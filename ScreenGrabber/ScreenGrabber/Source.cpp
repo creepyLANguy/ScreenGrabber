@@ -9,12 +9,22 @@
 //Maybe just use that EasyBMP
 #include <opencv2/highgui/highgui.hpp>
 
-
 #define WIN32_LEAN_AND_MEAN
 
 #define DEBUG_FPS
 #define DEBUG_VISUAL
-
+enum NoiseType
+{
+  NONE,
+  GREY,
+  COLOUR,
+  SHIFTER_1,
+  SHIFTER_2,
+  SHIFTER_3,
+  INCEPTION,
+  LAST
+};
+int shifter = 0;
 
 using namespace cv;
 using namespace std;
@@ -81,26 +91,45 @@ void FillMatChunksWithAverageRGB(vector<BorderChunk>& borderChunks, Mat& mat)
 }
 
 
-void BlankMat(Mat& mat, const float leeway = 0, const int blankVal = 0, const int shiftType = 0)
+void BlankMat(Mat& mat, const float leeway = 0, const int blankVal = 0, const NoiseType noiseType = NONE)
 {
   uint8_t* pixelPtr = static_cast<uint8_t*>(mat.data);
   const int cn = mat.channels();
 
-  for (int x = mat.cols*leeway; x < mat.cols*(1 - leeway); ++x)
+  for (int y = mat.rows*leeway; y < mat.rows*(1 - leeway); ++y)
   {
-    for (int y = mat.rows*leeway; y < mat.rows*(1 - leeway); ++y)
+    for (int x = mat.cols*leeway; x < mat.cols*(1 - leeway); ++x)
     {
       int shift1, shift2, shift3;
-      switch (shiftType)
+      switch (noiseType)
       {
-      case 1:
-        shift1 = shift2 = shift3 = rand();//distribution(generator);
+      case INCEPTION:
+        return;
+      case GREY:
+        shift1 = shift2 = shift3 = rand();
         break;
-      case 2:
+      case COLOUR:
         shift1 = rand();
         shift2 = rand();
         shift3 = rand();
         break;
+      case SHIFTER_1:
+        shift1 = ++shifter;
+        shift2 = ++shifter*++shifter;
+        shift3 = 100;
+        break;
+      case SHIFTER_2:
+        shift1 = shifter;
+        shift2 = shifter*2;
+        shift3 = shifter*3;
+        ++shifter;
+        break;
+      case SHIFTER_3:
+        shift1 = ++shifter*shifter;
+        shift2 = ++shifter*shifter;
+        shift3 = ++shifter*shifter;
+        break;
+      case NONE:
       default:
         shift1 = shift2 = shift3 = 0;
         break;
@@ -596,7 +625,9 @@ int main(const int argc, char** argv)
 
 #ifdef DEBUG_VISUAL
     const float leeway = borderSamplePercentage * 2;
-    BlankMat(mat, leeway, 150, 0);
+    const int blankVal = 150;
+    const NoiseType noiseType = NONE;//static_cast<NoiseType>(rand() % LAST);//LMAO
+    BlankMat(mat, leeway, blankVal, noiseType);
     FillMatChunksWithAverageRGB(borderChunks, mat);
     const String windowName = "";
     namedWindow(windowName, CV_WINDOW_NORMAL);
