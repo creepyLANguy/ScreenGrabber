@@ -81,20 +81,34 @@ void FillMatChunksWithAverageRGB(vector<BorderChunk>& borderChunks, Mat& mat)
 }
 
 
-void BlankMat(Mat& mat)
+void BlankMat(Mat& mat, const float leeway = 0, const int blankVal = 0, const int shiftType = 0)
 {
-  const int blankVal = 0;
-
   uint8_t* pixelPtr = static_cast<uint8_t*>(mat.data);
   const int cn = mat.channels();
 
-  for (int x = 0; x < mat.cols; ++x)
+  for (int x = mat.cols*leeway; x < mat.cols*(1 - leeway); ++x)
   {
-    for (int y = 0; y < mat.rows; ++y)
+    for (int y = mat.rows*leeway; y < mat.rows*(1 - leeway); ++y)
     {
-      pixelPtr[y*mat.cols*cn + x*cn + 2] = blankVal;
-      pixelPtr[y*mat.cols*cn + x*cn + 1] = blankVal;
-      pixelPtr[y*mat.cols*cn + x*cn + 0] = blankVal;
+      int shift1, shift2, shift3;
+      switch (shiftType)
+      {
+      case 1:
+        shift1 = shift2 = shift3 = rand();//distribution(generator);
+        break;
+      case 2:
+        shift1 = rand();
+        shift2 = rand();
+        shift3 = rand();
+        break;
+      default:
+        shift1 = shift2 = shift3 = 0;
+        break;
+      }
+
+      pixelPtr[y*mat.cols*cn + x*cn + 2] = blankVal + shift1;
+      pixelPtr[y*mat.cols*cn + x*cn + 1] = blankVal + shift2;
+      pixelPtr[y*mat.cols*cn + x*cn + 0] = blankVal + shift3;
     }
   }
 }
@@ -117,22 +131,22 @@ void SetAverageRGBValues(vector<BorderChunk>& borderChunks, Mat& mat)
   for (BorderChunk& chunk : borderChunks)
   {
     int pixels = 0;
-    
+
     int sum_r = 0;
     int sum_g = 0;
     int sum_b = 0;
-    
+
     uint8_t* pixelPtr = static_cast<uint8_t*>(mat.data);
     const int cn = mat.channels();
 
     for (int x = chunk.x_start; x < chunk.x_end; ++x)
     {
-      for (int y = chunk.y_start; y <  chunk.y_end; ++y)
+      for (int y = chunk.y_start; y < chunk.y_end; ++y)
       {
         sum_r += pixelPtr[y*mat.cols*cn + x*cn + 2];
         sum_g += pixelPtr[y*mat.cols*cn + x*cn + 1];
         sum_b += pixelPtr[y*mat.cols*cn + x*cn + 0];
-        
+
         ++pixels;
       }
     }
@@ -189,7 +203,7 @@ void CopyVector(vector<T>& src, vector<T>& dest)
 void AdjustChunksForGap_Vertical(vector<BorderChunk>& chunks, int gap)
 {
   int indexer = 1;
-  while(gap)
+  while (gap)
   {
     chunks[chunks.size() - indexer].y_start += gap;
     chunks[chunks.size() - indexer].y_end += gap;
@@ -197,9 +211,9 @@ void AdjustChunksForGap_Vertical(vector<BorderChunk>& chunks, int gap)
     ++indexer;
   }
 
-  for (int i = 0; i < chunks.size()-1; ++i)
+  for (int i = 0; i < chunks.size() - 1; ++i)
   {
-      chunks[i].y_end += chunks[i + 1].y_start - chunks[i].y_end;
+    chunks[i].y_end += chunks[i + 1].y_start - chunks[i].y_end;
   }
 }
 
@@ -292,7 +306,7 @@ void InitialiseBorderChunks(vector<BorderChunk>& borderChunks, const int bitmap_
     }
     CopyVector(chunks_lower, borderChunks);
   }
-  
+
   {
     vector<BorderChunk> chunks_left;
     const int chunk_left_width = bitmap_width * borderSamplePercentage;
@@ -315,7 +329,7 @@ void InitialiseBorderChunks(vector<BorderChunk>& borderChunks, const int bitmap_
     }
     CopyVector(chunks_left, borderChunks);
   }
-  
+
   {
     int i = 0;
     for (BorderChunk& bchunk : borderChunks)
@@ -386,35 +400,35 @@ float GetAspectRatio(vector<KeyValPair>& configBlob)
 /*
 int GetCommandLineProperty_Int(const int argc, char** argv, char* propertyName, const int default_return)
 {
-  for (int i = 0; i < argc; ++i)
-  {
-    if (!_strcmpi(propertyName, argv[i]))
-    {
-      return atoi(argv[++i]);
-    }
-  }
+for (int i = 0; i < argc; ++i)
+{
+if (!_strcmpi(propertyName, argv[i]))
+{
+return atoi(argv[++i]);
+}
+}
 
-  return default_return;
+return default_return;
 }
 
 
 float GetCommandLineProperty_Float(const int argc, char** argv, char* propertyName, const float default_return)
 {
-  return GetCommandLineProperty_Int(argc, argv, propertyName, (default_return *100)) / 100.0f;
+return GetCommandLineProperty_Int(argc, argv, propertyName, (default_return *100)) / 100.0f;
 }
 
 
 char* GetCommandLineProperty_String(const int argc, char** argv, char* propertyName, char* default_return)
 {
-  for (int i = 0; i < argc; ++i)
-  {
-    if (!_strcmpi(propertyName, argv[i]))
-    {
-      return argv[++i];
-    }
-  }
+for (int i = 0; i < argc; ++i)
+{
+if (!_strcmpi(propertyName, argv[i]))
+{
+return argv[++i];
+}
+}
 
-  return default_return;
+return default_return;
 }
 
 
@@ -496,15 +510,15 @@ int main(const int argc, char** argv)
   leds.LED_COUNT_LEFT = GetProperty_Int("led_count_vertical", 5, config);
   leds.LED_COUNT_RIGHT = leds.LED_COUNT_LEFT;
   leds.LED_COUNT_TOTAL = leds.LED_COUNT_UPPER + leds.LED_COUNT_LOWER + leds.LED_COUNT_LEFT + leds.LED_COUNT_RIGHT;
-  cout << "LED Count: "<< leds.LED_COUNT_TOTAL << endl;
+  cout << "LED Count: " << leds.LED_COUNT_TOTAL << endl;
 
   if
-  (
-    rect.right - rect.left < leds.LED_COUNT_UPPER || 
-    rect.right - rect.left < leds.LED_COUNT_LOWER ||
-    rect.bottom - rect.top < leds.LED_COUNT_LEFT||
-    rect.bottom - rect.top < leds.LED_COUNT_RIGHT
-  )
+    (
+      rect.right - rect.left < leds.LED_COUNT_UPPER ||
+      rect.right - rect.left < leds.LED_COUNT_LOWER ||
+      rect.bottom - rect.top < leds.LED_COUNT_LEFT ||
+      rect.bottom - rect.top < leds.LED_COUNT_RIGHT
+      )
   {
     MessageBoxA(nullptr,
       "TOO MANY LEDS SPECIFIED - EXCEEDS RESOLUTION OF DISPLAY",
@@ -534,21 +548,21 @@ int main(const int argc, char** argv)
   MySocket socket;
   if (socket.Initialise() == false)
   {
-    MessageBoxA(nullptr, 
-                "Failed to create socket \r\n\r\n\ "
-                "1) Close all instances of the application\r\n "
-                "2) Check your config files \r\n "
-                "3) Launch the application again.", 
-                "ScreenGrabber", 
-                0);
+    MessageBoxA(nullptr,
+      "Failed to create socket \r\n\r\n\ "
+      "1) Close all instances of the application\r\n "
+      "2) Check your config files \r\n "
+      "3) Launch the application again.",
+      "ScreenGrabber",
+      0);
     return -1;
   }
 
 
-  Rect simpleRect = {rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top};
+  Rect simpleRect = { rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top };
 
   InitialiseDeviceContextStuffs(bitmap_width, bitmap_height);
-  
+
   Mat mat(bitmap_height, bitmap_width, CV_8UC4);
 
   while (true)
@@ -556,7 +570,7 @@ int main(const int argc, char** argv)
     GrabScreen(mat, simpleRect, bitmap_width, bitmap_height);
 
     SetAverageRGBValues(borderChunks, mat);
-    
+
     if (brightnessPercentage < 1)
     {
       SetBrightness(borderChunks, brightnessPercentage);
@@ -564,7 +578,7 @@ int main(const int argc, char** argv)
 
     for (const BorderChunk chunk : borderChunks)
     {
-      unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;      
+      unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
       socket.Send(&payload);
     }
 
@@ -581,7 +595,8 @@ int main(const int argc, char** argv)
 #endif
 
 #ifdef DEBUG_VISUAL
-    BlankMat(mat);
+    const float leeway = borderSamplePercentage * 2;
+    BlankMat(mat, leeway, 150, 0);
     FillMatChunksWithAverageRGB(borderChunks, mat);
     const String windowName = "";
     namedWindow(windowName, CV_WINDOW_NORMAL);
