@@ -5,7 +5,8 @@
 #include <iostream>
 
 //AL.
-//Try compiling a version without the opencv stuff
+//Try compiling a version without the opencv stuff.
+//Maybe just use that EasyBMP
 #include <opencv2/highgui/highgui.hpp>
 
 
@@ -97,44 +98,6 @@ void BlankMat(Mat& mat)
     }
   }
 }
-
-
-//Yuck!!!!! >:(
-/*
-#include <bitset>
-void GeneratePayload(bitset<32>& payload, const BorderChunk& chunk)
-{
-  const int SHIFT = 8;
-  int runner = 0;
-
-  bitset<SHIFT> b_bitset(chunk.b);
-  for (int i = 0; i < SHIFT; ++i)
-  {
-    payload[runner + i] = b_bitset[i];
-  }
-  runner += SHIFT;
-
-  bitset<SHIFT> g_bitset(chunk.g);
-  for (int i = 0; i < SHIFT; ++i)
-  {
-    payload[runner + i] = g_bitset[i];
-  }
-  runner += SHIFT;
-
-  bitset<SHIFT> r_bitset(chunk.r);
-  for (int i = 0; i < SHIFT; ++i)
-  {
-    payload[runner + i] = r_bitset[i];
-  }
-  runner += SHIFT;
-
-  bitset<SHIFT> index_bitset(chunk.index);
-  for (int i = 0; i < SHIFT; ++i)
-  {
-    payload[runner + i] = index_bitset[i];
-  }
-}
-*/
 
 
 void SetBrightness(vector<BorderChunk>& borderChunks, const float brightness)
@@ -558,7 +521,7 @@ int main(const int argc, char** argv)
     BlankMat(mat);
     FillMatChunksWithAverageRGB(borderChunks, mat);
     const String windowName = "";
-    namedWindow(windowName, CV_WINDOW_AUTOSIZE);// CV_WINDOW_NORMAL);
+    namedWindow(windowName, CV_WINDOW_NORMAL);
     imshow(windowName, mat);
     waitKeyEx(1);
 #endif
