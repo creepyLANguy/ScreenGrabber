@@ -644,9 +644,9 @@ int main(const int argc, char** argv)
 #endif
 
 #ifdef DEBUG_VISUAL
-    const float leeway = borderSamplePercentage * 2;
+    const float leeway = borderSamplePercentage * 0;//2;
     const int blankVal = 150;
-    const NoiseType noiseType = NONE;//SHIFTER_1;//static_cast<NoiseType>(rand() % NOISETYPE_LAST);
+    const NoiseType noiseType = NONE;//static_cast<NoiseType>(rand() % NOISETYPE_LAST);
     const NoiseApplicator noiseApplicator = INNER;//static_cast<NoiseApplicator>(rand() % NOISEAPPLICATOR_LAST);
     BlankMat(mat, leeway, blankVal, noiseType, noiseApplicator);
     FillMatChunksWithAverageRGB(borderChunks, mat);
@@ -666,8 +666,8 @@ int main(const int argc, char** argv)
   //AL. 
   //Unreachable. 
   //Meh, not massively important to clean this up, rigtht?
-  DeleteObject(hbwindow);
-  DeleteDC(hwindowCompatibleDC);
-  ReleaseDC(hwnd, hwindowDC);
+  //DeleteObject(hbwindow);
+  //DeleteDC(hwindowCompatibleDC);
+  //ReleaseDC(hwnd, hwindowDC);
 }
 
