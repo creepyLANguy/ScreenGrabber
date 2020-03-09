@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "MySocket.h"
 #include <fstream>
 

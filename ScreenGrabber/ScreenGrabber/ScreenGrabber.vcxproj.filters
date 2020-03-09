@@ -3,18 +3,9 @@
   <ItemGroup>
     <ClCompile Include="MySocket.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Headers</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MySocket.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
