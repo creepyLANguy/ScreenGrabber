@@ -1,10 +1,7 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-#include <fstream>
 #include <Windows.h>
-#include "MySocket.h"
-#include <iostream>
 
 //AL.
 //Try compiling a version without the opencv stuff.
@@ -13,13 +10,28 @@
 
 #define WIN32_LEAN_AND_MEAN
 
-#define DEBUG_FPS
-#define DEBUG_VISUAL
-
-#define SECOND_MS 1000
-
 using namespace cv;
 using namespace std;
+
+
+const char* kConfigFileName = "config.ini";
+const char kDelim = ' ';
+
+
+//Device context stuffs
+const HWND hwnd = GetDesktopWindow();
+const HDC hwindowDC = GetDC(hwnd);
+const HDC hwindowCompatibleDC = CreateCompatibleDC(hwindowDC);
+HBITMAP hbwindow;
+BITMAPINFOHEADER bi;
+//
+
+struct KeyValPair
+{
+  string key = "";
+  string val = "";
+};
+
 
 enum NoiseType
 {
@@ -40,16 +52,6 @@ enum NoiseApplicator
 };
 int shifter = 0;
 
-const char* kConfigFileName = "config.ini";
-const char kDelim = ' ';
-
-//Device context stuffs
-const HWND hwnd = GetDesktopWindow();
-const HDC hwindowDC = GetDC(hwnd);
-const HDC hwindowCompatibleDC = CreateCompatibleDC(hwindowDC);
-HBITMAP hbwindow;
-BITMAPINFOHEADER bi;
-//
 
 struct LEDsCollection
 {
@@ -60,11 +62,6 @@ struct LEDsCollection
   int LED_COUNT_TOTAL;
 };
 
-struct KeyValPair
-{
-  string key = "";
-  string val = "";
-};
 
 struct BorderChunk
 {

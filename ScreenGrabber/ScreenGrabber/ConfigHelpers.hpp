@@ -2,6 +2,7 @@
 #define CONFIGHELPERS_HPP
 
 #include "Defines.h"
+#include <fstream>
 
 /*
 int GetCommandLineProperty_Int(const int argc, char** argv, char* propertyName, const int default_return)
@@ -70,6 +71,27 @@ inline int GetProperty_Int(const char* propertyName, const int default_return, v
 inline float GetProperty_Float(const char* propertyName, const float default_return, vector<KeyValPair>& configBlob)
 {
   return GetProperty_Int(propertyName, (default_return * 100), configBlob) / 100.0f;
+}
+
+
+inline void PopulateConfigBlob(vector<KeyValPair>& configBlob)
+{
+  ifstream myFile;
+  myFile.open(kConfigFileName);
+  if (myFile.is_open())
+  {
+    while (myFile.eof() == false)
+    {
+      string strLine = "";
+      getline(myFile, strLine);
+      const int delimPos = strLine.find_first_of(kDelim);
+      KeyValPair kvp;
+      kvp.key = strLine.substr(0, delimPos); ;
+      kvp.val = strLine.substr(delimPos + 1, strLine.length());
+      configBlob.push_back(kvp);
+    }
+  }
+  myFile.close();
 }
 
 #endif // CONFIGHELPERS_HPP
