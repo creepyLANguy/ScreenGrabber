@@ -1,20 +1,11 @@
 #include "Defines.h"
-#include "ConfigHelpers.hpp"
 #include "MySocket.h"
 #include <iostream>
+#include "ConfigHelpers.hpp"
+#include "Debug.hpp"
 
 #define DEBUG_FPS
 #define DEBUG_VISUAL
-
-#ifdef DEBUG_FPS
-  #define SECOND_MS 1000
-  DWORD zeroHour = GetTickCount();
-  unsigned int frameCount = 0;
-#endif
-
-#ifdef DEBUG_VISUAL
-  #include "Debug.hpp"
-#endif
 
 
 void SetBrightness(vector<BorderChunk>& borderChunks, const float brightness)
@@ -70,7 +61,7 @@ void InitialiseDeviceContextStuffs(const int bitmap_width, const int bitmap_heig
   hbwindow = CreateCompatibleBitmap(hwindowDC, bitmap_width, bitmap_height);
   bi.biSize = sizeof(BITMAPINFOHEADER);
   bi.biWidth = bitmap_width;
-  bi.biHeight = -bitmap_height;  //this is the line that makes it draw upside down or not
+  bi.biHeight = -bitmap_height;  //makes it draw upside down or not
   bi.biPlanes = 1;
   bi.biBitCount = 32;
   bi.biCompression = BI_RGB;
@@ -139,7 +130,13 @@ void AdjustChunksForGap_Horizontal(vector<BorderChunk>& chunks, int gap)
 }
 
 
-void InitialiseBorderChunks(vector<BorderChunk>& borderChunks, const int bitmap_width, const int bitmap_height, const float borderSamplePercentage, const int originPositionOffset, LEDsCollection& leds)
+void InitialiseBorderChunks(
+  vector<BorderChunk>& borderChunks, 
+  const int bitmap_width, 
+  const int bitmap_height, 
+  const float borderSamplePercentage, 
+  const int originPositionOffset, 
+  LEDsCollection& leds)
 {
   BorderChunk chunk;
 
@@ -248,6 +245,16 @@ void InitialiseBorderChunks(vector<BorderChunk>& borderChunks, const int bitmap_
 }
 
 
+void ReduceRectByBuffers(RECT& rect, vector<KeyValPair>& configBlob)
+{
+  //For sports and news feed strips at the bottom of the screen.
+  rect.bottom -= GetProperty_Int("lowerBuffer", 0, configBlob); 
+  rect.top += GetProperty_Int("upperBuffer", 0, configBlob);
+  rect.left += GetProperty_Int("leftBuffer", 0, configBlob);
+  rect.right -= GetProperty_Int("rightBuffer", 0, configBlob);
+}
+
+
 void TrimRectToRatio(RECT& rect, const float aspect_ratio)
 {
   const int display_width = rect.right - rect.left;
@@ -300,7 +307,7 @@ float GetAspectRatio(vector<KeyValPair>& configBlob)
 }
 
 
-//ratio 21:9 delay 0 downscale 3 lowerBuffer 0 borderSample 10 origin 0 brightness 100
+//ratio 21:9 delay 0 downscale 3 lower/upper/left/rightBuffer 0 borderSample 10 origin 0 brightness 100
 int main(const int argc, char** argv)
 {
   vector<KeyValPair> config;
@@ -311,7 +318,7 @@ int main(const int argc, char** argv)
   RECT rect;
   GetClientRect(hwnd, &rect);
   TrimRectToRatio(rect, GetAspectRatio(config));
-  rect.bottom -= GetProperty_Int("lowerBuffer", 0, config); //For sports and news feed strips at the bottom of the screen.
+  ReduceRectByBuffers(rect, config);
 
   const int WAIT_MS = GetProperty_Int("delay", 0, config);
 
