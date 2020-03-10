@@ -1,81 +1,5 @@
-#include <fstream>
-#include <Windows.h>
-#include "MySocket.h"
-#include <iostream>
-
-//AL.
-//Try compiling a version without the opencv stuff.
-//Maybe just use that EasyBMP
-#include <opencv2/highgui/highgui.hpp>
-
-#define WIN32_LEAN_AND_MEAN
-
-#define DEBUG_FPS
-#define DEBUG_VISUAL
-
-enum NoiseType
-{
-  NONE,
-  GREY,
-  COLOUR,
-  SHIFTER_1,
-  SHIFTER_2,
-  SHIFTER_3,
-  INCEPTION,
-  NOISETYPE_LAST
-};
-enum NoiseApplicator
-{
-  INNER,
-  OUTER,
-  NOISEAPPLICATOR_LAST
-};
-int shifter = 0;
-
-using namespace cv;
-using namespace std;
-
-const char* kConfigFileName = "config.ini";
-const char kDelim = ' ';
-
-//Device context stuffs
-const HWND hwnd = GetDesktopWindow();
-const HDC hwindowDC = GetDC(hwnd);
-const HDC hwindowCompatibleDC = CreateCompatibleDC(hwindowDC);
-HBITMAP hbwindow;
-BITMAPINFOHEADER bi;
-//
-
-struct LEDsCollection
-{
-  int LED_COUNT_UPPER;
-  int LED_COUNT_LOWER;
-  int LED_COUNT_LEFT;
-  int LED_COUNT_RIGHT;
-  int LED_COUNT_TOTAL;
-};
-
-struct KeyValPair
-{
-  string key = "";
-  string val = "";
-};
-
-struct BorderChunk
-{
-  int index = -1;
-
-  int x_start = 0;
-  int x_end = 0;
-  int y_start = 0;
-  int y_end = 0;
-
-  //To hold average rgb values for the chunk
-  int r = 0;
-  int g = 0;
-  int b = 0;
-};
-
+#include "Defines.h"
+#include "ConfigHelpers.hpp"
 
 void FillMatChunksWithAverageRGB(vector<BorderChunk>& borderChunks, Mat& mat)
 {
@@ -446,77 +370,6 @@ float GetAspectRatio(vector<KeyValPair>& configBlob)
 }
 
 
-/*
-int GetCommandLineProperty_Int(const int argc, char** argv, char* propertyName, const int default_return)
-{
-for (int i = 0; i < argc; ++i)
-{
-if (!_strcmpi(propertyName, argv[i]))
-{
-return atoi(argv[++i]);
-}
-}
-
-return default_return;
-}
-
-
-float GetCommandLineProperty_Float(const int argc, char** argv, char* propertyName, const float default_return)
-{
-return GetCommandLineProperty_Int(argc, argv, propertyName, (default_return *100)) / 100.0f;
-}
-
-
-char* GetCommandLineProperty_String(const int argc, char** argv, char* propertyName, char* default_return)
-{
-for (int i = 0; i < argc; ++i)
-{
-if (!_strcmpi(propertyName, argv[i]))
-{
-return argv[++i];
-}
-}
-
-return default_return;
-}
-
-
-/*
-const char* GetProperty_String(const char* propertyName, const char* default_return, vector<KeyValPair>& configBlob)
-{
-for (KeyValPair kvp : configBlob)
-{
-if (_strcmpi(kvp.key.c_str(), propertyName) == 0)
-{
-return kvp.val.c_str();
-}
-}
-
-return default_return;
-}
-*/
-
-
-int GetProperty_Int(const char* propertyName, const int default_return, vector<KeyValPair>& configBlob)
-{
-  for (KeyValPair kvp : configBlob)
-  {
-    if (_strcmpi(kvp.key.c_str(), propertyName) == 0)
-    {
-      return atoi(kvp.val.c_str());
-    }
-  }
-
-  return default_return;
-}
-
-
-float GetProperty_Float(const char* propertyName, const float default_return, vector<KeyValPair>& configBlob)
-{
-  return GetProperty_Int(propertyName, (default_return * 100), configBlob) / 100.0f;
-}
-
-
 void PopulateConfigBlob(vector<KeyValPair>& configBlob)
 {
   ifstream myFile;
@@ -634,7 +487,7 @@ int main(const int argc, char** argv)
 
 #ifdef DEBUG_FPS
     ++frameCount;
-    if (GetTickCount() - zeroHour > 1000)
+    if (GetTickCount() - zeroHour > SECOND_MS)
     {
       const string str = "FPS:" + to_string(frameCount) + "\r\n";
       OutputDebugStringA(str.c_str());

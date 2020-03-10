@@ -8,6 +8,12 @@
     <ClInclude Include="MySocket.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ConfigHelpers.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Defines.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
