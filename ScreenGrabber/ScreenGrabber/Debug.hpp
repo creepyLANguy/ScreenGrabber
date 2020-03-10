@@ -1,6 +1,10 @@
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 
+#define SECOND_MS 1000 
+DWORD zeroHour = GetTickCount();
+unsigned int frameCount = 0;
+
 inline void PrintFramerate()
 {
   ++frameCount;
