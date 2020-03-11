@@ -1,3 +1,10 @@
+// ReSharper disable CppClangTidyBugproneNarrowingConversions
+// ReSharper disable CppClangTidyClangDiagnosticSignCompare
+// ReSharper disable CppClangTidyCppcoreguidelinesNarrowingConversions
+// ReSharper disable CppClangTidyCppcoreguidelinesProTypeMemberInit
+// ReSharper disable CppClangTidyClangDiagnosticUnknownEscapeSequence
+// ReSharper disable CppClangTidyBugproneExceptionEscape
+
 #include "Defines.h"
 #include "MySocket.h"
 #include <iostream>
@@ -30,7 +37,7 @@ void SetAverageRGBValues(vector<BorderChunk>& borderChunks, Mat& mat)
     int sum_g = 0;
     int sum_b = 0;
 
-    uint8_t* pixelPtr = static_cast<uint8_t*>(mat.data);
+    auto* pixelPtr = static_cast<uint8_t*>(mat.data);
     const int cn = mat.channels();
 
     for (int x = chunk.x_start; x < chunk.x_end; ++x)
@@ -282,8 +289,8 @@ float GetAspectRatio(vector<KeyValPair>& configBlob)
 {
   float aspectRatioValue = 16 / 9.0f;
 
-  string str = "";
-  for (KeyValPair kvp : configBlob)
+  string str;
+  for (const KeyValPair& kvp : configBlob)
   {
     if (_strcmpi(kvp.key.c_str(), "ratio") == 0)
     {
@@ -369,7 +376,6 @@ int main(const int argc, char** argv)
     return -1;
   }
 
-
   Rect simpleRect = { rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top };
 
   InitialiseDeviceContextStuffs(bitmap_width, bitmap_height);
@@ -415,5 +421,6 @@ int main(const int argc, char** argv)
   //DeleteObject(hbwindow);
   //DeleteDC(hwindowCompatibleDC);
   //ReleaseDC(hwnd, hwindowDC);
+  //return 0;
 }
 
