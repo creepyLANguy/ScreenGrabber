@@ -17,6 +17,7 @@ inline void PrintFramerate()
   }
 }
 
+
 inline void FillMatChunksWithAverageRGB(vector<BorderChunk>& borderChunks, Mat& mat)
 {
   uint8_t* pixelPtr = static_cast<uint8_t*>(mat.data);
@@ -73,7 +74,12 @@ inline void SetNoiseValues(int& shift1, int& shift2, int& shift3, const NoiseTyp
 }
 
 
-inline void BlankMat(Mat& mat, const float leeway = 0, const int blankVal = 0, const NoiseType noiseType = NONE, const NoiseApplicator noiseApplicator = INNER)
+inline void BlankMat(
+  Mat& mat, 
+  const float leeway = 0, 
+  const int blankVal = 0, 
+  const NoiseType noiseType = NONE, 
+  const NoiseApplicator noiseApplicator = INNER)
 {
   if (noiseType == INCEPTION) { return; }
 
@@ -105,7 +111,7 @@ inline void BlankMat(Mat& mat, const float leeway = 0, const int blankVal = 0, c
 
 inline void ShowVisualisation(Mat& mat, const float& borderSamplePercentage, vector<BorderChunk>& borderChunks)
 {
-  const float leeway = borderSamplePercentage * 0;//2;
+  const float leeway = borderSamplePercentage * 2.5;//0;
   const int blankVal = 150;
   const NoiseType noiseType = NONE;//static_cast<NoiseType>(rand() % NOISETYPE_LAST);
   const NoiseApplicator noiseApplicator = INNER;//static_cast<NoiseApplicator>(rand() % NOISEAPPLICATOR_LAST);

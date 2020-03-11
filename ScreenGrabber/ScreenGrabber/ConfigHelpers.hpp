@@ -82,14 +82,23 @@ inline void PopulateConfigBlob(vector<KeyValPair>& configBlob)
   {
     while (myFile.eof() == false)
     {
-      string strLine = "";
+      string  strLine = "";
       getline(myFile, strLine);
-      const int delimPos = strLine.find_first_of(kDelim);
+      if (strLine.length() == 0 )
+      {
+        continue;
+      }
+      int delimPos = strLine.find_first_of(kDelim);
       KeyValPair kvp;
-      kvp.key = strLine.substr(0, delimPos); ;
-      kvp.val = strLine.substr(delimPos + 1, strLine.length());
+      kvp.key = strLine.substr(0, delimPos);
+      int endIndex = strLine.find_first_of(";");
+      endIndex = endIndex == -1 ? strLine.length() : endIndex;
+      ++delimPos;
+      kvp.val = strLine.substr(delimPos, endIndex-delimPos);
       configBlob.push_back(kvp);
+      cout << kvp.val << "\t=\t" << kvp.key << endl;
     }
+    cout << endl;
   }
   myFile.close();
 }

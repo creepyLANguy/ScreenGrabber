@@ -4,8 +4,7 @@
 #include <Windows.h>
 
 //AL.
-//Try compiling a version without the opencv stuff.
-//Maybe just use that EasyBMP
+//Try compiling a version without EasyBMP instead of opencv
 #include <opencv2/highgui/highgui.hpp>
 
 #define WIN32_LEAN_AND_MEAN
