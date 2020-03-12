@@ -5,6 +5,7 @@
 DWORD zeroHour = GetTickCount();
 unsigned int frameCount = 0;
 
+
 inline void PrintFramerate()
 {
   ++frameCount;
@@ -74,15 +75,12 @@ inline void SetNoiseValues(int& shift1, int& shift2, int& shift3, const NoiseTyp
 }
 
 
-inline void BlankMat(
-  Mat& mat, 
-  const float leeway = 0, 
-  const int blankVal = 0, 
-  const NoiseType noiseType = NONE, 
-  const NoiseApplicator noiseApplicator = INNER)
+inline void FillWithNoise(
+  Mat& mat, const float leeway,
+  const int blankVal, 
+  const NoiseType noiseType, 
+  const NoiseApplicator noiseApplicator)
 {
-  if (noiseType == INCEPTION) { return; }
-
   uint8_t* pixelPtr = static_cast<uint8_t*>(mat.data);
   const int cn = mat.channels();
 
@@ -109,11 +107,29 @@ inline void BlankMat(
   }
 }
 
+inline void BlankMat(
+  Mat& mat, 
+  const float leeway = 0, 
+  const int blankVal = 0, 
+  const NoiseType noiseType = NONE, 
+  const NoiseApplicator noiseApplicator = INNER)
+{
+  if (noiseType == INCEPTION) { return; }
+
+  if (noiseType == LOGO)
+  {
+    //AL.
+    return;
+  }
+
+  FillWithNoise(mat, leeway, blankVal, noiseType, noiseApplicator);
+}
+
 inline void ShowVisualisation(Mat& mat, const float& borderSamplePercentage, vector<BorderChunk>& borderChunks)
 {
   const float leeway = borderSamplePercentage * 2.5;//0;
   const int blankVal = 150;
-  const NoiseType noiseType = NONE;//static_cast<NoiseType>(rand() % NOISETYPE_LAST);
+  const NoiseType noiseType = LOGO;//static_cast<NoiseType>(rand() % NOISETYPE_LAST);
   const NoiseApplicator noiseApplicator = INNER;//static_cast<NoiseApplicator>(rand() % NOISEAPPLICATOR_LAST);
   BlankMat(mat, leeway, blankVal, noiseType, noiseApplicator);
   FillMatChunksWithAverageRGB(borderChunks, mat);

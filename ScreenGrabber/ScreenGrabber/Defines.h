@@ -32,9 +32,11 @@ struct KeyValPair
 };
 
 
+//DEBUGGUNG
 enum NoiseType
 {
   NONE,
+  LOGO,
   GREY,
   COLOUR,
   SHIFTER_1,
@@ -50,7 +52,8 @@ enum NoiseApplicator
   NOISEAPPLICATOR_LAST
 };
 int shifter = 0;
-
+const string logoFilename = "logo.bmp";
+//
 
 struct LEDsCollection
 {

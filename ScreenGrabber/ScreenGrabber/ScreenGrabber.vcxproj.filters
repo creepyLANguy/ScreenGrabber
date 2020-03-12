@@ -12,14 +12,14 @@
     <ClInclude Include="MySocket.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="ConfigHelpers.hpp">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Defines.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Debug.hpp">
-      <Filter>Headers</Filter>
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigHelpers.hpp">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
