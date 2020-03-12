@@ -129,7 +129,7 @@ inline void ShowVisualisation(Mat& mat, const float& borderSamplePercentage, vec
 {
   const float leeway = borderSamplePercentage * 2.5;//0;
   const int blankVal = 150;
-  const NoiseType noiseType = LOGO;//static_cast<NoiseType>(rand() % NOISETYPE_LAST);
+  const NoiseType noiseType = NONE;//static_cast<NoiseType>(rand() % NOISETYPE_LAST);
   const NoiseApplicator noiseApplicator = INNER;//static_cast<NoiseApplicator>(rand() % NOISEAPPLICATOR_LAST);
   BlankMat(mat, leeway, blankVal, noiseType, noiseApplicator);
   FillMatChunksWithAverageRGB(borderChunks, mat);
