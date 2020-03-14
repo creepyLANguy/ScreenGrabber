@@ -1,7 +1,7 @@
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 
-#define SECOND_MS 1000 
+constexpr auto SECOND_MS = 1000;
 DWORD zeroHour = GetTickCount();
 unsigned int frameCount = 0;
 
@@ -21,7 +21,7 @@ inline void PrintFramerate()
 
 inline void FillMatChunksWithAverageRGB(vector<BorderChunk>& borderChunks, Mat& mat)
 {
-  uint8_t* pixelPtr = static_cast<uint8_t*>(mat.data);
+  auto* pixelPtr = static_cast<uint8_t*>(mat.data);
   const int cn = mat.channels();
 
   for (const BorderChunk chunk : borderChunks)
@@ -81,7 +81,7 @@ inline void FillWithNoise(
   const NoiseType noiseType, 
   const NoiseApplicator noiseApplicator)
 {
-  uint8_t* pixelPtr = static_cast<uint8_t*>(mat.data);
+  auto* pixelPtr = static_cast<uint8_t*>(mat.data);
   const int cn = mat.channels();
 
   int shift1, shift2, shift3;
@@ -127,7 +127,7 @@ inline void BlankMat(
 
 inline void ShowVisualisation(Mat& mat, const float& borderSamplePercentage, vector<BorderChunk>& borderChunks)
 {
-  const float leeway = borderSamplePercentage * 2.5;//0;
+  const float leeway = borderSamplePercentage * 2.5f;//0;
   const int blankVal = 150;
   const NoiseType noiseType = NONE;//static_cast<NoiseType>(rand() % NOISETYPE_LAST);
   const NoiseApplicator noiseApplicator = INNER;//static_cast<NoiseApplicator>(rand() % NOISEAPPLICATOR_LAST);

@@ -330,10 +330,10 @@ int main(const int argc, char** argv)
   const int WAIT_MS = GetProperty_Int("delay", 0, config);
 
   LEDsCollection leds;
-  leds.LED_COUNT_UPPER = GetProperty_Int("led_count_horizontal", 10, config);
-  leds.LED_COUNT_LOWER = leds.LED_COUNT_UPPER;
-  leds.LED_COUNT_LEFT = GetProperty_Int("led_count_vertical", 5, config);
-  leds.LED_COUNT_RIGHT = leds.LED_COUNT_LEFT;
+  leds.LED_COUNT_UPPER = GetProperty_Int("led_count_upper", 10, config);
+  leds.LED_COUNT_LOWER = GetProperty_Int("led_count_lower", 10, config);
+  leds.LED_COUNT_LEFT = GetProperty_Int("led_count_left", 5, config);
+  leds.LED_COUNT_RIGHT = GetProperty_Int("led_count_right", 5, config);
   leds.LED_COUNT_TOTAL = leds.LED_COUNT_UPPER + leds.LED_COUNT_LOWER + leds.LED_COUNT_LEFT + leds.LED_COUNT_RIGHT;
   cout << "LED Count: " << leds.LED_COUNT_TOTAL << endl;
 
