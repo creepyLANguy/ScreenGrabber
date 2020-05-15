@@ -119,8 +119,6 @@ inline void BlankMat(
   if (noiseType == LOGO)
   {
     //AL.
-    //TODO
-    //Draw logo here, man...
     return;
   }
 
