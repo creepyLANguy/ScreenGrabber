@@ -136,7 +136,7 @@ inline void ShowVisualisation(Mat& mat, const float& borderSamplePercentage, vec
   BlankMat(mat, leeway, blankVal, noiseType, noiseApplicator);
   FillMatChunksWithAverageRGB(borderChunks, mat);
   const String windowName = "";
-  namedWindow(windowName, CV_WINDOW_NORMAL);
+  namedWindow(windowName, WINDOW_NORMAL);
   imshow(windowName, mat);
   waitKeyEx(1);
 }
