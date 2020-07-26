@@ -14,6 +14,63 @@
 #define DEBUG_FPS
 #define DEBUG_VISUAL
 
+void FilterRGBValues(vector<BorderChunk>& borderChunks, const int whiteVarianceThresh, const int outlierDiffThresh)
+{
+  for (BorderChunk& chunk : borderChunks)
+  {
+
+    //AL.
+    //TODO
+    //GetLuminance and zero out all vals if smaller than luminance thresh
+    //
+
+    //Only zero out a val if overall colour is not white.            
+    vector<int> absdiffs = 
+    { 
+      abs(chunk.r - chunk.g), 
+      abs(chunk.r - chunk.b), 
+      abs(chunk.g - chunk.b) 
+    };
+    for (int diff : absdiffs)
+    {
+      //if (diff > whiteVarianceThresh)
+      {
+        //return
+      }
+    }
+
+    //Remove the outlier value for a more typical final LED colour
+    bool outlierDiffIsAboveThresh = false;
+    for (int absdiff : absdiffs)
+    {
+      if (absdiff > outlierDiffThresh)
+      {
+        outlierDiffIsAboveThresh = true;
+        break;
+      }
+    }
+    if (outlierDiffIsAboveThresh == false)
+    {
+      continue;
+    }
+    if ((chunk.r < chunk.b) && (chunk.r < chunk.g))
+    {
+      chunk.r = 0;
+      continue;
+    }
+    if ((chunk.g < chunk.r) && (chunk.g < chunk.b))
+    {
+      chunk.g = 0;
+      continue;
+    }
+    if ((chunk.b < chunk.r) && (chunk.b < chunk.g))
+    {
+      chunk.b = 0;
+      continue;
+    }
+  }
+}
+
 
 void SetBrightness(vector<BorderChunk>& borderChunks, const float brightness)
 {
@@ -251,14 +308,16 @@ void InitialiseBorderChunks(
   }
 }
 
-
+//For sports and news feed strips at the edge of the screen - we want to ignore these.
 void ReduceRectByBuffers(RECT& rect, vector<KeyValPair>& configBlob)
 {
-  //For sports and news feed strips at the bottom of the screen.
-  rect.bottom -= GetProperty_Int("lowerBuffer", 0, configBlob); 
-  rect.top += GetProperty_Int("upperBuffer", 0, configBlob);
-  rect.left += GetProperty_Int("leftBuffer", 0, configBlob);
-  rect.right -= GetProperty_Int("rightBuffer", 0, configBlob);
+  const int height = rect.bottom - rect.top;
+  const int width = rect.right - rect.left;
+
+  rect.bottom -= (GetProperty_Float("lowerBuffer", 0.0f, configBlob) / 100) * height; 
+  rect.top    += (GetProperty_Float("upperBuffer", 0.0f, configBlob) / 100) * height;
+  rect.left   += (GetProperty_Float("leftBuffer", 0.0f, configBlob) / 100) * width;
+  rect.right  -= (GetProperty_Float("rightBuffer", 0.0f, configBlob) / 100) * width;
 }
 
 
@@ -362,6 +421,13 @@ int main(const int argc, char** argv)
   InitialiseBorderChunks(borderChunks, bitmap_width, bitmap_height, borderSamplePercentage, originPositionOffset, leds);
 
   const float brightnessPercentage = GetProperty_Float("brightness", 1.0f, config);
+  
+  const float whiteVarianceThreshPercentage = GetProperty_Float("whiteVarianceThresh", 0.5f, config);
+  const int whiteVarianceThresh = whiteVarianceThreshPercentage * 255;
+  
+  const float outlierDiffThreshPercentage = GetProperty_Float("outlierDiffThresh", 0.25f, config);
+  const int outlierDiffThresh = outlierDiffThreshPercentage * 255;
+
 
   MySocket socket;
   if (socket.Initialise() == false)
@@ -393,9 +459,20 @@ int main(const int argc, char** argv)
       SetBrightness(borderChunks, brightnessPercentage);
     }
 
+    FilterRGBValues(borderChunks, whiteVarianceThresh, outlierDiffThresh);
+
     for (const BorderChunk chunk : borderChunks)
     {
       unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
+      
+      //AL.
+      int i = 2;
+      int r = 5;
+      int g = 0;
+      int b = 0;
+      //payload = i << 24 | r << 16 | g << 8 | b;
+      //
+
       socket.Send(&payload);
     }
 
