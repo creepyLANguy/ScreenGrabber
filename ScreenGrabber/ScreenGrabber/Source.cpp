@@ -16,6 +16,10 @@
 
 void FilterRGBValues(vector<BorderChunk>& borderChunks, const int whiteVarianceThresh, const int outlierDiffThresh)
 {
+  //AL.
+  return;
+  //
+
   for (BorderChunk& chunk : borderChunks)
   {
 
@@ -314,10 +318,15 @@ void ReduceRectByBuffers(RECT& rect, vector<KeyValPair>& configBlob)
   const int height = rect.bottom - rect.top;
   const int width = rect.right - rect.left;
 
-  rect.bottom -= (GetProperty_Float("lowerBuffer", 0.0f, configBlob) / 100) * height; 
-  rect.top    += (GetProperty_Float("upperBuffer", 0.0f, configBlob) / 100) * height;
-  rect.left   += (GetProperty_Float("leftBuffer", 0.0f, configBlob) / 100) * width;
-  rect.right  -= (GetProperty_Float("rightBuffer", 0.0f, configBlob) / 100) * width;
+  const int bottomShift = GetProperty_Float("lowerBuffer", 0.0f, configBlob) * height;
+  const int topShift = GetProperty_Float("upperBuffer", 0.0f, configBlob) * height;
+  const int leftShift = GetProperty_Float("leftBuffer", 0.0f, configBlob) * width;
+  const int rightShift = GetProperty_Float("rightBuffer", 0.0f, configBlob) * width;
+
+  rect.bottom -= bottomShift; 
+  rect.top += topShift;
+  rect.left += leftShift;
+  rect.right -= rightShift;
 }
 
 
