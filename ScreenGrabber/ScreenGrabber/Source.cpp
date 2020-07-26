@@ -14,65 +14,72 @@
 #define DEBUG_FPS
 #define DEBUG_VISUAL
 
-void FilterRGBValues(vector<BorderChunk>& borderChunks, const int whiteVarianceThresh, const int outlierDiffThresh)
+static const struct
 {
-  //AL.
-  return;
-  //
+  const float R = 0.33;
+  const float G = 0.50;
+  const float B = 0.17;
+} Lumi;
 
-  for (BorderChunk& chunk : borderChunks)
+
+bool isWhite(const BorderChunk& chunk, const int whiteDiffThresh)
+{
+  if (
+    abs(chunk.r - chunk.g) > whiteDiffThresh || 
+    abs(chunk.r - chunk.b) > whiteDiffThresh ||
+    abs(chunk.g - chunk.b) > whiteDiffThresh
+    )
   {
-
-    //AL.
-    //TODO
-    //GetLuminance and zero out all vals if smaller than luminance thresh
-    //
-
-    //Only zero out a val if overall colour is not white.            
-    vector<int> absdiffs = 
-    { 
-      abs(chunk.r - chunk.g), 
-      abs(chunk.r - chunk.b), 
-      abs(chunk.g - chunk.b) 
-    };
-    for (int diff : absdiffs)
-    {
-      //if (diff > whiteVarianceThresh)
-      {
-        //return
-      }
-    }
-
-    //Remove the outlier value for a more typical final LED colour
-    bool outlierDiffIsAboveThresh = false;
-    for (int absdiff : absdiffs)
-    {
-      if (absdiff > outlierDiffThresh)
-      {
-        outlierDiffIsAboveThresh = true;
-        break;
-      }
-    }
-    if (outlierDiffIsAboveThresh == false)
-    {
-      continue;
-    }
-    if ((chunk.r < chunk.b) && (chunk.r < chunk.g))
-    {
-      chunk.r = 0;
-      continue;
-    }
-    if ((chunk.g < chunk.r) && (chunk.g < chunk.b))
-    {
-      chunk.g = 0;
-      continue;
-    }
-    if ((chunk.b < chunk.r) && (chunk.b < chunk.g))
-    {
-      chunk.b = 0;
-      continue;
-    }
+      return false;
   }
+
+  return true;
+}
+
+
+int GetLuminance(const BorderChunk& chunk)
+{
+  //const int lr = Lumi.R * static_cast<float>(chunk.r);
+  //const int lg = Lumi.G * static_cast<float>(chunk.g);
+  //const int lb = Lumi.B * static_cast<float>(chunk.b);
+  //return lr + lb + lg;
+  return 
+    Lumi.R * static_cast<float>(chunk.r) +
+    Lumi.G * static_cast<float>(chunk.g) +
+    Lumi.B * static_cast<float>(chunk.b);
+}
+
+
+//Try and sanitise the colour info for a more clearer and simpler renderening on the strip. 
+//Some approaches : 
+//Zero out all vals to black if the total luminoscity is weak so that we aren't backlighting a dark part of the scene.
+//Remove weakest value if the overall colour is not considered to be white.
+//(Make sure we're only zero-ing out that outlying val if it's below the outlierDiffTthresh else we'd be altering the hue)
+void FilterChunk(
+  BorderChunk& chunk,
+  const int luminanceThresh,
+  const int whiteDiffThresh,
+  const int outlierDiffThresh)
+{
+  //Zero out all vals to black if the total luminoscity is weak 
+    //so that we aren't backlighting a dark part of the scene.
+  const int luminance = GetLuminance(chunk);
+  if (luminance < luminanceThresh)
+  {
+    chunk.r = chunk.g = chunk.b = 0;
+    return;
+  }
+
+  //Don't mess with individual vals if the colour is white overall.            
+  if (isWhite(chunk, whiteDiffThresh) == true)
+  {
+    return;
+  }
+
+  //Remove the outlier value for a more typical final LED colour
+  //AL.
+  //TODO
+  //
 }
 
 
@@ -431,11 +438,14 @@ int main(const int argc, char** argv)
 
   const float brightnessPercentage = GetProperty_Float("brightness", 1.0f, config);
   
-  const float whiteVarianceThreshPercentage = GetProperty_Float("whiteVarianceThresh", 0.5f, config);
-  const int whiteVarianceThresh = whiteVarianceThreshPercentage * 255;
+  const float whiteDiffThreshPercentage = GetProperty_Float("whiteDiffThresh", 1.0f, config);
+  const int whiteDiffThresh = whiteDiffThreshPercentage * 255;
   
-  const float outlierDiffThreshPercentage = GetProperty_Float("outlierDiffThresh", 0.25f, config);
+  const float outlierDiffThreshPercentage = GetProperty_Float("outlierDiffThresh", 1.0f, config);
   const int outlierDiffThresh = outlierDiffThreshPercentage * 255;
+  
+  const float luminanceThreshPercentage = GetProperty_Float("luminanceThresh", 0.0f, config);
+  const int luminanceThresh = luminanceThreshPercentage * 255;
 
 
   MySocket socket;
@@ -468,7 +478,10 @@ int main(const int argc, char** argv)
       SetBrightness(borderChunks, brightnessPercentage);
     }
 
-    FilterRGBValues(borderChunks, whiteVarianceThresh, outlierDiffThresh);
+    for (BorderChunk& chunk : borderChunks)
+    {
+      FilterChunk(chunk, luminanceThresh, whiteDiffThresh, outlierDiffThresh);
+    }
 
     for (const BorderChunk chunk : borderChunks)
     {
