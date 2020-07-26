@@ -14,12 +14,71 @@
 #define DEBUG_FPS
 #define DEBUG_VISUAL
 
+//AL.
+//Mabe make these configurable
 static const struct
 {
-  const float R = 0.33;
-  const float G = 0.50;
-  const float B = 0.17;
+  const float R = 0.33f;
+  const float G = 0.50f;
+  const float B = 0.17f;
 } Lumi;
+
+
+int GetLuminance(const BorderChunk& chunk)
+{
+  //const int lr = Lumi.R * static_cast<float>(chunk.r);
+  //const int lg = Lumi.G * static_cast<float>(chunk.g);
+  //const int lb = Lumi.B * static_cast<float>(chunk.b);
+  //return lr + lb + lg;
+  const int lumi = 
+    Lumi.R * static_cast<float>(chunk.r) +
+    Lumi.G * static_cast<float>(chunk.g) +
+    Lumi.B * static_cast<float>(chunk.b);
+  return lumi;
+}
+
+
+//AL.
+//TODO
+//Sies. Refactor this shit. 
+//
+//Make sure we're only zero-ing out an outlying val if its distance from both the other vals exceeds the outlierDiffThresh,
+//else we'd be altering the hue.
+void StripAwayOutlier(BorderChunk& chunk, const int outlierDiffThresh)
+{
+  if ((chunk.r < chunk.g) && (chunk.r < chunk.b))
+  {
+    const int diff1 = chunk.g - chunk.r;
+    const int diff2 = chunk.b - chunk.r;
+    if (diff1 > outlierDiffThresh && diff2 > outlierDiffThresh)
+    {
+      chunk.r = 0;
+      return;
+    }    
+  }
+  
+  if ((chunk.g < chunk.r) && (chunk.g < chunk.b))
+  {
+    const int diff1 = chunk.r - chunk.g;
+    const int diff2 = chunk.b - chunk.g;
+    if (diff1 > outlierDiffThresh && diff2 > outlierDiffThresh)
+    {
+      chunk.g = 0;
+      return;
+    }
+  }
+  
+  if ((chunk.b < chunk.r) && (chunk.b < chunk.g))
+  {
+    const int diff1 = chunk.r - chunk.b;
+    const int diff2 = chunk.g - chunk.b;
+    if (diff1 > outlierDiffThresh && diff2 > outlierDiffThresh)
+    {
+      chunk.b = 0;
+      return;
+    }
+  }
+}
 
 
 bool isWhite(const BorderChunk& chunk, const int whiteDiffThresh)
@@ -37,49 +96,43 @@ bool isWhite(const BorderChunk& chunk, const int whiteDiffThresh)
 }
 
 
-int GetLuminance(const BorderChunk& chunk)
-{
-  //const int lr = Lumi.R * static_cast<float>(chunk.r);
-  //const int lg = Lumi.G * static_cast<float>(chunk.g);
-  //const int lb = Lumi.B * static_cast<float>(chunk.b);
-  //return lr + lb + lg;
-  return 
-    Lumi.R * static_cast<float>(chunk.r) +
-    Lumi.G * static_cast<float>(chunk.g) +
-    Lumi.B * static_cast<float>(chunk.b);
-}
-
-
 //Try and sanitise the colour info for a more clearer and simpler renderening on the strip. 
+//
 //Some approaches : 
 //Zero out all vals to black if the total luminoscity is weak so that we aren't backlighting a dark part of the scene.
 //Remove weakest value if the overall colour is not considered to be white.
-//(Make sure we're only zero-ing out that outlying val if it's below the outlierDiffTthresh else we'd be altering the hue)
+//
+//Make sure we're only zero-ing out an outlying val if its distance from both the other vals exceeds the outlierDiffThresh, 
+//else we'd be altering the hue.
+//
 void FilterChunk(
   BorderChunk& chunk,
-  const int luminanceThresh,
+  const int whiteLuminanceThresh,
+  const int colourLuminanceThresh,
   const int whiteDiffThresh,
   const int outlierDiffThresh)
 {
-  //Zero out all vals to black if the total luminoscity is weak 
-    //so that we aren't backlighting a dark part of the scene.
   const int luminance = GetLuminance(chunk);
-  if (luminance < luminanceThresh)
-  {
-    chunk.r = chunk.g = chunk.b = 0;
-    return;
-  }
 
   //Don't mess with individual vals if the colour is white overall.            
   if (isWhite(chunk, whiteDiffThresh) == true)
   {
+    if(luminance < whiteLuminanceThresh)
+    {
+      chunk.r = chunk.g = chunk.b = 0;
+    }
+    //chunk.r = chunk.g = chunk.b = 255;
     return;
   }
 
-  //Remove the outlier value for a more typical final LED colour
-  //AL.
-  //TODO
-  //
+  if (luminance < colourLuminanceThresh)
+  {
+    chunk.r = chunk.g = chunk.b = 0;
+    return;
+  }
+  
+  //Remove weakest value if the overall colour is not considered to be white.
+  StripAwayOutlier(chunk, outlierDiffThresh);
 }
 
 
@@ -444,15 +497,18 @@ int main(const int argc, char** argv)
   const float outlierDiffThreshPercentage = GetProperty_Float("outlierDiffThresh", 1.0f, config);
   const int outlierDiffThresh = outlierDiffThreshPercentage * 255;
   
-  const float luminanceThreshPercentage = GetProperty_Float("luminanceThresh", 0.0f, config);
-  const int luminanceThresh = luminanceThreshPercentage * 255;
+  const float whiteLuminanceThreshPercentage = GetProperty_Float("whiteLuminanceThresh", 0.0f, config);
+  const int whiteLuminanceThresh = whiteLuminanceThreshPercentage * 255;
+
+  const float colourLuminanceThreshPercentage = GetProperty_Float("colourLuminanceThresh", 0.0f, config);
+  const int colourLuminanceThresh = colourLuminanceThreshPercentage * 255;
 
 
   MySocket socket;
   if (socket.Initialise() == false)
   {
     MessageBoxA(nullptr,
-      "Failed to create socket \r\n\r\n\ "
+      "Failed to create socket \r\n\r\n "
       "1) Close all instances of the application\r\n "
       "2) Check your config files \r\n "
       "3) Launch the application again.",
@@ -480,7 +536,7 @@ int main(const int argc, char** argv)
 
     for (BorderChunk& chunk : borderChunks)
     {
-      FilterChunk(chunk, luminanceThresh, whiteDiffThresh, outlierDiffThresh);
+      FilterChunk(chunk, whiteLuminanceThresh, colourLuminanceThresh, whiteDiffThresh, outlierDiffThresh);
     }
 
     for (const BorderChunk chunk : borderChunks)
