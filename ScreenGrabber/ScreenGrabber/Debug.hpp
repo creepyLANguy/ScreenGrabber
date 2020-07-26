@@ -84,7 +84,7 @@ inline void FillWithNoise(
   auto* pixelPtr = static_cast<uint8_t*>(mat.data);
   const int cn = mat.channels();
 
-  int shift1, shift2, shift3;
+  int shift1 = 0, shift2 = 0, shift3 = 0;
 
   for (int y = mat.rows*leeway; y < mat.rows*(1 - leeway); ++y)
   {
