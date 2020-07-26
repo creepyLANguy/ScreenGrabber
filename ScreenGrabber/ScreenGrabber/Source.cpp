@@ -149,10 +149,9 @@ void SetBrightness(vector<BorderChunk>& borderChunks, const float brightness)
 
 void SetAverageRGBValues(vector<BorderChunk>& borderChunks, Mat& mat)
 {
-
   for (BorderChunk& chunk : borderChunks)
   {
-    int pixels = 0;
+    int pixelCount = 0;
 
     int sum_r = 0;
     int sum_g = 0;
@@ -169,15 +168,14 @@ void SetAverageRGBValues(vector<BorderChunk>& borderChunks, Mat& mat)
         sum_g += pixelPtr[y*mat.cols*cn + x*cn + 1];
         sum_b += pixelPtr[y*mat.cols*cn + x*cn + 0];
 
-        ++pixels;
+        ++pixelCount;
       }
     }
 
-    chunk.r = sum_r / pixels;
-    chunk.g = sum_g / pixels;
-    chunk.b = sum_b / pixels;
+    chunk.r = sum_r / pixelCount;
+    chunk.g = sum_g / pixelCount;
+    chunk.b = sum_b / pixelCount;
   }
-
 }
 
 
@@ -465,8 +463,7 @@ int main(const int argc, char** argv)
   leds.LED_COUNT_TOTAL = leds.LED_COUNT_UPPER + leds.LED_COUNT_LOWER + leds.LED_COUNT_LEFT + leds.LED_COUNT_RIGHT;
   cout << "LED Count: " << leds.LED_COUNT_TOTAL << endl;
 
-  if
-    (
+  if (
       rect.right - rect.left < leds.LED_COUNT_UPPER ||
       rect.right - rect.left < leds.LED_COUNT_LOWER ||
       rect.bottom - rect.top < leds.LED_COUNT_LEFT ||
@@ -491,17 +488,13 @@ int main(const int argc, char** argv)
 
   const float brightnessPercentage = GetProperty_Float("brightness", 1.0f, config);
   
-  const float whiteDiffThreshPercentage = GetProperty_Float("whiteDiffThresh", 1.0f, config);
-  const int whiteDiffThresh = whiteDiffThreshPercentage * 255;
+  const int whiteDiffThresh = GetProperty_Float("whiteDiffThresh", 1.0f, config) * 255;
   
-  const float outlierDiffThreshPercentage = GetProperty_Float("outlierDiffThresh", 1.0f, config);
-  const int outlierDiffThresh = outlierDiffThreshPercentage * 255;
+  const int outlierDiffThresh = GetProperty_Float("outlierDiffThresh", 1.0f, config) * 255;
   
-  const float whiteLuminanceThreshPercentage = GetProperty_Float("whiteLuminanceThresh", 0.0f, config);
-  const int whiteLuminanceThresh = whiteLuminanceThreshPercentage * 255;
+  const float whiteLuminanceThresh = GetProperty_Float("whiteLuminanceThresh", 0.0f, config) * 255;
 
-  const float colourLuminanceThreshPercentage = GetProperty_Float("colourLuminanceThresh", 0.0f, config);
-  const int colourLuminanceThresh = colourLuminanceThreshPercentage * 255;
+  const float colourLuminanceThresh = GetProperty_Float("colourLuminanceThresh", 0.0f, config) * 255;
 
 
   MySocket socket;
@@ -545,7 +538,7 @@ int main(const int argc, char** argv)
       
       //AL.
       int i = 2;
-      int r = 5;
+      int r = 100;
       int g = 0;
       int b = 0;
       //payload = i << 24 | r << 16 | g << 8 | b;
