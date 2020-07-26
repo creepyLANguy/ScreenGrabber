@@ -18,9 +18,9 @@
 //Mabe make these configurable
 static const struct
 {
-  const float R = 0.33f;
-  const float G = 0.50f;
-  const float B = 0.17f;
+  const float R = 0.33334f;//0.33f;
+  const float G = 0.33333f;//0.50f;
+  const float B = 0.33333f;//0.17f;
 } Lumi;
 
 
@@ -112,12 +112,11 @@ void FilterChunk(
   const int whiteDiffThresh,
   const int outlierDiffThresh)
 {
-  const int luminance = GetLuminance(chunk);
-
   //Don't mess with individual vals if the colour is white overall.            
   if (isWhite(chunk, whiteDiffThresh) == true)
   {
-    if(luminance < whiteLuminanceThresh)
+    int whiteLumi = (chunk.r + chunk.g + chunk.b) / 3;
+    if(whiteLumi < whiteLuminanceThresh)
     {
       chunk.r = chunk.g = chunk.b = 0;
     }
@@ -125,6 +124,7 @@ void FilterChunk(
     return;
   }
 
+  const int luminance = GetLuminance(chunk);
   if (luminance < colourLuminanceThresh)
   {
     chunk.r = chunk.g = chunk.b = 0;
