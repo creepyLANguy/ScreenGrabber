@@ -15,6 +15,16 @@ const char* kConfigFileName = "config.ini";
 const char kDelim = ' ';
 
 
+//AL.
+//Maybe make these configurable
+static const struct
+{
+  const float R = 0.33334f;//0.33f;
+  const float G = 0.33333f;//0.50f;
+  const float B = 0.33333f;//0.17f;
+} Lumi;
+
+
 //Device context stuffs
 const HWND hwnd = GetDesktopWindow();
 const HDC hwindowDC = GetDC(hwnd);

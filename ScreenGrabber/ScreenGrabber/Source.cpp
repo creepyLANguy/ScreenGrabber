@@ -14,15 +14,6 @@
 #define DEBUG_FPS
 #define DEBUG_VISUAL
 
-//AL.
-//Mabe make these configurable
-static const struct
-{
-  const float R = 0.33334f;//0.33f;
-  const float G = 0.33333f;//0.50f;
-  const float B = 0.33333f;//0.17f;
-} Lumi;
-
 
 int GetLuminance(const BorderChunk& chunk)
 {
@@ -470,7 +461,8 @@ int main(const int argc, char** argv)
       rect.bottom - rect.top < leds.LED_COUNT_RIGHT
       )
   {
-    MessageBoxA(nullptr,
+    MessageBoxA(
+      nullptr,
       "TOO MANY LEDS SPECIFIED - EXCEEDS RESOLUTION OF DISPLAY",
       "ScreenGrabber",
       0);
@@ -492,9 +484,9 @@ int main(const int argc, char** argv)
   
   const int outlierDiffThresh = GetProperty_Float("outlierDiffThresh", 1.0f, config) * 255;
   
-  const float whiteLuminanceThresh = GetProperty_Float("whiteLuminanceThresh", 0.0f, config) * 255;
+  const int whiteLuminanceThresh = GetProperty_Float("whiteLuminanceThresh", 0.0f, config) * 255;
 
-  const float colourLuminanceThresh = GetProperty_Float("colourLuminanceThresh", 0.0f, config) * 255;
+  const int colourLuminanceThresh = GetProperty_Float("colourLuminanceThresh", 0.0f, config) * 255;
 
 
   MySocket socket;
