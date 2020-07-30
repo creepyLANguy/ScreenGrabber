@@ -13,6 +13,7 @@
 
 #define DEBUG_FPS
 #define DEBUG_VISUAL
+#define DEBUG_PAYLOAD
 
 
 int GetLuminance(const BorderChunk& chunk)
@@ -537,6 +538,11 @@ int main(const int argc, char** argv)
       //
 
       socket.Send(&payload);
+
+#ifdef DEBUG_PAYLOAD
+      PrintPayload(payload);
+      PrintChunk(chunk);
+#endif
     }
 
 

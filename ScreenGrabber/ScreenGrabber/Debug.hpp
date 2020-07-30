@@ -1,11 +1,23 @@
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 
+#include <bitset>
+inline void PrintPayload(const unsigned int& payload)
+{
+  cout << bitset<32>(payload) << "\r\n";
+}
+
+
+const char* sep = " | ";
+inline void PrintChunk(const BorderChunk& chunk)
+{
+  cout << chunk.index << sep << chunk.r << sep << chunk.g << sep << chunk.b << "\r\n\r\n";
+}
+
+
 constexpr auto SECOND_MS = 1000;
 DWORD zeroHour = GetTickCount();
 unsigned int frameCount = 0;
-
-
 inline void PrintFramerate()
 {
   ++frameCount;
