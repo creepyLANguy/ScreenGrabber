@@ -13,7 +13,7 @@
 
 #define DEBUG_FPS
 #define DEBUG_VISUAL
-#define DEBUG_PAYLOAD
+//#define DEBUG_PAYLOAD
 
 
 int GetLuminance(const BorderChunk& chunk)
@@ -34,8 +34,9 @@ int GetLuminance(const BorderChunk& chunk)
 //TODO
 //Sies. Refactor this shit. 
 //
-//Make sure we're only zero-ing out an outlying val if its distance from both the other vals exceeds the outlierDiffThresh,
-//else we'd be altering the hue.
+//Make sure we're only zero-ing out an outlying val 
+//iff its distance from both the other vals exceeds 
+//outlierDiffThresh, else we'd be altering the hue.
 void StripAwayOutlier(BorderChunk& chunk, const int outlierDiffThresh)
 {
   if ((chunk.r < chunk.g) && (chunk.r < chunk.b))
@@ -94,7 +95,7 @@ bool isWhite(const BorderChunk& chunk, const int whiteDiffThresh)
 //Zero out all vals to black if the total luminoscity is weak so that we aren't backlighting a dark part of the scene.
 //Remove weakest value if the overall colour is not considered to be white.
 //
-//Make sure we're only zero-ing out an outlying val if its distance from both the other vals exceeds the outlierDiffThresh, 
+//Make sure we're only zero-ing out an outlying val if its distance from both the other vals exceeds outlierDiffThresh, 
 //else we'd be altering the hue.
 //
 void FilterChunk(
@@ -135,6 +136,21 @@ void SetBrightness(vector<BorderChunk>& borderChunks, const float brightness)
     chunk.r *= brightness;
     chunk.g *= brightness;
     chunk.b *= brightness;
+  }
+}
+
+void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks)
+{
+  for (int i = chunks.size()-1; i >= 0; --i)
+  {
+    if (
+      chunks[i].r == referenceChunks[i].r &&
+      chunks[i].g == referenceChunks[i].g &&
+      chunks[i].b == referenceChunks[i].b
+      )
+    {
+      chunks.erase(chunks.begin() + i);
+    }
   }
 }
 
@@ -203,8 +219,19 @@ void GrabScreen(Mat& mat, Rect& rect, const int bitmap_width, const int bitmap_h
 
 
 template <class T>
-void CopyVector(vector<T>& src, vector<T>& dest)
+void CopyToVector(vector<T>& src, vector<T>& dest)
 {
+  for (auto v : src)
+  {
+    dest.push_back(v);
+  }
+}
+
+
+template <class T>
+void OverwriteVector(vector<T>& src, vector<T>& dest)
+{
+  dest.clear();
   for (auto v : src)
   {
     dest.push_back(v);
@@ -277,7 +304,7 @@ void InitialiseBorderChunks(
     {
       AdjustChunksForGap_Horizontal(chunks_upper, gapUpper);
     }
-    CopyVector(chunks_upper, borderChunks);
+    CopyToVector(chunks_upper, borderChunks);
   }
 
   {
@@ -300,7 +327,7 @@ void InitialiseBorderChunks(
     {
       AdjustChunksForGap_Vertical(chunks_right, gapRight);
     }
-    CopyVector(chunks_right, borderChunks);
+    CopyToVector(chunks_right, borderChunks);
   }
 
   {
@@ -322,7 +349,7 @@ void InitialiseBorderChunks(
     {
       AdjustChunksForGap_Horizontal(chunks_lower, gapLower);
     }
-    CopyVector(chunks_lower, borderChunks);
+    CopyToVector(chunks_lower, borderChunks);
   }
 
   {
@@ -345,7 +372,7 @@ void InitialiseBorderChunks(
     {
       AdjustChunksForGap_Vertical(chunks_left, gapLeft);
     }
-    CopyVector(chunks_left, borderChunks);
+    CopyToVector(chunks_left, borderChunks);
   }
 
   {
@@ -438,7 +465,7 @@ int main(const int argc, char** argv)
   vector<KeyValPair> config;
   PopulateConfigBlob(config);
 
-  vector<BorderChunk> borderChunks;
+  vector<BorderChunk> borderChunks, previousChunks, limitedChunks;
 
   RECT rect;
   GetClientRect(hwnd, &rect);
@@ -479,6 +506,8 @@ int main(const int argc, char** argv)
 
   InitialiseBorderChunks(borderChunks, bitmap_width, bitmap_height, borderSamplePercentage, originPositionOffset, leds);
 
+  OverwriteVector(borderChunks, previousChunks);
+
   const float brightnessPercentage = GetProperty_Float("brightness", 1.0f, config);
   
   const int whiteDiffThresh = GetProperty_Float("whiteDiffThresh", 1.0f, config) * 255;
@@ -488,6 +517,8 @@ int main(const int argc, char** argv)
   const int whiteLuminanceThresh = GetProperty_Float("whiteLuminanceThresh", 0.0f, config) * 255;
 
   const int colourLuminanceThresh = GetProperty_Float("colourLuminanceThresh", 0.0f, config) * 255;
+
+  const bool optimiseTransmit= GetProperty_Int("optimiseTransmit", 0, config) == 1;
 
 
   MySocket socket;
@@ -525,15 +556,23 @@ int main(const int argc, char** argv)
       FilterChunk(chunk, whiteLuminanceThresh, colourLuminanceThresh, whiteDiffThresh, outlierDiffThresh);
     }
 
-    for (const BorderChunk chunk : borderChunks)
+    if (optimiseTransmit == true)
+    {
+      OverwriteVector(borderChunks, limitedChunks);
+      RemoveStaticChunks(limitedChunks, previousChunks);
+      OverwriteVector(borderChunks, previousChunks);
+    }
+    else
+    {
+      limitedChunks = borderChunks;
+    }
+
+    for (const BorderChunk chunk : limitedChunks)
     {
       unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
       
       //AL.
-      int i = 2;
-      int r = 100;
-      int g = 0;
-      int b = 0;
+      int i = 2; int r = 100; int g = 0; int b = 0;
       //payload = i << 24 | r << 16 | g << 8 | b;
       //
 
@@ -545,13 +584,12 @@ int main(const int argc, char** argv)
 #endif
     }
 
-
 #ifdef DEBUG_FPS
     PrintFramerate();
 #endif
 
 #ifdef DEBUG_VISUAL
-    ShowVisualisation(mat, borderSamplePercentage, borderChunks);
+    ShowVisualisation(mat, borderSamplePercentage, limitedChunks);
 #endif
 
     if (WAIT_MS)
