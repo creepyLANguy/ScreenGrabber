@@ -24,7 +24,9 @@
     <ClInclude Include="DeltaE.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Colourspaces.h" />
+    <ClInclude Include="Colourspaces.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
