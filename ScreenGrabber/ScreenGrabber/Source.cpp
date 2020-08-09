@@ -156,6 +156,11 @@ void RemoveIdenticalChunks(vector<BorderChunk>& chunks, const vector<BorderChunk
 
 void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks, double (*deltaeFunc)(LAB, LAB), int deltaEThresh)
 {
+  if (deltaEThresh <= 0)
+  {
+    return;
+  }
+
   for (int i = chunks.size() - 1; i >= 0; --i)
   {
     RGB rgb1;
