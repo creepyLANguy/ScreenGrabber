@@ -155,9 +155,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Colourspaces.h" />
     <ClInclude Include="ConfigHelpers.hpp" />
     <ClInclude Include="Debug.hpp" />
     <ClInclude Include="Defines.h" />
+    <ClInclude Include="DeltaE.h" />
     <ClInclude Include="MySocket.h" />
   </ItemGroup>
   <ItemGroup>

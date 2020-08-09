@@ -10,6 +10,7 @@
 #include <iostream>
 #include "ConfigHelpers.hpp"
 #include "Debug.hpp"
+#include "DeltaE.h"
 
 #define DEBUG_FPS
 #define DEBUG_VISUAL
@@ -136,7 +137,7 @@ void SetBrightness(vector<BorderChunk>& borderChunks, const float brightness)
   }
 }
 
-void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks)
+void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks, DeltaEType deltaEType, int deltaEThresh)
 {
   for (int i = chunks.size()-1; i >= 0; --i)
   {
@@ -517,7 +518,7 @@ int main(const int argc, char** argv)
 
   const bool optimiseTransmit= GetProperty_Int("optimiseTransmit", 0, config) == 1;
   
-  const int deltaEType = GetProperty_Int("deltaeType", static_cast<int>(DeltaEType::CIE2000), config);
+  const DeltaEType deltaEType = static_cast<DeltaEType>(GetProperty_Int("deltaeType", static_cast<int>(DeltaEType::CIE2000), config));
   
   const int deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
 
@@ -564,7 +565,7 @@ int main(const int argc, char** argv)
     if (optimiseTransmit == true)
     {
       OverwriteVector(borderChunks, limitedChunks);
-      RemoveStaticChunks(limitedChunks, previousChunks);
+      RemoveStaticChunks(limitedChunks, previousChunks, deltaEType, deltaEThresh);
       OverwriteVector(borderChunks, previousChunks);
     }
     else

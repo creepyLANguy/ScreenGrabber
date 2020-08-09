@@ -14,13 +14,6 @@ using namespace std;
 const char* kConfigFileName = "config.ini";
 const char kDelim = ' ';
 
-enum class DeltaEType
-{
-  CIE76 = 1,
-  CIE94 = 2,
-  CIE2000 = 3
-};
-
 
 //Device context stuffs
 const HWND hwnd = GetDesktopWindow();
