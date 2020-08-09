@@ -555,13 +555,13 @@ int main(const int argc, char** argv)
   
   const int deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
 
-  const DeltaEType deltaEType = static_cast<DeltaEType>(GetProperty_Int("deltaeType", static_cast<int>(DeltaEType::CIE2000), config));
+  const DeltaEType deltaEType = static_cast<DeltaEType>(GetProperty_Int("deltaEType", static_cast<int>(DeltaEType::CIE2000), config));
   double (*deltaeFunc)(LAB, LAB) = nullptr;
   switch (deltaEType) 
   {
-  case DeltaEType::CIE76:  deltaeFunc = &Calc76;
-  case DeltaEType::CIE94:  deltaeFunc = &Calc94;
-  case DeltaEType::CIE2000:  deltaeFunc = &Calc2000;
+  case DeltaEType::CIE76:  deltaeFunc = &Calc76; break;
+  case DeltaEType::CIE94:  deltaeFunc = &Calc94; break;
+  case DeltaEType::CIE2000:  deltaeFunc = &Calc2000; break;
   }
   
   Lumi lumi;
