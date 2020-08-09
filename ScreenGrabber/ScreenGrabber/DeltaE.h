@@ -15,10 +15,12 @@ enum class DeltaEType
   CIE2000 = 3
 };
 
-double deg2Rad(double deg)
+
+inline double deg2Rad(double deg)
 {
   return (deg * (M_PI / 180.0));
 }
+
 
 /*
  * CIE2000 implemtation was lifted almost verbatim from Greg Fiumara's C++ implementation:
@@ -161,6 +163,7 @@ double Calc2000(LAB lab1, LAB lab2)
   return (deltaE);
 }
 
+
 /*
  * CIE94 implemtation was lifted almost verbatim from Shaun Lynch's blog:
  * https://blog.genreof.com/post/comparing-colors-using-delta-e-1994-in-c
@@ -213,6 +216,7 @@ double Calc94(LAB lab1, LAB lab2)
 
   return delta94;
 }
+
 
 double Calc76(LAB lab1, LAB lab2)
 {

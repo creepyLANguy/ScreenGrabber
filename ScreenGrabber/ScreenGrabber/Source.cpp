@@ -14,7 +14,7 @@
 
 #define DEBUG_FPS
 #define DEBUG_VISUAL
-//#define DEBUG_PAYLOAD
+#define DEBUG_PAYLOAD
 
 
 int GetLuminance(const BorderChunk& chunk, Lumi& lumi)
@@ -137,15 +137,45 @@ void SetBrightness(vector<BorderChunk>& borderChunks, const float brightness)
   }
 }
 
-void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks, DeltaEType deltaEType, int deltaEThresh)
+
+void RemoveIdenticalChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks)
 {
-  for (int i = chunks.size()-1; i >= 0; --i)
+  for (int i = chunks.size() - 1; i >= 0; --i)
   {
     if (
       chunks[i].r == referenceChunks[i].r &&
       chunks[i].g == referenceChunks[i].g &&
       chunks[i].b == referenceChunks[i].b
       )
+    {
+      chunks.erase(chunks.begin() + i);
+    }
+  }
+}
+
+
+void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks, double (*deltaeFunc)(LAB, LAB), int deltaEThresh)
+{
+  for (int i = chunks.size() - 1; i >= 0; --i)
+  {
+    RGB rgb1;
+    rgb1.r = chunks[i].r;
+    rgb1.g = chunks[i].g;
+    rgb1.b = chunks[i].b;
+    
+    RGB rgb2;
+    rgb2.r = referenceChunks[i].r;
+    rgb2.g = referenceChunks[i].g;
+    rgb2.b = referenceChunks[i].b;
+
+    XYZ xyz1 = RgbToXyz(rgb1);
+    XYZ xyz2 = RgbToXyz(rgb2);
+
+    LAB lab1 = XyzToLab(xyz1);
+    LAB lab2 = XyzToLab(xyz2);
+    
+    double deltae = deltaeFunc(lab1, lab2);
+    if (deltae < deltaEThresh)
     {
       chunks.erase(chunks.begin() + i);
     }
@@ -518,14 +548,22 @@ int main(const int argc, char** argv)
 
   const bool optimiseTransmit= GetProperty_Int("optimiseTransmit", 0, config) == 1;
   
-  const DeltaEType deltaEType = static_cast<DeltaEType>(GetProperty_Int("deltaeType", static_cast<int>(DeltaEType::CIE2000), config));
-  
   const int deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
 
+  const DeltaEType deltaEType = static_cast<DeltaEType>(GetProperty_Int("deltaeType", static_cast<int>(DeltaEType::CIE2000), config));
+  double (*deltaeFunc)(LAB, LAB) = nullptr;
+  switch (deltaEType) 
+  {
+  case DeltaEType::CIE76:  deltaeFunc = &Calc76;
+  case DeltaEType::CIE94:  deltaeFunc = &Calc94;
+  case DeltaEType::CIE2000:  deltaeFunc = &Calc2000;
+  }
+  
   Lumi lumi;
   lumi.r = GetProperty_Float("lumiR", lumi.r, config);
   lumi.g = GetProperty_Float("lumiG", lumi.g, config);
   lumi.b = GetProperty_Float("lumiB", lumi.b, config);
+
 
   MySocket socket;
   if (socket.Initialise() == false)
@@ -565,7 +603,11 @@ int main(const int argc, char** argv)
     if (optimiseTransmit == true)
     {
       OverwriteVector(borderChunks, limitedChunks);
-      RemoveStaticChunks(limitedChunks, previousChunks, deltaEType, deltaEThresh);
+      
+      deltaeFunc == nullptr ? 
+        RemoveIdenticalChunks(limitedChunks, previousChunks) : 
+        RemoveStaticChunks(limitedChunks, previousChunks, deltaeFunc, deltaEThresh);      
+           
       OverwriteVector(borderChunks, previousChunks);
     }
     else

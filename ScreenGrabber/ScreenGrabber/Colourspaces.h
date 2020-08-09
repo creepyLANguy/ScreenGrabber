@@ -5,20 +5,24 @@
 
 using namespace std;
 
+
 struct RGB
 {
   double r, g, b;
 };
+
 
 struct XYZ
 {
   double x, y, z;
 };
 
+
 struct LAB
 {
   double l, a, b;
 };
+
 
 XYZ RgbToXyz(RGB rgb)
 {
@@ -45,15 +49,13 @@ XYZ RgbToXyz(RGB rgb)
   g *= 100;
   b *= 100;
 
-  double x = r * 0.4124 + g * 0.3576 + b * 0.1805;
-  double y = r * 0.2126 + g * 0.7152 + b * 0.0722;
-  double z = r * 0.0193 + g * 0.1192 + b * 0.9505;
+  xyz.x = r * 0.4124 + g * 0.3576 + b * 0.1805;
+  xyz.y = r * 0.2126 + g * 0.7152 + b * 0.0722;
+  xyz.z = r * 0.0193 + g * 0.1192 + b * 0.9505;
 
-  xyz.x = x;
-  xyz.y = y;
-  xyz.z = z;
   return xyz;
 }
+
 
 LAB XyzToLab(XYZ xyz)
 {
@@ -76,13 +78,10 @@ LAB XyzToLab(XYZ xyz)
   if (z > 0.008856) { z = pow(z, (1.0 / 3.0)); }
   else { z = (7.787 * z) + (16.0 / 116.0); }
 
-  double l = (116 * y) - 16;
-  double a = 500 * (x - y);
-  double b = 200 * (y - z);
+  lab.l = (116 * y) - 16;
+  lab.a = 500 * (x - y);
+  lab.b = 200 * (y - z);
 
-  lab.l = l;
-  lab.a = a;
-  lab.b = b;
   return lab;
 }
 
