@@ -154,7 +154,7 @@ void RemoveIdenticalChunks(vector<BorderChunk>& chunks, const vector<BorderChunk
 }
 
 
-void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks, double (*deltaeFunc)(LAB, LAB), int deltaEThresh)
+void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks, double (*deltaeFunc)(LAB&, LAB&), int deltaEThresh)
 {
   if (deltaEThresh <= 0)
   {
@@ -556,7 +556,7 @@ int main(const int argc, char** argv)
   const int deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
 
   const DeltaEType deltaEType = static_cast<DeltaEType>(GetProperty_Int("deltaEType", static_cast<int>(DeltaEType::CIE2000), config));
-  double (*deltaeFunc)(LAB, LAB) = nullptr;
+  double (*deltaeFunc)(LAB&, LAB&) = nullptr;
   switch (deltaEType) 
   {
   case DeltaEType::CIE76:  deltaeFunc = &Calc76; break;
