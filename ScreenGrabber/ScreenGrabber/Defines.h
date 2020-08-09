@@ -14,15 +14,12 @@ using namespace std;
 const char* kConfigFileName = "config.ini";
 const char kDelim = ' ';
 
-
-//AL.
-//Maybe make these configurable
-static const struct
+enum class DeltaEType
 {
-  const float R = 0.33334f;//0.33f;
-  const float G = 0.33333f;//0.50f;
-  const float B = 0.33333f;//0.17f;
-} Lumi;
+  CIE76 = 1,
+  CIE94 = 2,
+  CIE2000 = 3
+};
 
 
 //Device context stuffs
@@ -63,6 +60,7 @@ int shifter = 0;
 const string logoFilename = "logo.bmp";
 //
 
+
 struct LEDsCollection
 {
   int LED_COUNT_UPPER;
@@ -87,5 +85,14 @@ struct BorderChunk
   int g = 0;
   int b = 0;
 };
+
+
+struct Lumi 
+{
+  double r = 0.33f;
+  double g = 0.50f;
+  double b = 0.17f;
+};
+
 
 #endif // DEFINES_H

@@ -16,17 +16,13 @@
 //#define DEBUG_PAYLOAD
 
 
-int GetLuminance(const BorderChunk& chunk)
+int GetLuminance(const BorderChunk& chunk, Lumi& lumi)
 {
-  //const int lr = Lumi.R * static_cast<float>(chunk.r);
-  //const int lg = Lumi.G * static_cast<float>(chunk.g);
-  //const int lb = Lumi.B * static_cast<float>(chunk.b);
-  //return lr + lb + lg;
-  const int lumi = 
-    Lumi.R * static_cast<float>(chunk.r) +
-    Lumi.G * static_cast<float>(chunk.g) +
-    Lumi.B * static_cast<float>(chunk.b);
-  return lumi;
+  const int val = 
+    lumi.r * static_cast<float>(chunk.r) +
+    lumi.g * static_cast<float>(chunk.g) +
+    lumi.b * static_cast<float>(chunk.b);
+  return val;
 }
 
 
@@ -103,7 +99,8 @@ void FilterChunk(
   const int whiteLuminanceThresh,
   const int colourLuminanceThresh,
   const int whiteDiffThresh,
-  const int outlierDiffThresh)
+  const int outlierDiffThresh,
+  Lumi& lumi)
 {
   //Don't mess with individual vals if the colour is white overall.            
   if (isWhite(chunk, whiteDiffThresh) == true)
@@ -117,7 +114,7 @@ void FilterChunk(
     return;
   }
 
-  const int luminance = GetLuminance(chunk);
+  const int luminance = GetLuminance(chunk, lumi);
   if (luminance < colourLuminanceThresh)
   {
     chunk.r = chunk.g = chunk.b = 0;
@@ -519,7 +516,15 @@ int main(const int argc, char** argv)
   const int colourLuminanceThresh = GetProperty_Float("colourLuminanceThresh", 0.0f, config) * 255;
 
   const bool optimiseTransmit= GetProperty_Int("optimiseTransmit", 0, config) == 1;
+  
+  const int deltaEType = GetProperty_Int("deltaeType", static_cast<int>(DeltaEType::CIE2000), config);
+  
+  const int deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
 
+  Lumi lumi;
+  lumi.r = GetProperty_Float("lumiR", lumi.r, config);
+  lumi.g = GetProperty_Float("lumiG", lumi.g, config);
+  lumi.b = GetProperty_Float("lumiB", lumi.b, config);
 
   MySocket socket;
   if (socket.Initialise() == false)
@@ -553,7 +558,7 @@ int main(const int argc, char** argv)
 
     for (BorderChunk& chunk : borderChunks)
     {
-      FilterChunk(chunk, whiteLuminanceThresh, colourLuminanceThresh, whiteDiffThresh, outlierDiffThresh);
+      FilterChunk(chunk, whiteLuminanceThresh, colourLuminanceThresh, whiteDiffThresh, outlierDiffThresh, lumi);
     }
 
     if (optimiseTransmit == true)
