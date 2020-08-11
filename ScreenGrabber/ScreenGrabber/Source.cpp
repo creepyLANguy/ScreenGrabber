@@ -28,15 +28,17 @@ int GetLuminance(const BorderChunk& chunk, const Lumi& lumi)
 }
 
 
-//AL.
-//TODO
-//Sies. Refactor this shit. 
-//
 //Make sure we're only zero-ing out an outlying val 
 //iff its distance from both the other vals exceeds 
 //outlierDiffThresh, else we'd be altering the hue.
 void StripAwayOutlier(BorderChunk& chunk, const int outlierDiffThresh)
 {
+
+//AL.
+//TODO
+//Refactor this?  Essentially doing the same thing 3 times. 
+//
+
   if ((chunk.r < chunk.g) && (chunk.r < chunk.b))
   {
     const int diff1 = chunk.g - chunk.r;
@@ -139,14 +141,14 @@ void SetBrightness(vector<BorderChunk>& borderChunks, const float brightness)
 }
 
 
-void RemoveIdenticalChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks)
+void RemoveIdenticalChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& previousChunks)
 {
   for (int i = chunks.size() - 1; i >= 0; --i)
   {
     if (
-      chunks[i].r == referenceChunks[i].r &&
-      chunks[i].g == referenceChunks[i].g &&
-      chunks[i].b == referenceChunks[i].b
+      chunks[i].r == previousChunks[i].r &&
+      chunks[i].g == previousChunks[i].g &&
+      chunks[i].b == previousChunks[i].b
       )
     {
       chunks.erase(chunks.begin() + i);
@@ -155,12 +157,14 @@ void RemoveIdenticalChunks(vector<BorderChunk>& chunks, const vector<BorderChunk
 }
 
 
-void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks, DELTA_FUNC, const int deltaEThresh)
+void RemoveStaticChunks(vector<BorderChunk>& chunks, vector<BorderChunk>& previousChunks, DELTA_FUNC, const int deltaEThresh)
 {
   if (deltaEThresh <= 0)
   {
     return;
   }
+
+  vector<BorderChunk> resultantChunks;
 
   for (int i = chunks.size() - 1; i >= 0; --i)
   {
@@ -168,28 +172,11 @@ void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& 
     rgb1.r = chunks[i].r;
     rgb1.g = chunks[i].g;
     rgb1.b = chunks[i].b;
-    
-    //AL.
-    //I'm not sure if this is actually necessary cos 
-    //the indexes should always be in the same order, but eh...
-    //RGB rgb2; 
-    //for (auto ref : referenceChunks)
-    //{
-    //  if (ref.index != i)
-    //  {
-    //    continue;
-    //  }
 
-    //  rgb2.r = ref.r;
-    //  rgb2.g = ref.g;
-    //  rgb2.b = ref.b;
-    //  break;
-    //}
-    //
     RGB rgb2;
-    rgb2.r = referenceChunks[i].r;
-    rgb2.g = referenceChunks[i].g;
-    rgb2.b = referenceChunks[i].b;
+    rgb2.r = previousChunks[i].r;
+    rgb2.g = previousChunks[i].g;
+    rgb2.b = previousChunks[i].b;
     
     XYZ xyz1 = RgbToXyz(rgb1);
     XYZ xyz2 = RgbToXyz(rgb2);
@@ -200,14 +187,15 @@ void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& 
     const double deltae = deltaeFunc(lab1, lab2);
     if (deltae < deltaEThresh)
     {
-      chunks.erase(chunks.begin() + i);
+      resultantChunks.push_back(previousChunks[i]);
+      chunks.erase(chunks.begin() + i);      
     }
-    //AL.
     else {
-      int x = 1;
+      resultantChunks.push_back(chunks[i]);
     }
-    //
   }
+
+  OverwriteVector(resultantChunks, previousChunks);
 }
 
 
@@ -256,18 +244,12 @@ void OptimiseTransmit(
   if (deltaeFunc == nullptr)
   {
     RemoveIdenticalChunks(limitedChunks, previousChunks);
+    OverwriteVector(borderChunks, previousChunks);
   }
   else
   {
-    //AL.
-    //WOAH WOAH WOAH
-    //You may not be able to pass in the latest of the previousChunks cos that diff would be too small!
-    //Maintain the last BORADCASTED chunks!
-    //
     RemoveStaticChunks(limitedChunks, previousChunks, deltaeFunc, deltaEThresh);
   }
-
-  OverwriteVector(borderChunks, previousChunks);
 }
 
 
@@ -569,7 +551,7 @@ int main(const int argc, char** argv)
 
   InitialiseBorderChunks(borderChunks, bitmap_width, bitmap_height, borderSamplePercentage, originPositionOffset, leds);
 
-  OverwriteVector(borderChunks, previousChunks);
+  CopyToVector(borderChunks, previousChunks);
 
   const float brightnessPercentage = GetProperty_Float("brightness", 1.0f, config);
   

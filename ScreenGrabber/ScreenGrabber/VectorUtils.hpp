@@ -15,10 +15,7 @@ template <class T>
 void OverwriteVector(const vector<T>& src, vector<T>& dest)
 {
   dest.clear();
-  for (auto v : src)
-  {
-    dest.push_back(v);
-  }
+  CopyToVector(src, dest);
 }
 
 #endif
