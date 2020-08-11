@@ -157,7 +157,12 @@ void RemoveIdenticalChunks(vector<BorderChunk>& chunks, const vector<BorderChunk
 }
 
 
-void RemoveStaticChunks(vector<BorderChunk>& chunks, vector<BorderChunk>& previousChunks, DELTA_FUNC, const int deltaEThresh)
+void RemoveStaticChunks(
+  vector<BorderChunk>& chunks, 
+  vector<BorderChunk>& previousChunks, 
+  double (*deltaEFunc)(const LAB&, const LAB&), 
+  const int deltaEThresh
+)
 {
   if (deltaEThresh <= 0)
   {
@@ -184,7 +189,7 @@ void RemoveStaticChunks(vector<BorderChunk>& chunks, vector<BorderChunk>& previo
     const LAB lab1 = XyzToLab(xyz1);
     const LAB lab2 = XyzToLab(xyz2);
     
-    const double deltae = deltaeFunc(lab1, lab2);
+    const double deltae = deltaEFunc(lab1, lab2);
     if (deltae < deltaEThresh)
     {
       resultantChunks.push_back(previousChunks[i]);
@@ -235,20 +240,20 @@ void OptimiseTransmit(
   vector<BorderChunk>& borderChunks,
   vector<BorderChunk>& previousChunks,
   vector<BorderChunk>& limitedChunks,
-  DELTA_FUNC,
+  double (*deltaEFunc)(const LAB&, const LAB&),
   const int deltaEThresh
 )
 {
   OverwriteVector(borderChunks, limitedChunks);
 
-  if (deltaeFunc == nullptr)
+  if (deltaEFunc == nullptr)
   {
     RemoveIdenticalChunks(limitedChunks, previousChunks);
     OverwriteVector(borderChunks, previousChunks);
   }
   else
   {
-    RemoveStaticChunks(limitedChunks, previousChunks, deltaeFunc, deltaEThresh);
+    RemoveStaticChunks(limitedChunks, previousChunks, deltaEFunc, deltaEThresh);
   }
 }
 
@@ -568,12 +573,12 @@ int main(const int argc, char** argv)
   const int deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
 
   const DeltaEType deltaEType = static_cast<DeltaEType>(GetProperty_Int("deltaEType", static_cast<int>(DeltaEType::CIE2000), config));
-  DELTA_FUNC = nullptr;
+  double (*deltaEFunc)(const LAB&, const LAB&) = nullptr;
   switch (deltaEType) 
   {
-  case DeltaEType::CIE76:  deltaeFunc = &Calc76; break;
-  case DeltaEType::CIE94:  deltaeFunc = &Calc94; break;
-  case DeltaEType::CIE2000:  deltaeFunc = &Calc2000; break;
+  case DeltaEType::CIE76:  deltaEFunc = &Calc76; break;
+  case DeltaEType::CIE94:  deltaEFunc = &Calc94; break;
+  case DeltaEType::CIE2000:  deltaEFunc = &Calc2000; break;
   }
   
   Lumi lumi;
@@ -619,7 +624,7 @@ int main(const int argc, char** argv)
 
     if (optimiseTransmit == true)
     {
-      OptimiseTransmit(borderChunks, previousChunks, limitedChunks, deltaeFunc, deltaEThresh);
+      OptimiseTransmit(borderChunks, previousChunks, limitedChunks, deltaEFunc, deltaEThresh);
     }
     else
     {

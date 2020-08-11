@@ -15,9 +15,6 @@ const char* kConfigFileName = "config.ini";
 const char kDelim = ' ';
 
 
-#define  DELTA_FUNC double (*deltaeFunc)(const LAB&, const LAB&) 
-
-
 //Device context stuffs
 const HWND hwnd = GetDesktopWindow();
 const HDC hwindowDC = GetDC(hwnd);
