@@ -21,11 +21,14 @@
     <ClInclude Include="ConfigHelpers.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="DeltaE.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="DeltaE.hpp">
+      <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Colourspaces.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="Colourspaces.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorUtils.hpp">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

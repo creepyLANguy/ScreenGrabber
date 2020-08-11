@@ -9,8 +9,9 @@
 #include "MySocket.h"
 #include <iostream>
 #include "ConfigHelpers.hpp"
+#include "VectorUtils.hpp"
 #include "Debug.hpp"
-#include "DeltaE.h"
+#include "DeltaE.hpp"
 
 #define DEBUG_FPS
 #define DEBUG_VISUAL
@@ -168,11 +169,29 @@ void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& 
     rgb1.g = chunks[i].g;
     rgb1.b = chunks[i].b;
     
+    //AL.
+    //I'm not sure if this is actually necessary cos 
+    //the indexes should always be in the same order, but eh...
+    //RGB rgb2; 
+    //for (auto ref : referenceChunks)
+    //{
+    //  if (ref.index != i)
+    //  {
+    //    continue;
+    //  }
+
+    //  rgb2.r = ref.r;
+    //  rgb2.g = ref.g;
+    //  rgb2.b = ref.b;
+    //  break;
+    //}
+    //
+
     RGB rgb2;
     rgb2.r = referenceChunks[i].r;
     rgb2.g = referenceChunks[i].g;
     rgb2.b = referenceChunks[i].b;
-
+    
     XYZ xyz1 = RgbToXyz(rgb1);
     XYZ xyz2 = RgbToXyz(rgb2);
 
@@ -184,6 +203,11 @@ void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& 
     {
       chunks.erase(chunks.begin() + i);
     }
+    //AL.
+    else {
+      int x = 1;
+    }
+    //
   }
 }
 
@@ -220,6 +244,34 @@ void SetAverageRGBValues(vector<BorderChunk>& borderChunks, Mat& mat)
 }
 
 
+void OptimiseTransmit(
+  vector<BorderChunk>& borderChunks,
+  vector<BorderChunk>& previousChunks,
+  vector<BorderChunk>& limitedChunks,
+  double (*deltaeFunc)(LAB&, LAB&),
+  int deltaEThresh
+)
+{
+  OverwriteVector(borderChunks, limitedChunks);
+
+  if (deltaeFunc == nullptr)
+  {
+    RemoveIdenticalChunks(limitedChunks, previousChunks);
+  }
+  else
+  {
+    //AL.
+    //WOAH WOAH WOAH
+    //You may not be able to pass in the latest of the previousChunks cos that diff would be too small!
+    //Maintain the last BORADCASTED chunks!
+    //
+    RemoveStaticChunks(limitedChunks, previousChunks, deltaeFunc, deltaEThresh);
+  }
+
+  OverwriteVector(borderChunks, previousChunks);
+}
+
+
 void InitialiseDeviceContextStuffs(const int bitmap_width, const int bitmap_height)
 {
   SetStretchBltMode(hwindowCompatibleDC, COLORONCOLOR);
@@ -248,27 +300,6 @@ void GrabScreen(Mat& mat, Rect& rect, const int bitmap_width, const int bitmap_h
   StretchBlt(hwindowCompatibleDC, 0, 0, bitmap_width, bitmap_height, hwindowDC, rect.x, rect.y, rect.width, rect.height, SRCCOPY);
   //copy from hwindowCompatibleDC to hbwindow
   GetDIBits(hwindowCompatibleDC, hbwindow, 0, bitmap_height, mat.data, reinterpret_cast<BITMAPINFO *>(&bi), DIB_RGB_COLORS);
-}
-
-
-template <class T>
-void CopyToVector(vector<T>& src, vector<T>& dest)
-{
-  for (auto v : src)
-  {
-    dest.push_back(v);
-  }
-}
-
-
-template <class T>
-void OverwriteVector(vector<T>& src, vector<T>& dest)
-{
-  dest.clear();
-  for (auto v : src)
-  {
-    dest.push_back(v);
-  }
 }
 
 
@@ -607,13 +638,7 @@ int main(const int argc, char** argv)
 
     if (optimiseTransmit == true)
     {
-      OverwriteVector(borderChunks, limitedChunks);
-      
-      deltaeFunc == nullptr ? 
-        RemoveIdenticalChunks(limitedChunks, previousChunks) : 
-        RemoveStaticChunks(limitedChunks, previousChunks, deltaeFunc, deltaEThresh);      
-           
-      OverwriteVector(borderChunks, previousChunks);
+      OptimiseTransmit(borderChunks, previousChunks, limitedChunks, deltaeFunc, deltaEThresh);
     }
     else
     {

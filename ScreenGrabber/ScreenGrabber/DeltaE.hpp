@@ -1,7 +1,7 @@
 #ifndef DELTAE_H
 #define DELTAE_H
 
-#include "Colourspaces.h"
+#include "Colourspaces.hpp"
 #include <complex>
 
 using namespace std;

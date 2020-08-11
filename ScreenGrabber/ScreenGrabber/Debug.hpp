@@ -129,8 +129,7 @@ inline void BlankMat(
   if (noiseType == INCEPTION) { return; }
 
   if (noiseType == LOGO)
-  {
-    //AL.
+  {   
     //TODO
     //Draw logo here, man...
     return;
