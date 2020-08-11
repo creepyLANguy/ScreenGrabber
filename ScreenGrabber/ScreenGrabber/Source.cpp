@@ -18,7 +18,7 @@
 #define DEBUG_PAYLOAD
 
 
-int GetLuminance(const BorderChunk& chunk, Lumi& lumi)
+int GetLuminance(const BorderChunk& chunk, const Lumi& lumi)
 {
   const int val = 
     lumi.r * static_cast<float>(chunk.r) +
@@ -102,7 +102,7 @@ void FilterChunk(
   const int colourLuminanceThresh,
   const int whiteDiffThresh,
   const int outlierDiffThresh,
-  Lumi& lumi)
+  const Lumi& lumi)
 {
   //Don't mess with individual vals if the colour is white overall.            
   if (isWhite(chunk, whiteDiffThresh) == true)
@@ -155,7 +155,7 @@ void RemoveIdenticalChunks(vector<BorderChunk>& chunks, const vector<BorderChunk
 }
 
 
-void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks, double (*deltaeFunc)(LAB&, LAB&), int deltaEThresh)
+void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& referenceChunks, DELTA_FUNC, const int deltaEThresh)
 {
   if (deltaEThresh <= 0)
   {
@@ -186,7 +186,6 @@ void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& 
     //  break;
     //}
     //
-
     RGB rgb2;
     rgb2.r = referenceChunks[i].r;
     rgb2.g = referenceChunks[i].g;
@@ -195,10 +194,10 @@ void RemoveStaticChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& 
     XYZ xyz1 = RgbToXyz(rgb1);
     XYZ xyz2 = RgbToXyz(rgb2);
 
-    LAB lab1 = XyzToLab(xyz1);
-    LAB lab2 = XyzToLab(xyz2);
+    const LAB lab1 = XyzToLab(xyz1);
+    const LAB lab2 = XyzToLab(xyz2);
     
-    double deltae = deltaeFunc(lab1, lab2);
+    const double deltae = deltaeFunc(lab1, lab2);
     if (deltae < deltaEThresh)
     {
       chunks.erase(chunks.begin() + i);
@@ -248,8 +247,8 @@ void OptimiseTransmit(
   vector<BorderChunk>& borderChunks,
   vector<BorderChunk>& previousChunks,
   vector<BorderChunk>& limitedChunks,
-  double (*deltaeFunc)(LAB&, LAB&),
-  int deltaEThresh
+  DELTA_FUNC,
+  const int deltaEThresh
 )
 {
   OverwriteVector(borderChunks, limitedChunks);
@@ -587,7 +586,7 @@ int main(const int argc, char** argv)
   const int deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
 
   const DeltaEType deltaEType = static_cast<DeltaEType>(GetProperty_Int("deltaEType", static_cast<int>(DeltaEType::CIE2000), config));
-  double (*deltaeFunc)(LAB&, LAB&) = nullptr;
+  DELTA_FUNC = nullptr;
   switch (deltaEType) 
   {
   case DeltaEType::CIE76:  deltaeFunc = &Calc76; break;

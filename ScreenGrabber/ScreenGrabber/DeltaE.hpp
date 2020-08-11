@@ -26,7 +26,7 @@ inline double deg2Rad(double deg)
  * CIE2000 implemtation was lifted almost verbatim from Greg Fiumara's C++ implementation:
  * https://github.com/gfiumara/CIEDE2000
  */
-double Calc2000(LAB& lab1, LAB& lab2)
+double Calc2000(const LAB& lab1, const LAB& lab2)
 {
   double k_L = 1.0;
   double k_C = 1.0;
@@ -168,7 +168,7 @@ double Calc2000(LAB& lab1, LAB& lab2)
  * CIE94 implemtation was lifted almost verbatim from Shaun Lynch's blog:
  * https://blog.genreof.com/post/comparing-colors-using-delta-e-1994-in-c
  */
-double Calc94(LAB& lab1, LAB& lab2)
+double Calc94(const LAB& lab1, const LAB& lab2)
 {
   double k1 = 0.045;      // 0.045 graphic arts, 0.048 textiles
   double k2 = 0.015;      // 0.015 graphic arts, 0.014 textiles
@@ -218,7 +218,7 @@ double Calc94(LAB& lab1, LAB& lab2)
 }
 
 
-double Calc76(LAB& lab1, LAB& lab2)
+double Calc76(const LAB& lab1, const LAB& lab2)
 {
   double lDiff = pow(lab2.l - lab1.l, 2);
   double aDiff = pow(lab2.a - lab1.a, 2);
