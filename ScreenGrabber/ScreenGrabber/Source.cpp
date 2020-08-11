@@ -568,7 +568,7 @@ int main(const int argc, char** argv)
 
   const int colourLuminanceThresh = GetProperty_Float("colourLuminanceThresh", 0.0f, config) * 255;
 
-  const bool optimiseTransmit= GetProperty_Int("optimiseTransmit", 0, config) == 1;
+  const bool optimiseTransmit = GetProperty_Int("optimiseTransmit", 0, config) == 1;
   
   const int deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
 
