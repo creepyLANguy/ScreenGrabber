@@ -14,15 +14,18 @@ enum NoiseType
   INCEPTION,
   NOISETYPE_LAST
 };
+
+
 enum NoiseApplicator
 {
   INNER,
   OUTER,
   NOISEAPPLICATOR_LAST
 };
+
+
 int shifter = 0;
 const string logoFilename = "logo.bmp";
-
 
 
 #include <bitset>

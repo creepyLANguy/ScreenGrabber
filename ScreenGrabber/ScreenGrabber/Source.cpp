@@ -1,11 +1,11 @@
-// ReSharper disable IdentifierTypo
+// ReSharper disable CppClangTidyCppcoreguidelinesNarrowingConversions
+// ReSharper disable CppClangTidyClangDiagnosticUnknownEscapeSequence
+// ReSharper disable CppClangTidyCppcoreguidelinesProTypeMemberInit
 // ReSharper disable CppClangTidyBugproneNarrowingConversions
 // ReSharper disable CppClangTidyClangDiagnosticSignCompare
-// ReSharper disable CppClangTidyCppcoreguidelinesNarrowingConversions
-// ReSharper disable CppClangTidyCppcoreguidelinesProTypeMemberInit
-// ReSharper disable CppClangTidyClangDiagnosticUnknownEscapeSequence
 // ReSharper disable CppClangTidyBugproneExceptionEscape
 // ReSharper disable CppInconsistentNaming
+// ReSharper disable IdentifierTypo
 // ReSharper disable CppUseAuto
 
 
@@ -675,4 +675,3 @@ int main(const int argc, char** argv)
   //ReleaseDC(hwnd, hwindowDC);
   //return 0;
 }
-
