@@ -28,30 +28,30 @@ inline double deg2Rad(double deg)
  */
 double Calc2000(const LAB& lab1, const LAB& lab2)
 {
-  double k_L = 1.0;
-  double k_C = 1.0;
-  double k_H = 1.0;
+  const double k_L = 1.0;
+  const double k_C = 1.0;
+  const double k_H = 1.0;
 
-  double deg360InRad = deg2Rad(360.0);
-  double deg180InRad = deg2Rad(180.0);
-  double pow25To7 = 6103515625.0; /* pow(25, 7) */
+  const double deg360InRad = deg2Rad(360.0);
+  const double deg180InRad = deg2Rad(180.0);
+  const double pow25To7 = 6103515625.0; /* pow(25, 7) */
 
   /*
   * Step 1
   */
   /* Equation 2 */
-  double C1 = sqrt((lab1.a * lab1.a) + (lab1.b * lab1.b));
-  double C2 = sqrt((lab2.a * lab2.a) + (lab2.b * lab2.b));
+  const double C1 = sqrt((lab1.a * lab1.a) + (lab1.b * lab1.b));
+  const double C2 = sqrt((lab2.a * lab2.a) + (lab2.b * lab2.b));
   /* Equation 3 */
-  double barC = (C1 + C2) / 2.0;
+  const double barC = (C1 + C2) / 2.0;
   /* Equation 4 */
-  double G = 0.5 * (1 - sqrt(pow(barC, 7) / (pow(barC, 7) + pow25To7)));
+  const double G = 0.5 * (1 - sqrt(pow(barC, 7) / (pow(barC, 7) + pow25To7)));
   /* Equation 5 */
-  double a1Prime = (1.0 + G) * lab1.a;
-  double a2Prime = (1.0 + G) * lab2.a;
+  const double a1Prime = (1.0 + G) * lab1.a;
+  const double a2Prime = (1.0 + G) * lab2.a;
   /* Equation 6 */
-  double CPrime1 = sqrt((a1Prime * a1Prime) + (lab1.b * lab1.b));
-  double CPrime2 = sqrt((a2Prime * a2Prime) + (lab2.b * lab2.b));
+  const double CPrime1 = sqrt((a1Prime * a1Prime) + (lab1.b * lab1.b));
+  const double CPrime2 = sqrt((a2Prime * a2Prime) + (lab2.b * lab2.b));
   /* Equation 7 */
   double hPrime1;
   if (lab1.b == 0 && a1Prime == 0)
@@ -85,12 +85,12 @@ double Calc2000(const LAB& lab1, const LAB& lab2)
   * Step 2
   */
   /* Equation 8 */
-  double deltaLPrime = lab2.l - lab1.l;
+  const double deltaLPrime = lab2.l - lab1.l;
   /* Equation 9 */
-  double deltaCPrime = CPrime2 - CPrime1;
+  const double deltaCPrime = CPrime2 - CPrime1;
   /* Equation 10 */
   double deltahPrime;
-  double CPrimeProduct = CPrime1 * CPrime2;
+  const double CPrimeProduct = CPrime1 * CPrime2;
   if (CPrimeProduct == 0)
     deltahPrime = 0;
   else
@@ -103,7 +103,7 @@ double Calc2000(const LAB& lab1, const LAB& lab2)
       deltahPrime -= deg360InRad;
   }
   /* Equation 11 */
-  double deltaHPrime = 2.0 * sqrt(CPrimeProduct) *
+  const double deltaHPrime = 2.0 * sqrt(CPrimeProduct) *
     sin(deltahPrime / 2.0);
 
 
@@ -111,11 +111,12 @@ double Calc2000(const LAB& lab1, const LAB& lab2)
    * Step 3
    */
    /* Equation 12 */
-  double barLPrime = (lab1.l + lab2.l) / 2.0;
+  const double barLPrime = (lab1.l + lab2.l) / 2.0;
   /* Equation 13 */
-  double barCPrime = (CPrime1 + CPrime2) / 2.0;
+  const double barCPrime = (CPrime1 + CPrime2) / 2.0;
   /* Equation 14 */
-  double barhPrime, hPrimeSum = hPrime1 + hPrime2;
+  double barhPrime;
+  const double hPrimeSum = hPrime1 + hPrime2;
   if (CPrime1 * CPrime2 == 0)
   {
     barhPrime = hPrimeSum;
@@ -133,25 +134,25 @@ double Calc2000(const LAB& lab1, const LAB& lab2)
     }
   }
   /* Equation 15 */
-  double T = 1.0 - (0.17 * cos(barhPrime - deg2Rad(30.0))) +
+  const double T = 1.0 - (0.17 * cos(barhPrime - deg2Rad(30.0))) +
     (0.24 * cos(2.0 * barhPrime)) +
     (0.32 * cos((3.0 * barhPrime) + deg2Rad(6.0))) -
     (0.20 * cos((4.0 * barhPrime) - deg2Rad(63.0)));
   /* Equation 16 */
-  double deltaTheta = deg2Rad(30.0) *
+  const double deltaTheta = deg2Rad(30.0) *
     exp(-1 * (pow((barhPrime - deg2Rad(275.0)) / deg2Rad(25.0), 2.0)));
   /* Equation 17 */
-  double R_C = 2.0 * sqrt(pow(barCPrime, 7.0) /
+  const double R_C = 2.0 * sqrt(pow(barCPrime, 7.0) /
     (pow(barCPrime, 7.0) + pow25To7));
   /* Equation 18 */
-  double S_L = 1 + ((0.015 * pow(barLPrime - 50.0, 2.0)) /
+  const double S_L = 1 + ((0.015 * pow(barLPrime - 50.0, 2.0)) /
     sqrt(20 + pow(barLPrime - 50.0, 2.0)));
   /* Equation 19 */
-  double S_C = 1 + (0.045 * barCPrime);
+  const double S_C = 1 + (0.045 * barCPrime);
   /* Equation 20 */
-  double S_H = 1 + (0.015 * barCPrime * T);
+  const double S_H = 1 + (0.015 * barCPrime * T);
   /* Equation 21 */
-  double R_T = (-1 * (sin(2.0 * deltaTheta))) * R_C;
+  const double R_T = (-1 * (sin(2.0 * deltaTheta))) * R_C;
 
   /* Equation 22 */
   double deltaE = sqrt(
@@ -170,27 +171,27 @@ double Calc2000(const LAB& lab1, const LAB& lab2)
  */
 double Calc94(const LAB& lab1, const LAB& lab2)
 {
-  double k1 = 0.045;      // 0.045 graphic arts, 0.048 textiles
-  double k2 = 0.015;      // 0.015 graphic arts, 0.014 textiles
+  const double k1 = 0.045;      // 0.045 graphic arts, 0.048 textiles
+  const double k2 = 0.015;      // 0.015 graphic arts, 0.014 textiles
 
-  double kl = 1;         // 1 default, 2 textiles
-  double kc = 1;
-  double kh = 1;
+  const double kl = 1;         // 1 default, 2 textiles
+  const double kc = 1;
+  const double kh = 1;
 
-  double xc1 = sqrt(pow(lab1.a, 2) + pow(lab1.b, 2));
-  double xc2 = sqrt(pow(lab2.a, 2) + pow(lab2.b, 2));
+  const double xc1 = sqrt(pow(lab1.a, 2) + pow(lab1.b, 2));
+  const double xc2 = sqrt(pow(lab2.a, 2) + pow(lab2.b, 2));
 
-  double sl = 1;
-  double sc = 1 + k1 * xc1;
-  double sh = 1 + k2 * xc1;
+  const double sl = 1;
+  const double sc = 1 + k1 * xc1;
+  const double sh = 1 + k2 * xc1;
 
-  double delta_L = lab1.l - lab2.l;
-  double delta_C = xc1 - xc2;
-  double delta_a = lab1.a - lab2.a;
-  double delta_b = lab1.b - lab2.b;
+  const double delta_L = lab1.l - lab2.l;
+  const double delta_C = xc1 - xc2;
+  const double delta_a = lab1.a - lab2.a;
+  const double delta_b = lab1.b - lab2.b;
 
   double delta_H = 0;
-  double deltaHCalc = pow(delta_a, 2) + pow(delta_b, 2) - pow(delta_C, 2);
+  const double deltaHCalc = pow(delta_a, 2) + pow(delta_b, 2) - pow(delta_C, 2);
 
   // Can't do a sqrt of a negative num
   if (deltaHCalc < 0)
@@ -208,11 +209,11 @@ double Calc94(const LAB& lab1, const LAB& lab2)
     delta_H = 0;
   }
 
-  double lgroup = pow(delta_L / (kl * sl), 2);
-  double cgroup = pow(delta_C / (kc * sc), 2);
-  double hgroup = pow(delta_H / (kh * sh), 2);
+  const double lgroup = pow(delta_L / (kl * sl), 2);
+  const double cgroup = pow(delta_C / (kc * sc), 2);
+  const double hgroup = pow(delta_H / (kh * sh), 2);
 
-  double delta94 = sqrt(lgroup + cgroup + hgroup);
+  const double delta94 = sqrt(lgroup + cgroup + hgroup);
 
   return delta94;
 }
@@ -220,11 +221,11 @@ double Calc94(const LAB& lab1, const LAB& lab2)
 
 double Calc76(const LAB& lab1, const LAB& lab2)
 {
-  double lDiff = pow(lab2.l - lab1.l, 2);
-  double aDiff = pow(lab2.a - lab1.a, 2);
-  double bDiff = pow(lab2.b - lab1.b, 2);
+  const double lDiff = pow(lab2.l - lab1.l, 2);
+  const double aDiff = pow(lab2.a - lab1.a, 2);
+  const double bDiff = pow(lab2.b - lab1.b, 2);
 
-  double delta76 = sqrt(lDiff + aDiff + bDiff);
+  const double delta76 = sqrt(lDiff + aDiff + bDiff);
 
   return delta76;
 }

@@ -1,6 +1,30 @@
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 
+
+enum NoiseType
+{
+  NONE,
+  LOGO,
+  GREY,
+  COLOUR,
+  SHIFTER_1,
+  SHIFTER_2,
+  SHIFTER_3,
+  INCEPTION,
+  NOISETYPE_LAST
+};
+enum NoiseApplicator
+{
+  INNER,
+  OUTER,
+  NOISEAPPLICATOR_LAST
+};
+int shifter = 0;
+const string logoFilename = "logo.bmp";
+
+
+
 #include <bitset>
 inline void PrintPayload(const unsigned int& payload)
 {

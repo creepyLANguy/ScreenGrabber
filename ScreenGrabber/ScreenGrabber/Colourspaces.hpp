@@ -24,7 +24,7 @@ struct LAB
 };
 
 
-XYZ RgbToXyz(RGB& rgb)
+inline XYZ RgbToXyz(RGB& rgb)
 {
   XYZ xyz;
 
@@ -57,7 +57,7 @@ XYZ RgbToXyz(RGB& rgb)
 }
 
 
-LAB XyzToLab(XYZ& xyz)
+inline LAB XyzToLab(XYZ& xyz)
 {
   LAB lab;
 

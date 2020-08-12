@@ -31,30 +31,6 @@ struct KeyValPair
 };
 
 
-//DEBUGGUNG
-enum NoiseType
-{
-  NONE,
-  LOGO,
-  GREY,
-  COLOUR,
-  SHIFTER_1,
-  SHIFTER_2,
-  SHIFTER_3,
-  INCEPTION,
-  NOISETYPE_LAST
-};
-enum NoiseApplicator
-{
-  INNER,
-  OUTER,
-  NOISEAPPLICATOR_LAST
-};
-int shifter = 0;
-const string logoFilename = "logo.bmp";
-//
-
-
 struct LEDsCollection
 {
   int LED_COUNT_UPPER;

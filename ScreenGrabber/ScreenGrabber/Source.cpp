@@ -1,9 +1,13 @@
+// ReSharper disable IdentifierTypo
 // ReSharper disable CppClangTidyBugproneNarrowingConversions
 // ReSharper disable CppClangTidyClangDiagnosticSignCompare
 // ReSharper disable CppClangTidyCppcoreguidelinesNarrowingConversions
 // ReSharper disable CppClangTidyCppcoreguidelinesProTypeMemberInit
 // ReSharper disable CppClangTidyClangDiagnosticUnknownEscapeSequence
 // ReSharper disable CppClangTidyBugproneExceptionEscape
+// ReSharper disable CppInconsistentNaming
+// ReSharper disable CppUseAuto
+
 
 #include "Defines.h"
 #include "MySocket.h"
@@ -636,7 +640,7 @@ int main(const int argc, char** argv)
       unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
       
       //AL.
-      int i = 2; int r = 100; int g = 0; int b = 0;
+      //int i = 2; int r = 100; int g = 0; int b = 0;
       //payload = i << 24 | r << 16 | g << 8 | b;
       //
 
