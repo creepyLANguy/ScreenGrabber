@@ -96,7 +96,7 @@ bool isWhite(const BorderChunk& chunk, const int whiteDiffThresh)
 //Try and sanitise the colour info for a more clearer and simpler renderening on the strip. 
 //
 //Some approaches : 
-//Zero out all vals to black if the total luminoscity is weak so that we aren't backlighting a dark part of the scene.
+//Zero out all vals to black if the total luminosity is weak so that we aren't backlighting a dark part of the scene.
 //Remove weakest value if the overall colour is not considered to be white.
 //
 //Make sure we're only zero-ing out an outlying val if its distance from both the other vals exceeds outlierDiffThresh, 
@@ -328,7 +328,9 @@ void AdjustChunksForGap_Horizontal(vector<BorderChunk>& chunks, int gap)
   }
 }
 
-
+//AL.
+//TODO
+//Refactor this.
 void InitialiseBorderChunks(
   vector<BorderChunk>& borderChunks, 
   const int bitmap_width, 
@@ -513,7 +515,6 @@ float GetAspectRatio(vector<KeyValPair>& configBlob)
 }
 
 
-//ratio 21:9 delay 0 downscale 3 lower/upper/left/rightBuffer 0 borderSample 10 origin 0 brightness 100
 int main(const int argc, char** argv)
 {
   vector<KeyValPair> config;
@@ -526,7 +527,11 @@ int main(const int argc, char** argv)
   TrimRectToRatio(rect, GetAspectRatio(config));
   ReduceRectByBuffers(rect, config);
 
-  const int WAIT_MS = GetProperty_Int("delay", 0, config);
+  const int wait_ms = GetProperty_Int("delay_ms", 0, config);
+
+  //AL.
+  const int chunk_update_timeout_ms = GetProperty_Int("chunk_update_timeout_ms", 0, config);
+  //
 
   LEDsCollection leds;
   leds.LED_COUNT_UPPER = GetProperty_Int("led_count_upper", 10, config);
@@ -576,7 +581,7 @@ int main(const int argc, char** argv)
   
   const int deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
 
-  const DeltaEType deltaEType = static_cast<DeltaEType>(GetProperty_Int("deltaEType", static_cast<int>(DeltaEType::CIE2000), config));
+  const auto deltaEType = static_cast<DeltaEType>(GetProperty_Int("deltaEType", static_cast<int>(DeltaEType::CIE2000), config));
   double (*deltaEFunc)(const LAB&, const LAB&) = nullptr;
   switch (deltaEType) 
   {
@@ -660,9 +665,9 @@ int main(const int argc, char** argv)
     ShowVisualisation(mat, borderSamplePercentage, limitedChunks);
 #endif
 
-    if (WAIT_MS)
+    if (wait_ms)
     {
-      Sleep(WAIT_MS);
+      Sleep(wait_ms);
     }
   }
 
