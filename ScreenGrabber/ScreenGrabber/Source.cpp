@@ -22,6 +22,24 @@
 #define DEBUG_PAYLOAD
 
 
+inline bool HasLEDRecentlyBeenUpdated(const int chunkIndex, vector<DWORD>& ledUpdateTracker, const int chunkUpdateTimeoutMS)
+{
+  if (chunkUpdateTimeoutMS <= 0)
+  {
+    return false;
+  }
+
+  const auto now = GetTickCount();
+  const auto timeDiff = now - ledUpdateTracker[chunkIndex];
+  if (timeDiff < chunkUpdateTimeoutMS)
+  {
+    return true;
+  }
+
+  ledUpdateTracker[chunkIndex] = now;
+  return false;
+}
+
 int GetLuminance(const BorderChunk& chunk, const Lumi& lumi)
 {
   const int val = 
@@ -111,7 +129,7 @@ void FilterChunk(
   const Lumi& lumi)
 {
   //Don't mess with individual vals if the colour is white overall.            
-  if (isWhite(chunk, whiteDiffThresh) == true)
+  if (isWhite(chunk, whiteDiffThresh))
   {
     int whiteLumi = (chunk.r + chunk.g + chunk.b) / 3;
     if(whiteLumi < whiteLuminanceThresh)
@@ -240,7 +258,7 @@ void SetAverageRGBValues(vector<BorderChunk>& borderChunks, Mat& mat)
 }
 
 
-void OptimiseTransmit(
+void OptimiseTransmitWithDelta(
   vector<BorderChunk>& borderChunks,
   vector<BorderChunk>& previousChunks,
   vector<BorderChunk>& limitedChunks,
@@ -488,28 +506,10 @@ void TrimRectToRatio(RECT& rect, const float aspect_ratio)
 
 float GetAspectRatio(vector<KeyValPair>& configBlob)
 {
-  float aspectRatioValue = 16 / 9.0f;
+  const int width = GetProperty_Int("ratioHorizontal", 16, configBlob);
+  const int height = GetProperty_Int("ratioVertical", 9, configBlob);
 
-  string str;
-  for (const KeyValPair& kvp : configBlob)
-  {
-    if (_strcmpi(kvp.key.c_str(), "ratio") == 0)
-    {
-      str = kvp.val;
-      break;
-    }
-  }
-
-  if (str.length() == 0)
-  {
-    return aspectRatioValue;
-  }
-
-  const int delimPos = str.find_first_of(':');
-  const float width = atoi(str.substr(0, delimPos).c_str());
-  const float height = atoi(str.substr(delimPos + 1, str.length()).c_str());
-
-  aspectRatioValue = width / height;
+  const float aspectRatioValue = (width) / static_cast<float>(height);
 
   return aspectRatioValue;
 }
@@ -526,12 +526,6 @@ int main(const int argc, char** argv)
   GetClientRect(hwnd, &rect);
   TrimRectToRatio(rect, GetAspectRatio(config));
   ReduceRectByBuffers(rect, config);
-
-  const int wait_ms = GetProperty_Int("delay_ms", 0, config);
-
-  //AL.
-  const int chunk_update_timeout_ms = GetProperty_Int("chunk_update_timeout_ms", 0, config);
-  //
 
   LEDsCollection leds;
   leds.LED_COUNT_UPPER = GetProperty_Int("led_count_upper", 10, config);
@@ -556,6 +550,13 @@ int main(const int argc, char** argv)
     return -1;
   }
 
+  const int wait_ms = GetProperty_Int("delay_ms", 0, config);
+
+  //AL.
+  const int chunkUpdateTimeoutMS = GetProperty_Int("chunkUpdateTimeoutMS", 0, config);
+  vector<DWORD> ledUpdateTracker(leds.LED_COUNT_TOTAL);
+  //
+
   const int downscaler = GetProperty_Int("downscale", 3, config);
   const int bitmap_width = (rect.right - rect.left) / downscaler;
   const int bitmap_height = (rect.bottom - rect.top) / downscaler;
@@ -577,7 +578,7 @@ int main(const int argc, char** argv)
 
   const int colourLuminanceThresh = GetProperty_Float("colourLuminanceThresh", 0.0f, config) * 255;
 
-  const bool optimiseTransmit = GetProperty_Int("optimiseTransmit", 0, config) == 1;
+  const bool optimiseTransmitWithDelta = GetProperty_Int("optimiseTransmitWithDelta", 0, config) == 1;
   
   const int deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
 
@@ -631,9 +632,9 @@ int main(const int argc, char** argv)
       FilterChunk(chunk, whiteLuminanceThresh, colourLuminanceThresh, whiteDiffThresh, outlierDiffThresh, lumi);
     }
 
-    if (optimiseTransmit == true)
+    if (optimiseTransmitWithDelta)
     {
-      OptimiseTransmit(borderChunks, previousChunks, limitedChunks, deltaEFunc, deltaEThresh);
+      OptimiseTransmitWithDelta(borderChunks, previousChunks, limitedChunks, deltaEFunc, deltaEThresh);
     }
     else
     {
@@ -642,6 +643,11 @@ int main(const int argc, char** argv)
 
     for (const BorderChunk chunk : limitedChunks)
     {
+      if (HasLEDRecentlyBeenUpdated(chunk.index, ledUpdateTracker, chunkUpdateTimeoutMS))
+      {
+        continue;
+      }
+
       unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
       
       //AL.

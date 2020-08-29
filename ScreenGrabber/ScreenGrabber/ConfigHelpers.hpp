@@ -54,11 +54,18 @@ return default_return;
 }
 */
 
-inline int GetProperty_Int(const char* propertyName, const int default_return, vector<KeyValPair>& configBlob)
+
+inline bool StringsAreEqual(string str1, string str2)
+{
+  return _strcmpi(str1.c_str(), str2.c_str()) == 0;
+}
+
+
+inline int GetProperty_Int(const string propertyName, const int default_return, vector<KeyValPair>& configBlob)
 {
   for (KeyValPair kvp : configBlob)
   {
-    if (_strcmpi(kvp.key.c_str(), propertyName) == 0)
+    if (StringsAreEqual(kvp.key, propertyName))
     {
       return atoi(kvp.val.c_str());
     }
@@ -68,7 +75,7 @@ inline int GetProperty_Int(const char* propertyName, const int default_return, v
 }
 
 
-inline float GetProperty_Float(const char* propertyName, const float default_return, vector<KeyValPair>& configBlob)
+inline float GetProperty_Float(const string propertyName, const float default_return, vector<KeyValPair>& configBlob)
 {
   return GetProperty_Int(propertyName, (default_return * 100), configBlob) / 100.0f;
 }
