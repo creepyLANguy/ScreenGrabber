@@ -50,48 +50,39 @@ int GetLuminance(const BorderChunk& chunk, const Lumi& lumi)
 }
 
 
+inline bool StripAwayOutlierHelper(int& candidateValue, const int comparableValue1, const int comparableValue2, const int outlierDiffThresh)
+{
+  if ((candidateValue < comparableValue1) && (candidateValue < comparableValue2))
+  {
+    const int diff1 = comparableValue1 - candidateValue;
+    const int diff2 = comparableValue2 - candidateValue;
+    if (diff1 > outlierDiffThresh && diff2 > outlierDiffThresh)
+    {
+      candidateValue = 0;
+      return true;
+    }    
+  }
+
+  return false;
+}
+
+
 //Make sure we're only zero-ing out an outlying val 
 //iff its distance from both the other vals exceeds 
 //outlierDiffThresh, else we'd be altering the hue.
 void StripAwayOutlier(BorderChunk& chunk, const int outlierDiffThresh)
 {
-
-//AL.
-//TODO
-//Refactor this?  Essentially doing the same thing 3 times. 
-//
-
-  if ((chunk.r < chunk.g) && (chunk.r < chunk.b))
+  if (StripAwayOutlierHelper(chunk.r, chunk.g, chunk.b, outlierDiffThresh))
   {
-    const int diff1 = chunk.g - chunk.r;
-    const int diff2 = chunk.b - chunk.r;
-    if (diff1 > outlierDiffThresh && diff2 > outlierDiffThresh)
-    {
-      chunk.r = 0;
-      return;
-    }    
+    return;
   }
-  
-  if ((chunk.g < chunk.r) && (chunk.g < chunk.b))
+  if (StripAwayOutlierHelper(chunk.g, chunk.r, chunk.b, outlierDiffThresh))
   {
-    const int diff1 = chunk.r - chunk.g;
-    const int diff2 = chunk.b - chunk.g;
-    if (diff1 > outlierDiffThresh && diff2 > outlierDiffThresh)
-    {
-      chunk.g = 0;
-      return;
-    }
+    return;
   }
-  
-  if ((chunk.b < chunk.r) && (chunk.b < chunk.g))
+  if (StripAwayOutlierHelper(chunk.b, chunk.g, chunk.r, outlierDiffThresh))
   {
-    const int diff1 = chunk.r - chunk.b;
-    const int diff2 = chunk.g - chunk.b;
-    if (diff1 > outlierDiffThresh && diff2 > outlierDiffThresh)
-    {
-      chunk.b = 0;
-      return;
-    }
+    return;
   }
 }
 
@@ -297,6 +288,14 @@ void InitialiseDeviceContextStuffs(const int bitmap_width, const int bitmap_heig
   bi.biYPelsPerMeter = 0;
   bi.biClrUsed = 0;
   bi.biClrImportant = 0;
+}
+
+
+void CleanUpDeviceContextStuffs()
+{
+  DeleteObject(hbwindow); 
+  DeleteDC(hwindowCompatibleDC); 
+  ReleaseDC(hwnd, hwindowDC); 
 }
 
 
@@ -552,10 +551,8 @@ int main(const int argc, char** argv)
 
   const int wait_ms = GetProperty_Int("delay_ms", 0, config);
 
-  //AL.
   const int chunkUpdateTimeoutMS = GetProperty_Int("chunkUpdateTimeoutMS", 0, config);
   vector<DWORD> ledUpdateTracker(leds.LED_COUNT_TOTAL);
-  //
 
   const int downscaler = GetProperty_Int("downscale", 3, config);
   const int bitmap_width = (rect.right - rect.left) / downscaler;
@@ -681,8 +678,7 @@ int main(const int argc, char** argv)
   //AL. 
   //Unreachable. 
   //Meh, not massively important to clean this up, right?
-  //DeleteObject(hbwindow);
-  //DeleteDC(hwindowCompatibleDC);
-  //ReleaseDC(hwnd, hwindowDC);
-  //return 0;
+  CleanUpDeviceContextStuffs();
+
+  return 0;
 }
