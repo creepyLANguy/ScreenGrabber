@@ -78,6 +78,23 @@ inline void FillMatChunksWithAverageRGB(vector<BorderChunk>& borderChunks, Mat& 
 }
 
 
+inline void RemoveSkippedChunks(vector<BorderChunk>& borderChunks, vector<int>& skippedChunksIndexes)
+{
+  for (int i = borderChunks.size() - 1; i >= 0; --i)
+  {
+    for (int j = skippedChunksIndexes.size() - 1; j >= 0; --j)
+    {
+      if (borderChunks[i].index == skippedChunksIndexes[j])
+      {
+        borderChunks.erase(borderChunks.begin() + i);
+        skippedChunksIndexes.erase(skippedChunksIndexes.begin() + j);
+        break;
+      }
+    }
+  }
+}
+
+
 inline void SetNoiseValues(int& shift1, int& shift2, int& shift3, const NoiseType noiseType)
 {
   switch (noiseType)
@@ -165,13 +182,14 @@ inline void BlankMat(
   FillWithNoise(mat, leeway, blankVal, noiseType, noiseApplicator);
 }
 
-inline void ShowVisualisation(Mat& mat, const float& borderSamplePercentage, vector<BorderChunk>& borderChunks)
+inline void ShowVisualisation(Mat& mat, const float& borderSamplePercentage, vector<BorderChunk>& borderChunks, vector<int>& skippedChunksIndexes)
 {
   const float leeway = borderSamplePercentage * 2.5f;//0;
   const int blankVal = 150;
   const NoiseType noiseType = NONE;//static_cast<NoiseType>(rand() % NOISETYPE_LAST);
   const NoiseApplicator noiseApplicator = INNER;//static_cast<NoiseApplicator>(rand() % NOISEAPPLICATOR_LAST);
   BlankMat(mat, leeway, blankVal, noiseType, noiseApplicator);
+  RemoveSkippedChunks(borderChunks, skippedChunksIndexes);
   FillMatChunksWithAverageRGB(borderChunks, mat);
   const String windowName = "";
   namedWindow(windowName, WINDOW_NORMAL);

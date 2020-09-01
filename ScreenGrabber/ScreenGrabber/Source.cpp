@@ -638,10 +638,18 @@ int main(const int argc, char** argv)
       limitedChunks = borderChunks;
     }
 
+#ifdef DEBUG_VISUAL
+    vector<int> skippedChunksIndexesBasedOnLastUpdatedTime;
+#endif
+
     for (const BorderChunk chunk : limitedChunks)
     {
       if (HasLEDRecentlyBeenUpdated(chunk.index, ledUpdateTracker, chunkUpdateTimeoutMS))
       {
+#ifdef DEBUG_VISUAL
+        skippedChunksIndexesBasedOnLastUpdatedTime.push_back(chunk.index);
+#endif
+
         continue;
       }
 
@@ -665,7 +673,7 @@ int main(const int argc, char** argv)
 #endif
 
 #ifdef DEBUG_VISUAL
-    ShowVisualisation(mat, borderSamplePercentage, limitedChunks);
+    ShowVisualisation(mat, borderSamplePercentage, limitedChunks, skippedChunksIndexesBasedOnLastUpdatedTime);
 #endif
 
     if (wait_ms)
