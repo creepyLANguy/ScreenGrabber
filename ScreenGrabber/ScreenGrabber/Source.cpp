@@ -686,7 +686,7 @@ int main(const int argc, char** argv)
   //AL. 
   //Unreachable. 
   //Meh, not massively important to clean this up, right?
-  CleanUpDeviceContextStuffs();
+  //CleanUpDeviceContextStuffs();
 
-  return 0;
+  //return 0;
 }
