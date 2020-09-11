@@ -24,10 +24,8 @@ struct LAB
 };
 
 
-inline XYZ RgbToXyz(RGB& rgb)
+inline void RgbToXyz(RGB& rgb, XYZ& xyz)
 {
-  XYZ xyz;
-
   double r = rgb.r;
   double g = rgb.g;
   double b = rgb.b;
@@ -52,15 +50,11 @@ inline XYZ RgbToXyz(RGB& rgb)
   xyz.x = r * 0.4124 + g * 0.3576 + b * 0.1805;
   xyz.y = r * 0.2126 + g * 0.7152 + b * 0.0722;
   xyz.z = r * 0.0193 + g * 0.1192 + b * 0.9505;
-
-  return xyz;
 }
 
 
-inline LAB XyzToLab(XYZ& xyz)
+inline void XyzToLab(XYZ& xyz, LAB& lab)
 {
-  LAB lab;
-
   double x = xyz.x;
   double y = xyz.y;
   double z = xyz.z;
@@ -81,8 +75,6 @@ inline LAB XyzToLab(XYZ& xyz)
   lab.l = (116 * y) - 16;
   lab.a = 500 * (x - y);
   lab.b = 200 * (y - z);
-
-  return lab;
 }
 
 #endif

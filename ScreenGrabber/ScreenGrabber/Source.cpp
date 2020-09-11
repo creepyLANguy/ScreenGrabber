@@ -119,19 +119,18 @@ void FilterChunk(
   const int outlierDiffThresh,
   const Lumi& lumi)
 {
+  const int luminance = GetLuminance(chunk, lumi);
+
   //Don't mess with individual vals if the colour is white overall.            
   if (isWhite(chunk, whiteDiffThresh))
   {
-    int whiteLumi = (chunk.r + chunk.g + chunk.b) / 3;
-    if(whiteLumi < whiteLuminanceThresh)
+    if(luminance < whiteLuminanceThresh)
     {
       chunk.r = chunk.g = chunk.b = 0;
     }
-    //chunk.r = chunk.g = chunk.b = 255;
     return;
   }
 
-  const int luminance = GetLuminance(chunk, lumi);
   if (luminance < colourLuminanceThresh)
   {
     chunk.r = chunk.g = chunk.b = 0;
@@ -154,19 +153,44 @@ void SetBrightness(vector<BorderChunk>& borderChunks, const float brightness)
 }
 
 
-void RemoveIdenticalChunks(vector<BorderChunk>& chunks, const vector<BorderChunk>& previousChunks)
+void RemoveIdenticalChunks(vector<BorderChunk>& chunks, vector<BorderChunk>& previousChunks)
 {
   for (int i = chunks.size() - 1; i >= 0; --i)
   {
+    const int index = chunks[i].index;
     if (
-      chunks[i].r == previousChunks[i].r &&
-      chunks[i].g == previousChunks[i].g &&
-      chunks[i].b == previousChunks[i].b
+      chunks[i].r == previousChunks[index].r &&
+      chunks[i].g == previousChunks[index].g &&
+      chunks[i].b == previousChunks[index].b
       )
     {
       chunks.erase(chunks.begin() + i);
     }
   }
+}
+
+
+void GetLab(BorderChunk& chunk, LAB& lab)
+{
+  RGB rgb;
+  rgb.r = chunk.r;
+  rgb.g = chunk.g;
+  rgb.b = chunk.b;
+    
+  XYZ xyz;
+  RgbToXyz(rgb, xyz);
+
+  XyzToLab(xyz, lab);
+}
+
+
+void GetDeltaE(BorderChunk& chunk1, BorderChunk& chunk2, double(* deltaEFunc)(const LAB&, const LAB&), double& deltae)
+{
+  LAB lab1;    
+  GetLab(chunk1, lab1);
+  LAB lab2;
+  GetLab(chunk2, lab2);
+  deltae = deltaEFunc(lab1, lab2);
 }
 
 
@@ -182,38 +206,20 @@ void RemoveStaticChunks(
     return;
   }
 
-  vector<BorderChunk> resultantChunks;
-
   for (int i = chunks.size() - 1; i >= 0; --i)
   {
-    RGB rgb1;
-    rgb1.r = chunks[i].r;
-    rgb1.g = chunks[i].g;
-    rgb1.b = chunks[i].b;
+    double deltae = 0;
+    GetDeltaE(chunks[i], previousChunks[chunks[i].index], deltaEFunc, deltae);
 
-    RGB rgb2;
-    rgb2.r = previousChunks[i].r;
-    rgb2.g = previousChunks[i].g;
-    rgb2.b = previousChunks[i].b;
-    
-    XYZ xyz1 = RgbToXyz(rgb1);
-    XYZ xyz2 = RgbToXyz(rgb2);
-
-    const LAB lab1 = XyzToLab(xyz1);
-    const LAB lab2 = XyzToLab(xyz2);
-    
-    const double deltae = deltaEFunc(lab1, lab2);
     if (deltae < deltaEThresh)
     {
-      resultantChunks.push_back(previousChunks[i]);
       chunks.erase(chunks.begin() + i);      
     }
-    else {
-      resultantChunks.push_back(chunks[i]);
+    else 
+    {    
+      previousChunks[chunks[i].index] = chunks[i];
     }
   }
-
-  OverwriteVector(resultantChunks, previousChunks);
 }
 
 
