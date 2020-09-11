@@ -12,6 +12,8 @@
 #include "Defines.h"
 #include "MySocket.h"
 #include <iostream>
+
+#include "ChunkInitHelper.hpp"
 #include "ConfigHelpers.hpp"
 #include "VectorUtils.hpp"
 #include "Debug.hpp"
@@ -114,8 +116,8 @@ bool isWhite(const BorderChunk& chunk, const int whiteDiffThresh)
 void FilterChunk(
   BorderChunk& chunk,
   const int whiteLuminanceThresh,
-  const int colourLuminanceThresh,
   const int whiteDiffThresh,
+  const int colourLuminanceThresh,
   const int outlierDiffThresh,
   const Lumi& lumi)
 {
@@ -310,163 +312,14 @@ void GrabScreen(Mat& mat, Rect& rect, const int bitmap_width, const int bitmap_h
   //Use the previously created device context with the bitmap
   SelectObject(hwindowCompatibleDC, hbwindow);
   //Copy from the window device context to the bitmap device context
-  StretchBlt(hwindowCompatibleDC, 0, 0, bitmap_width, bitmap_height, hwindowDC, rect.x, rect.y, rect.width, rect.height, SRCCOPY);
+  StretchBlt(
+    hwindowCompatibleDC, 0, 0, bitmap_width, bitmap_height, 
+    hwindowDC, rect.x, rect.y, rect.width, rect.height, SRCCOPY);
   //copy from hwindowCompatibleDC to hbwindow
-  GetDIBits(hwindowCompatibleDC, hbwindow, 0, bitmap_height, mat.data, reinterpret_cast<BITMAPINFO *>(&bi), DIB_RGB_COLORS);
+  GetDIBits(hwindowCompatibleDC, hbwindow, 
+    0, bitmap_height, mat.data, reinterpret_cast<BITMAPINFO *>(&bi), DIB_RGB_COLORS);
 }
 
-
-void AdjustChunksForGap_Vertical(vector<BorderChunk>& chunks, int gap)
-{
-  int indexer = 1;
-  while (gap)
-  {
-    chunks[chunks.size() - indexer].y_start += gap;
-    chunks[chunks.size() - indexer].y_end += gap;
-    --gap;
-    ++indexer;
-  }
-
-  for (int i = 0; i < chunks.size() - 1; ++i)
-  {
-    chunks[i].y_end += chunks[i + 1].y_start - chunks[i].y_end;
-  }
-}
-
-
-void AdjustChunksForGap_Horizontal(vector<BorderChunk>& chunks, int gap)
-{
-  int indexer = 1;
-  while (gap)
-  {
-    chunks[chunks.size() - indexer].x_start += gap;
-    chunks[chunks.size() - indexer].x_end += gap;
-    --gap;
-    ++indexer;
-  }
-
-  for (int i = 0; i < chunks.size() - 1; ++i)
-  {
-    chunks[i].x_end += chunks[i + 1].x_start - chunks[i].x_end;
-  }
-}
-
-//AL.
-//TODO
-//Refactor this.
-void InitialiseBorderChunks(
-  vector<BorderChunk>& borderChunks, 
-  const int bitmap_width, 
-  const int bitmap_height, 
-  const float borderSamplePercentage, 
-  const int originPositionOffset, 
-  LEDsCollection& leds)
-{
-  BorderChunk chunk;
-
-  const int chunk_upper_width = bitmap_width / leds.LED_COUNT_UPPER;
-  const int chunk_upper_height = bitmap_height * borderSamplePercentage;
-  {
-    vector<BorderChunk> chunks_upper;
-    for (int i = 0; i < leds.LED_COUNT_UPPER; ++i)
-    {
-      chunk.x_start = i * chunk_upper_width;
-      chunk.x_end = chunk.x_start + chunk_upper_width;
-
-      chunk.y_start = 0;
-      chunk.y_end = chunk_upper_height;
-
-      chunks_upper.push_back(chunk);
-    }
-    const int gapUpper = bitmap_width % leds.LED_COUNT_UPPER;
-    if (gapUpper)
-    {
-      AdjustChunksForGap_Horizontal(chunks_upper, gapUpper);
-    }
-    CopyToVector(chunks_upper, borderChunks);
-  }
-
-  {
-    vector<BorderChunk> chunks_right;
-    const int chunk_right_width = bitmap_width * borderSamplePercentage;
-    const int neededRightArea = (bitmap_height - (2 * chunk_upper_height));
-    const int chunk_right_height = neededRightArea / leds.LED_COUNT_RIGHT;
-    for (int i = 0; i < leds.LED_COUNT_RIGHT; ++i)
-    {
-      chunk.x_end = bitmap_width;
-      chunk.x_start = chunk.x_end - chunk_right_width;
-
-      chunk.y_start = (i * chunk_right_height) + chunk_upper_height;
-      chunk.y_end = chunk.y_start + chunk_right_height;
-
-      chunks_right.push_back(chunk);
-    }
-    const int gapRight = neededRightArea % (neededRightArea / leds.LED_COUNT_RIGHT);
-    if (gapRight)
-    {
-      AdjustChunksForGap_Vertical(chunks_right, gapRight);
-    }
-    CopyToVector(chunks_right, borderChunks);
-  }
-
-  {
-    vector<BorderChunk> chunks_lower;
-    const int chunk_lower_width = bitmap_width / leds.LED_COUNT_LOWER;
-    const int chunk_lower_height = bitmap_height * borderSamplePercentage;
-    for (int i = 0; i < leds.LED_COUNT_LOWER; ++i)
-    {
-      chunk.x_start = i * chunk_lower_width;
-      chunk.x_end = chunk.x_start + chunk_upper_width;
-
-      chunk.y_end = bitmap_height;
-      chunk.y_start = chunk.y_end - chunk_lower_height;
-
-      chunks_lower.push_back(chunk);
-    }
-    const int gapLower = bitmap_width % leds.LED_COUNT_LOWER;
-    if (gapLower)
-    {
-      AdjustChunksForGap_Horizontal(chunks_lower, gapLower);
-    }
-    CopyToVector(chunks_lower, borderChunks);
-  }
-
-  {
-    vector<BorderChunk> chunks_left;
-    const int chunk_left_width = bitmap_width * borderSamplePercentage;
-    const int neededLeftArea = (bitmap_height - (2 * chunk_upper_height));
-    const int chunk_left_height = neededLeftArea / leds.LED_COUNT_LEFT;
-    for (int i = 0; i < leds.LED_COUNT_LEFT; ++i)
-    {
-      chunk.x_start = 0;
-      chunk.x_end = chunk_left_width;
-
-      chunk.y_start = (i * chunk_left_height) + chunk_upper_height;
-      chunk.y_end = chunk.y_start + chunk_left_height;
-
-      chunks_left.push_back(chunk);
-    }
-    const int gapLeft = neededLeftArea % (neededLeftArea / leds.LED_COUNT_LEFT);
-    if (gapLeft)
-    {
-      AdjustChunksForGap_Vertical(chunks_left, gapLeft);
-    }
-    CopyToVector(chunks_left, borderChunks);
-  }
-
-  {
-    int i = 0;
-    for (BorderChunk& bchunk : borderChunks)
-    {
-      bchunk.index = (i % leds.LED_COUNT_TOTAL) - originPositionOffset;
-      if (bchunk.index < 0)
-      {
-        bchunk.index += leds.LED_COUNT_TOTAL;
-      }
-      ++i;
-    }
-  }
-}
 
 //For sports and news feed strips at the edge of the screen - we want to ignore these.
 void ReduceRectByBuffers(RECT& rect, vector<KeyValPair>& configBlob)
@@ -494,6 +347,7 @@ void TrimRectToRatio(RECT& rect, const float aspect_ratio)
   const int logical_width = aspect_ratio * display_height;
   int cropped_width = logical_width;
   int cropped_height = display_height;
+
   if (logical_width > display_width)
   {
     cropped_width -= (logical_width - display_width);
@@ -555,7 +409,7 @@ int main(const int argc, char** argv)
     return -1;
   }
 
-  const int wait_ms = GetProperty_Int("delay_ms", 0, config);
+  const int sleepMS = GetProperty_Int("sleepMS", 0, config);
 
   const int chunkUpdateTimeoutMS = GetProperty_Int("chunkUpdateTimeoutMS", 0, config);
   vector<DWORD> ledUpdateTracker(leds.LED_COUNT_TOTAL);
@@ -632,7 +486,8 @@ int main(const int argc, char** argv)
 
     for (BorderChunk& chunk : borderChunks)
     {
-      FilterChunk(chunk, whiteLuminanceThresh, colourLuminanceThresh, whiteDiffThresh, outlierDiffThresh, lumi);
+      FilterChunk(chunk, whiteLuminanceThresh, whiteDiffThresh, 
+        colourLuminanceThresh, outlierDiffThresh, lumi);
     }
 
     if (optimiseTransmitWithDelta)
@@ -679,12 +534,13 @@ int main(const int argc, char** argv)
 #endif
 
 #ifdef DEBUG_VISUAL
-    ShowVisualisation(mat, borderSamplePercentage, limitedChunks, skippedChunksIndexesBasedOnLastUpdatedTime);
+    ShowVisualisation(mat, borderSamplePercentage, 
+      limitedChunks, skippedChunksIndexesBasedOnLastUpdatedTime, previousChunks);
 #endif
 
-    if (wait_ms)
+    if (sleepMS)
     {
-      Sleep(wait_ms);
+      Sleep(sleepMS);
     }
   }
 
