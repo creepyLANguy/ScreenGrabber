@@ -28,7 +28,7 @@ enum NoiseApplicator
 
 
 int shifter = 0;
-const string logoFilename = "logo.bmp";
+const string logoFilename = "logo_small.bmp";
 
 
 #include <bitset>
@@ -136,10 +136,10 @@ inline void SetNoiseValues(int& shift1, int& shift2, int& shift3, const NoiseTyp
 
 inline void FillWithNoise(
   Mat& mat, 
-  const float leeway,
-  const int blankVal, 
-  const NoiseType noiseType, 
-  const NoiseApplicator noiseApplicator)
+  const int blankVal = 0,
+  const float leeway = 0,
+  const NoiseType noiseType = NONE, 
+  const NoiseApplicator noiseApplicator = EITHER)
 {
   auto* pixelPtr = static_cast<uint8_t*>(mat.data);
   const int cn = mat.channels();
@@ -176,42 +176,39 @@ inline void FillWithNoise(
 inline void DrawLogo(Mat& mat, const float leeway)
 {
   //AL.
-  FillWithNoise(mat, leeway, 0, NONE, EITHER);
+  FillWithNoise(mat, 150, leeway);
 
-  const int y_start = 150;//mat.rows * leeway;
-  const int y_end = 300;//mat.rows * (1 - leeway);
-  const int x_start = 150;//mat.cols* leeway;
-  const int x_end = 250;// mat.cols* (1 - leeway);
-  const int height = y_end - y_start;
+  ///*
+  const int y_start = mat.rows * leeway;
+  const int y_end = mat.rows * (1 - leeway);
+  const int x_start = mat.cols * leeway;
+  const int x_end = mat.cols * (1 - leeway);
   const int width = x_end - x_start;
+  const int height = y_end - y_start;
 
-  const Mat logo = imread("logo_small.bmp");
+  const Mat logo = imread(logoFilename, CV_8UC4);
   Mat scaledLogo(width, height, logo.type());
   const float fx = static_cast<float>(scaledLogo.cols) / logo.cols;
   const float fy = static_cast<float>(scaledLogo.rows) / logo.rows;
   resize(logo, scaledLogo, scaledLogo.size(), fx, fy, INTER_AREA);
 
-  Rect roi = Rect(x_start, y_start, width, height);
-  Mat subView = mat(roi);
-  scaledLogo.copyTo(subView);
+  auto* pixelMat = static_cast<uint8_t*>(mat.data);
+  const int cnMat = mat.channels();
 
+  auto* pixelLogo = static_cast<uint8_t*>(logo.data);
+  const int cnLogo = logo.channels();
 
-
-  for (int i = 0; i < scaledLogo.rows; i++)
+  for (int y = y_start; y < y_end; ++y)
   {
-    for (int j = 0; j < scaledLogo.cols; j++)
+    for (int x = x_start; x < x_end; ++x)
     {
-
-      int b = scaledLogo.at<Vec3b>(i, j)[0];
-      int g = scaledLogo.at<Vec3b>(i, j)[1];
-      int r = scaledLogo.at<Vec3b>(i, j)[2];
-
-
-      mat.at<::Vec3b>(x_start + i, y_start + j)[0] = b;
-      mat.at<::Vec3b>(x_start + i, y_start + j)[1] = g;
-      mat.at<::Vec3b>(x_start + i, y_start + j)[2] = r;
+      pixelMat[y * mat.cols * cnMat + x * cnMat + 3] = pixelLogo[(y - y_start) * logo.cols * cnLogo + (x - x_start) * cnLogo + 3];
+      pixelMat[y * mat.cols * cnMat + x * cnMat + 2] = pixelLogo[(y - y_start) * logo.cols * cnLogo + (x - x_start) * cnLogo + 2];
+      pixelMat[y * mat.cols * cnMat + x * cnMat + 1] = pixelLogo[(y - y_start) * logo.cols * cnLogo + (x - x_start) * cnLogo + 1];
+      pixelMat[y * mat.cols * cnMat + x * cnMat + 0] = pixelLogo[(y - y_start) * logo.cols * cnLogo + (x - x_start) * cnLogo + 0];
     }
   }
+  //*/
 }
 
 
@@ -222,15 +219,7 @@ inline void BlankMat(
   const NoiseType noiseType = NONE, 
   const NoiseApplicator noiseApplicator = INNER)
 {
-  if (noiseType == INCEPTION) { return; }
-
-  if (noiseType == LOGO)
-  {
-    DrawLogo(mat, leeway);
-    return;
-  }
-
-  FillWithNoise(mat, leeway, blankVal, noiseType, noiseApplicator);
+  FillWithNoise(mat, blankVal, leeway, noiseType, noiseApplicator);
 }
 
 //#include <opencv2/opencv.hpp>
@@ -290,7 +279,11 @@ inline void ShowVisualisation(Mat& mat, const float& borderSamplePercentage,
     //Draw the chunk data to the blanked area.
     //WriteChunkDataToMat(mat, borderChunks, previousChunks);
   }
-  else
+  else if (noiseType == LOGO)
+  {
+    DrawLogo(mat, leeway);
+  }
+  else if (noiseType != INCEPTION)
   {
     BlankMat(mat, blankVal, leeway, noiseType, noiseApplicator);
   }
