@@ -13,6 +13,7 @@ enum NoiseType
   SHIFTER_3,
   INCEPTION,
   CHUNKDATA,
+  BLUR,
   RANDOM,
   NOISETYPE_LAST
 };
@@ -20,16 +21,13 @@ enum NoiseType
 
 enum NoiseApplicator
 {
-  INNER,
-  OUTER,
+  STATIC,
+  DYNAMIC,
   EITHER,
   NOISEAPPLICATOR_LAST
 };
 
-
 int shifter = 0;
-const string logoFilename = "logo_small.bmp";
-
 
 #include <bitset>
 inline void PrintPayload(const unsigned int& payload)
@@ -103,7 +101,7 @@ inline void SetNoiseValues(int& shift1, int& shift2, int& shift3, const NoiseTyp
   switch (noiseType)
   {
   case GREY:
-    shift1 = shift2 = shift3 = rand();
+    shift1 = shift2 = shift3 = rand()%120;
     break;
   case COLOUR:
     shift1 = rand();
@@ -153,14 +151,14 @@ inline void FillWithNoise(
 
   for (int y = y_start; y < y_end; ++y)
   {
-    if (noiseApplicator == OUTER)
+    if (noiseApplicator == DYNAMIC)
     {
       SetNoiseValues(shift1, shift2, shift3, noiseType);
     }
 
     for (int x = x_start; x < x_end; ++x)
     {
-      if (noiseApplicator == INNER)
+      if (noiseApplicator == STATIC)
       {
         SetNoiseValues(shift1, shift2, shift3, noiseType);
       }
@@ -172,43 +170,49 @@ inline void FillWithNoise(
   }
 }
 
-#include <opencv2/opencv.hpp>
-inline void DrawLogo(Mat& mat, const float leeway)
-{
-  //AL.
-  FillWithNoise(mat, 150, leeway);
 
-  ///*
+#include <opencv2/opencv.hpp>
+inline void DrawLogo(Mat& mat, const int blankVal, const float leeway)
+{
+  FillWithNoise(mat, blankVal, leeway);
+
   const int y_start = mat.rows * leeway;
   const int y_end = mat.rows * (1 - leeway);
   const int x_start = mat.cols * leeway;
   const int x_end = mat.cols * (1 - leeway);
-  const int width = x_end - x_start;
-  const int height = y_end - y_start;
 
-  const Mat logo = imread(logoFilename, CV_8UC4);
-  Mat scaledLogo(width, height, logo.type());
-  const float fx = static_cast<float>(scaledLogo.cols) / logo.cols;
-  const float fy = static_cast<float>(scaledLogo.rows) / logo.rows;
-  resize(logo, scaledLogo, scaledLogo.size(), fx, fy, INTER_AREA);
+  /*
+  const int v1 = rand() % 255;
+  const int v2 = rand() % 255;
+  const int v3 = rand() % 255;
+  const auto colour = Scalar(v1, v2, v3);
+  */
 
-  auto* pixelMat = static_cast<uint8_t*>(mat.data);
-  const int cnMat = mat.channels();
+  const auto colour = Scalar(255, 255, 255);
 
-  auto* pixelLogo = static_cast<uint8_t*>(logo.data);
-  const int cnLogo = logo.channels();
-
-  for (int y = y_start; y < y_end; ++y)
+  /*
+  for (int y = y_start + 20; y < y_end; y+=25)
   {
-    for (int x = x_start; x < x_end; ++x)
+    for (int x = x_start; x < x_end; x+=107)
     {
-      pixelMat[y * mat.cols * cnMat + x * cnMat + 3] = pixelLogo[(y - y_start) * logo.cols * cnLogo + (x - x_start) * cnLogo + 3];
-      pixelMat[y * mat.cols * cnMat + x * cnMat + 2] = pixelLogo[(y - y_start) * logo.cols * cnLogo + (x - x_start) * cnLogo + 2];
-      pixelMat[y * mat.cols * cnMat + x * cnMat + 1] = pixelLogo[(y - y_start) * logo.cols * cnLogo + (x - x_start) * cnLogo + 1];
-      pixelMat[y * mat.cols * cnMat + x * cnMat + 0] = pixelLogo[(y - y_start) * logo.cols * cnLogo + (x - x_start) * cnLogo + 0];
+      putText(mat, "Project Luna", Point(x, y), FONT_HERSHEY_SIMPLEX, 0.5, colour, 1, LINE_AA);
     }
   }
-  //*/
+  */
+
+  putText(mat, "Project Luna", Point(x_start*1.25, y_start*2.1), FONT_HERSHEY_SCRIPT_COMPLEX, 1.35, colour, 1.25, LINE_AA);
+}
+
+
+inline void Blur(Mat& mat, const float leeway)
+{
+  const int y_start = mat.rows * leeway;
+  const int y_end = mat.rows * (1 - leeway);
+  const int x_start = mat.cols * leeway;
+  const int x_end = mat.cols * (1 - leeway);
+
+  Rect region(x_start, y_start, x_end - x_start, y_end - y_start);
+  GaussianBlur(mat(region), mat(region), Size(0, 0), 9);
 }
 
 
@@ -217,10 +221,11 @@ inline void BlankMat(
   const int blankVal = 0,
   const float leeway = 0,
   const NoiseType noiseType = NONE, 
-  const NoiseApplicator noiseApplicator = INNER)
+  const NoiseApplicator noiseApplicator = STATIC)
 {
   FillWithNoise(mat, blankVal, leeway, noiseType, noiseApplicator);
 }
+
 
 //#include <opencv2/opencv.hpp>
 //inline void WriteChunkDataToMat(const Mat& mat, const vector<BorderChunk>& borderChunks, const vector<BorderChunk>& previousChunks)
@@ -259,9 +264,14 @@ inline void BlankMat(
 //}
 
 
-inline void ShowVisualisation(Mat& mat, const float& borderSamplePercentage, 
-                              vector<BorderChunk>& borderChunks, vector<int>& skippedChunksIndexes, vector<BorderChunk>& previousChunks,
-                              NoiseType noiseType = NONE, NoiseApplicator noiseApplicator = EITHER, const int blankVal = 150)
+inline void ShowVisualisation(
+  Mat& mat, const float& borderSamplePercentage, 
+  vector<BorderChunk>& borderChunks, 
+  vector<int>& skippedChunksIndexes, 
+  vector<BorderChunk>& previousChunks,
+  const int blankVal = 0,
+  NoiseType noiseType = NONE, 
+  NoiseApplicator noiseApplicator = EITHER)
 {
   FillMatChunksWithAverageRGB(previousChunks, mat);
   RemoveSkippedChunks(borderChunks, skippedChunksIndexes);
@@ -281,7 +291,11 @@ inline void ShowVisualisation(Mat& mat, const float& borderSamplePercentage,
   }
   else if (noiseType == LOGO)
   {
-    DrawLogo(mat, leeway);
+    DrawLogo(mat, blankVal, leeway);
+  }
+  else if (noiseType == BLUR)
+  {
+    Blur(mat, leeway);
   }
   else if (noiseType != INCEPTION)
   {

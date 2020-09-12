@@ -471,7 +471,7 @@ int main(const int argc, char** argv)
 
   InitialiseDeviceContextStuffs(bitmap_width, bitmap_height);
 
-  Mat mat(bitmap_height, bitmap_width, CV_8UC4);
+  Mat mat(bitmap_height, bitmap_width, imageType);
 
   while (true)
   {
@@ -533,12 +533,14 @@ int main(const int argc, char** argv)
 
 #ifdef DEBUG_VISUAL
     ShowVisualisation(
-      mat, 
-      borderSamplePercentage, 
-      limitedChunks, 
-      skippedChunksIndexesBasedOnLastUpdatedTime, 
+      mat,
+      borderSamplePercentage,
+      limitedChunks,
+      skippedChunksIndexesBasedOnLastUpdatedTime,
       previousChunks,
-      LOGO);
+      150
+      //,BLUR
+    );
 #endif
 
     if (sleepMS)
