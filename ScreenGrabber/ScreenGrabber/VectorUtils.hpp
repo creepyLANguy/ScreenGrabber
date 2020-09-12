@@ -6,7 +6,7 @@ void CopyToVector(const vector<T>& src, vector<T>& dest)
 {
   for (auto v : src)
   {
-    dest.push_back(v);
+    dest.emplace_back(v);
   }
 }
 

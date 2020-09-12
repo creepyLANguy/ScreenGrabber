@@ -1,7 +1,6 @@
 #ifndef CHUNKINITHELPER_HPP
 #define CHUNKINITHELPER_HPP
 
-//AL.
 //TODO
 //For the love of all that is pure and sacred,
 //please refactor this.
@@ -71,7 +70,7 @@ inline void InitialiseBorderChunks(
       chunk.y_start = 0;
       chunk.y_end = chunk_upper_height;
 
-      chunks_upper.push_back(chunk);
+      chunks_upper.emplace_back(chunk);
     }
     const int gapUpper = bitmap_width % leds.LED_COUNT_UPPER;
     if (gapUpper)
@@ -94,7 +93,7 @@ inline void InitialiseBorderChunks(
       chunk.y_start = (i * chunk_right_height) + chunk_upper_height;
       chunk.y_end = chunk.y_start + chunk_right_height;
 
-      chunks_right.push_back(chunk);
+      chunks_right.emplace_back(chunk);
     }
     const int gapRight = neededRightArea % (neededRightArea / leds.LED_COUNT_RIGHT);
     if (gapRight)
@@ -116,7 +115,7 @@ inline void InitialiseBorderChunks(
       chunk.y_end = bitmap_height;
       chunk.y_start = chunk.y_end - chunk_lower_height;
 
-      chunks_lower.push_back(chunk);
+      chunks_lower.emplace_back(chunk);
     }
     const int gapLower = bitmap_width % leds.LED_COUNT_LOWER;
     if (gapLower)
@@ -139,7 +138,7 @@ inline void InitialiseBorderChunks(
       chunk.y_start = (i * chunk_left_height) + chunk_upper_height;
       chunk.y_end = chunk.y_start + chunk_left_height;
 
-      chunks_left.push_back(chunk);
+      chunks_left.emplace_back(chunk);
     }
     const int gapLeft = neededLeftArea % (neededLeftArea / leds.LED_COUNT_LEFT);
     if (gapLeft)

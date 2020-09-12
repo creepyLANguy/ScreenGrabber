@@ -14,6 +14,7 @@ using namespace std;
 const char* kConfigFileName = "config.ini";
 const char kDelim = ' ';
 
+constexpr auto imageType = CV_8UC4;
 
 //Device context stuffs
 const HWND hwnd = GetDesktopWindow();

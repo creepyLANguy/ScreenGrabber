@@ -471,7 +471,7 @@ int main(const int argc, char** argv)
 
   InitialiseDeviceContextStuffs(bitmap_width, bitmap_height);
 
-  Mat mat(bitmap_height, bitmap_width, CV_8UC4);
+  Mat mat(bitmap_height, bitmap_width, imageType);
 
   while (true)
   {
@@ -508,7 +508,7 @@ int main(const int argc, char** argv)
       if (HasLEDRecentlyBeenUpdated(chunk.index, ledUpdateTracker, chunkUpdateTimeoutMS))
       {
 #ifdef DEBUG_VISUAL
-        skippedChunksIndexesBasedOnLastUpdatedTime.push_back(chunk.index);
+        skippedChunksIndexesBasedOnLastUpdatedTime.emplace_back(chunk.index);
 #endif
 
         continue;
@@ -517,9 +517,7 @@ int main(const int argc, char** argv)
       unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
       
       //AL.
-      //int i = 2; int r = 100; int g = 0; int b = 0;
-      //payload = i << 24 | r << 16 | g << 8 | b;
-      //
+      //GetDebugPayload(payload);
 
       socket.Send(&payload);
 
@@ -534,8 +532,15 @@ int main(const int argc, char** argv)
 #endif
 
 #ifdef DEBUG_VISUAL
-    ShowVisualisation(mat, borderSamplePercentage, 
-      limitedChunks, skippedChunksIndexesBasedOnLastUpdatedTime, previousChunks);
+    ShowVisualisation(
+      mat,
+      borderSamplePercentage,
+      limitedChunks,
+      skippedChunksIndexesBasedOnLastUpdatedTime,
+      previousChunks,
+      150
+      //,BLUR
+    );
 #endif
 
     if (sleepMS)
@@ -544,8 +549,6 @@ int main(const int argc, char** argv)
     }
   }
 
-
-  //AL. 
   //Unreachable. 
   //Meh, not massively important to clean this up, right?
   //CleanUpDeviceContextStuffs();
