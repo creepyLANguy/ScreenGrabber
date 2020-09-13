@@ -172,14 +172,8 @@ inline void FillWithNoise(
 
 
 #include <opencv2/opencv.hpp>
-inline void Blur(Mat& mat, const float leeway)
+inline void Blur(Mat& mat, const Rect region)
 {
-  const int y_start = mat.rows * leeway;
-  const int y_end = mat.rows * (1 - leeway);
-  const int x_start = mat.cols * leeway;
-  const int x_end = mat.cols * (1 - leeway);
-
-  Rect region(x_start, y_start, x_end - x_start, y_end - y_start);
   //GaussianBlur(mat(region), mat(region), Size(0, 0), 9);
   blur(mat(region), mat(region), region.size());
 }
@@ -191,15 +185,15 @@ inline void DrawLogo(Mat& mat, const int blankVal, const float leeway)
   //Can pull most of the setup code out and only exec once.
   //Quite inefficient to keep doing all of this each frame. 
 
-  //FillWithNoise(mat, blankVal, leeway);
-  Blur(mat, leeway);
-
   const int y_start = mat.rows * leeway;
   const int y_end = mat.rows * (1 - leeway);
   const int x_start = mat.cols * leeway;
   const int x_end = mat.cols * (1 - leeway);
   const int height = y_end - y_start;
   const int width = x_end - x_start;
+
+  const Rect region(x_start, y_start, x_end - x_start, y_end - y_start);
+  Blur(mat, region);
 
   const auto colour = Scalar(255, 255, 255);
 
@@ -298,7 +292,15 @@ inline void ShowVisualisation(
   }
   else if (noiseType == BLUR)
   {
-    Blur(mat, leeway);
+    const int y_start = mat.rows * leeway;
+    const int y_end = mat.rows * (1 - leeway);
+    const int x_start = mat.cols * leeway;
+    const int x_end = mat.cols * (1 - leeway);
+    const int height = y_end - y_start;
+    const int width = x_end - x_start;
+
+    const Rect region(x_start, y_start, x_end - x_start, y_end - y_start);
+    Blur(mat, region);
   }
   else if (noiseType != INCEPTION)
   {
