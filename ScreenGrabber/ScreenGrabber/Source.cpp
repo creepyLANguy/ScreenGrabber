@@ -539,7 +539,7 @@ int main(const int argc, char** argv)
       skippedChunksIndexesBasedOnLastUpdatedTime,
       previousChunks,
       150
-      //,BLUR
+      ,LOGO//,BLUR
     );
 #endif
 

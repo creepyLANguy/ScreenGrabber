@@ -172,38 +172,6 @@ inline void FillWithNoise(
 
 
 #include <opencv2/opencv.hpp>
-inline void DrawLogo(Mat& mat, const int blankVal, const float leeway)
-{
-  FillWithNoise(mat, blankVal, leeway);
-
-  const int y_start = mat.rows * leeway;
-  const int y_end = mat.rows * (1 - leeway);
-  const int x_start = mat.cols * leeway;
-  const int x_end = mat.cols * (1 - leeway);
-
-  /*
-  const int v1 = rand() % 255;
-  const int v2 = rand() % 255;
-  const int v3 = rand() % 255;
-  const auto colour = Scalar(v1, v2, v3);
-  */
-
-  const auto colour = Scalar(255, 255, 255);
-
-  /*
-  for (int y = y_start + 20; y < y_end; y+=25)
-  {
-    for (int x = x_start; x < x_end; x+=107)
-    {
-      putText(mat, "Project Luna", Point(x, y), FONT_HERSHEY_SIMPLEX, 0.5, colour, 1, LINE_AA);
-    }
-  }
-  */
-
-  putText(mat, "Project Luna", Point(x_start*1.25, y_start*2.1), FONT_HERSHEY_SCRIPT_COMPLEX, 1.35, colour, 1.25, LINE_AA);
-}
-
-
 inline void Blur(Mat& mat, const float leeway)
 {
   const int y_start = mat.rows * leeway;
@@ -212,7 +180,42 @@ inline void Blur(Mat& mat, const float leeway)
   const int x_end = mat.cols * (1 - leeway);
 
   Rect region(x_start, y_start, x_end - x_start, y_end - y_start);
-  GaussianBlur(mat(region), mat(region), Size(0, 0), 9);
+  //GaussianBlur(mat(region), mat(region), Size(0, 0), 9);
+  blur(mat(region), mat(region), region.size());
+}
+
+
+inline void DrawLogo(Mat& mat, const int blankVal, const float leeway)
+{
+  //TODO
+  //Can pull most of the setup code out and only exec once.
+  //Quite inefficient to keep doing all of this each frame. 
+
+  //FillWithNoise(mat, blankVal, leeway);
+  Blur(mat, leeway);
+
+  const int y_start = mat.rows * leeway;
+  const int y_end = mat.rows * (1 - leeway);
+  const int x_start = mat.cols * leeway;
+  const int x_end = mat.cols * (1 - leeway);
+  const int height = y_end - y_start;
+  const int width = x_end - x_start;
+
+  const auto colour = Scalar(255, 255, 255);
+
+  const string text = "Project Luna";
+  const auto font = FONT_HERSHEY_PLAIN;
+  const double scale = 2.2;
+  const int thickness = 1;
+  const auto line = LINE_AA;
+
+  const auto textBox = getTextSize(text, font, scale, thickness, nullptr);
+
+  const int x = (width - textBox.width)/2 + x_start;
+  const int y = (height / 2) + (textBox.height / 2) + y_start;
+  const auto org = Point(x, y);
+
+  putText(mat, text, org, font, scale, colour, thickness, line);
 }
 
 

@@ -51,7 +51,6 @@ struct BorderChunk
   int y_start = 0;
   int y_end = 0;
 
-  //To hold average rgb values for the chunk
   int r = 0;
   int g = 0;
   int b = 0;
