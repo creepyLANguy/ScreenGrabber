@@ -376,8 +376,8 @@ float GetAspectRatio(vector<KeyValPair>& configBlob)
 
 int main(const int argc, char** argv)
 {
-  vector<MySocket> sockets;
-  SetupSockets(vector<MySocket>(), sockets);
+  vector<MySocket> tempSockets, sockets;
+  SetupSockets(tempSockets, sockets);
 
   vector<KeyValPair> config;
   PopulateConfigBlob(config);
