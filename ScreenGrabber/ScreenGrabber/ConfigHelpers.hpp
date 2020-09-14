@@ -89,7 +89,7 @@ inline void PopulateConfigBlob(vector<KeyValPair>& configBlob)
   {
     while (myFile.eof() == false)
     {
-      string  strLine = "";
+      string strLine = "";
       getline(myFile, strLine);
       if (strLine.length() == 0 )
       {

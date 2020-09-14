@@ -17,7 +17,6 @@ enum NoiseType : int
   NOISETYPE_LAST = 10
 };
 
-
 enum NoiseApplicator
 {
   STATIC,
@@ -34,7 +33,6 @@ constexpr int blankVal = 150;
 
 
 #include <opencv2/opencv.hpp>
-
 
 struct LogoText
 {
@@ -125,19 +123,21 @@ inline void PrintChunk(const BorderChunk& chunk)
 }
 
 
-constexpr auto SECOND_MS = 1000;
 DWORD zeroHour = GetTickCount();
 unsigned int frameCount = 0;
 inline void PrintFramerate()
 {
   ++frameCount;
-  if (GetTickCount() - zeroHour > SECOND_MS)
+
+  if (GetTickCount() - zeroHour < 1000)
   {
-    const string str = "FPS:" + to_string(frameCount) + "\r\n";
-    OutputDebugStringA(str.c_str());
-    zeroHour = GetTickCount();
-    frameCount = 0;
+    return;
   }
+
+  const string str = "FPS:" + to_string(frameCount) + "\r\n";
+  OutputDebugStringA(str.c_str());
+  zeroHour = GetTickCount();
+  frameCount = 0;
 }
 
 

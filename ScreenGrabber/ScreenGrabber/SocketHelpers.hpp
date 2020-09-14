@@ -74,7 +74,7 @@ inline bool PopulateSocketList(vector<MySocket>& sockets)
   }
   if (hosts.size() != ports.size())
   {
-    ShowError("WARNING!!!\r\nHOSTS LIST AND PORTS LIST ARE DIFFERENT LENGTH!\r\n");
+    ShowError("WARNING!!!\r\nHOSTS LIST AND PORTS LIST ARE DIFFERENT LENGTHS!\r\n");
   }
 
   //Go by shorter max between hosts list and ports list to at least get some potentially usable ports created. 
@@ -107,6 +107,8 @@ inline void InitialiseSockets(vector<MySocket>& sockets)
   {
     ShowError("Failed to init the following sockets :\r\n" + failures);
   }
+
+  cout << "\r\n";
 }
 
 
