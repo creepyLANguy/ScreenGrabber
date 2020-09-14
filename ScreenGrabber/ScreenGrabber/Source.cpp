@@ -520,6 +520,7 @@ int main(const int argc, char** argv)
 #ifdef DEBUG_PAYLOAD
       PrintPayload(payload);
       PrintChunk(chunk);
+      IncrementMargin();
 #endif
     }
 

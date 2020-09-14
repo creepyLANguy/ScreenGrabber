@@ -109,17 +109,37 @@ inline void InitNoiseRegion(Mat& mat, const float leeway)
 }
 
 
+int marginCounter = 0;
+const int marginLimit = 5;
+int marginModifier = 1;
+const char marginMarker = ' ';
+string margin = "";
+inline void IncrementMargin()
+{
+  marginCounter += marginModifier;
+  if (marginCounter > marginLimit)
+  {
+    marginCounter = marginLimit;
+    marginModifier = -1;
+  }
+  else if (marginCounter < 0)
+  {
+    marginCounter = 0;
+    marginModifier = 1;
+  }
+  margin = string(marginCounter, marginMarker);
+}
+
 #include <bitset>
 inline void PrintPayload(const unsigned int& payload)
 {
-  cout << bitset<32>(payload) << "\r\n";
+  cout << margin << bitset<32>(payload) << "\r\n";
 }
-
 
 const char* sep = " | ";
 inline void PrintChunk(const BorderChunk& chunk)
 {
-  cout << chunk.index << sep << chunk.r << sep << chunk.g << sep << chunk.b << "\r\n\r\n";
+  cout << margin << chunk.index << sep << chunk.r << sep << chunk.g << sep << chunk.b << "\r\n\r\n";
 }
 
 
