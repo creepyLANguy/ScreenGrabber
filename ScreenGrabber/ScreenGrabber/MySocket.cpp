@@ -7,39 +7,16 @@
 
 typedef char raw_type;
 
-const char* kServerFileName = "server.ini";
-const char* kPortFileName = "port.ini";
-
 MySocket::MySocket()
+{   
+}
+
+MySocket::MySocket(const string host, const int port)
 {
-  ReadConfig(mHost, kServerFileName);
-  ReadConfig(mPort, kPortFileName);
+  mHost = host;
+  mPort = port;
   mSock = 0;
 }
-
-
-void MySocket::ReadConfig(string& str, const string filename) const
-{
-  ifstream myFile_Server;
-  myFile_Server.open(filename);
-  if (myFile_Server.is_open())
-  {
-    getline(myFile_Server, str);
-  }
-  myFile_Server.close();
-}
-
-
-void MySocket::ReadConfig(int& val, const string filename) const
-{
-  string str;
-  ReadConfig(str, filename);
-  if (str.length() > 0)
-  {
-    val = atoi(str.c_str());
-  }
-}
-
 
 bool MySocket::Initialise()
 {
@@ -65,9 +42,9 @@ bool MySocket::Initialise()
     return false;
   }
 
-  cout << "Socket created.\r\nAddress: " << mHost << "\r\nPort: " << to_string(mPort);
+  mInitialised = true;
 
-  return true;
+  return mInitialised;
 }
 
 

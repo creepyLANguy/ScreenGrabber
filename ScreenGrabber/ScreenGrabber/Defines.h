@@ -10,9 +10,11 @@
 using namespace cv;
 using namespace std;
 
+const char* kHostsFileName = "hosts.ini";
+const char* kPortsFileName = "ports.ini";
 
 const char* kConfigFileName = "config.ini";
-const char kDelim = ' ';
+const char kConfigDelim = ' ';
 
 constexpr auto imageType = CV_8UC4;
 

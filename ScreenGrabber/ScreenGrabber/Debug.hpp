@@ -1,13 +1,3 @@
-// ReSharper disable CppClangTidyCppcoreguidelinesNarrowingConversions
-// ReSharper disable CppClangTidyClangDiagnosticUnknownEscapeSequence
-// ReSharper disable CppClangTidyCppcoreguidelinesProTypeMemberInit
-// ReSharper disable CppClangTidyBugproneNarrowingConversions
-// ReSharper disable CppClangTidyClangDiagnosticSignCompare
-// ReSharper disable CppClangTidyBugproneExceptionEscape
-// ReSharper disable CppInconsistentNaming
-// ReSharper disable IdentifierTypo
-// ReSharper disable CppUseAuto
-//
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 
@@ -156,7 +146,7 @@ inline void FillMatChunksWithAverageRGB(vector<BorderChunk>& borderChunks, Mat& 
   auto* pixelPtr = static_cast<uint8_t*>(mat.data);
   const int cn = mat.channels();
 
-  for (const BorderChunk chunk : borderChunks)
+  for (const BorderChunk& chunk : borderChunks)
   {
     for (int x = chunk.x_start; x < chunk.x_end; ++x)
     {

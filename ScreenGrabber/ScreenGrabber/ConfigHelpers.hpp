@@ -63,7 +63,7 @@ inline bool StringsAreEqual(string str1, string str2)
 
 inline int GetProperty_Int(const string propertyName, const int default_return, vector<KeyValPair>& configBlob)
 {
-  for (KeyValPair kvp : configBlob)
+  for (const KeyValPair& kvp : configBlob)
   {
     if (StringsAreEqual(kvp.key, propertyName))
     {
@@ -95,7 +95,7 @@ inline void PopulateConfigBlob(vector<KeyValPair>& configBlob)
       {
         continue;
       }
-      int delimPos = strLine.find_first_of(kDelim);
+      int delimPos = strLine.find_first_of(kConfigDelim);
       KeyValPair kvp;
       kvp.key = strLine.substr(0, delimPos);
       int endIndex = strLine.find_first_of(";");
@@ -109,5 +109,6 @@ inline void PopulateConfigBlob(vector<KeyValPair>& configBlob)
   }
   myFile.close();
 }
+
 
 #endif // CONFIGHELPERS_HPP

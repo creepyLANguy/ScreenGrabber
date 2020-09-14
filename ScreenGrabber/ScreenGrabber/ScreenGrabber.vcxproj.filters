@@ -15,23 +15,26 @@
     <ClInclude Include="Defines.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Debug.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="ConfigHelpers.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="DeltaE.hpp">
-      <Filter>Source</Filter>
+    <ClInclude Include="ChunkInitHelper.hpp">
+      <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Colourspaces.hpp">
-      <Filter>Source</Filter>
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigHelpers.hpp">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.hpp">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="DeltaE.hpp">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketHelpers.hpp">
+      <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="VectorUtils.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="ChunkInitHelper.hpp">
-      <Filter>Source</Filter>
+      <Filter>Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +46,9 @@
     </Filter>
     <Filter Include="Source">
       <UniqueIdentifier>{a518c423-1bb7-4a6c-9c9e-90f07bf7b732}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{600c75c9-8c1c-42ea-96c7-1acd243bd259}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

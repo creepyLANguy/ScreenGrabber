@@ -10,7 +10,6 @@
 
 
 #include "Defines.h"
-#include "MySocket.h"
 #include <iostream>
 
 #include "ChunkInitHelper.hpp"
@@ -18,6 +17,7 @@
 #include "VectorUtils.hpp"
 #include "Debug.hpp"
 #include "DeltaE.hpp"
+#include "SocketHelpers.hpp"
 
 #define DEBUG_FPS
 #define DEBUG_VISUAL
@@ -376,6 +376,9 @@ float GetAspectRatio(vector<KeyValPair>& configBlob)
 
 int main(const int argc, char** argv)
 {
+  vector<MySocket> sockets;
+  SetupSockets(vector<MySocket>(), sockets);
+
   vector<KeyValPair> config;
   PopulateConfigBlob(config);
 
@@ -454,19 +457,7 @@ int main(const int argc, char** argv)
   lumi.b = GetProperty_Float("lumiB", lumi.b, config);
 
 
-  MySocket socket;
-  if (socket.Initialise() == false)
-  {
-    MessageBoxA(nullptr,
-      "Failed to create socket \r\n\r\n "
-      "1) Close all instances of the application\r\n "
-      "2) Check your config files \r\n "
-      "3) Launch the application again.",
-      "ScreenGrabber",
-      0);
-    return -1;
-  }
-
+  
   Rect simpleRect = { rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top };
 
   InitialiseDeviceContextStuffs(bitmap_width, bitmap_height);
@@ -520,7 +511,11 @@ int main(const int argc, char** argv)
       //AL.
       //GetDebugPayload(payload);
 
-      socket.Send(&payload);
+      for (const MySocket& socket : sockets)
+      {
+        socket.Send(&payload);
+      }
+
 
 #ifdef DEBUG_PAYLOAD
       PrintPayload(payload);
