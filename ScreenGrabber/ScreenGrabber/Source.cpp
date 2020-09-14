@@ -473,6 +473,7 @@ int main(const int argc, char** argv)
 
   Mat mat(bitmap_height, bitmap_width, imageType);
 
+
   while (true)
   {
     GrabScreen(mat, simpleRect, bitmap_width, bitmap_height);
@@ -534,12 +535,12 @@ int main(const int argc, char** argv)
 #ifdef DEBUG_VISUAL
     ShowVisualisation(
       mat,
-      borderSamplePercentage,
+      borderSamplePercentage * 2.5f,
       limitedChunks,
       skippedChunksIndexesBasedOnLastUpdatedTime,
       previousChunks,
-      150
-      ,LOGO//,BLUR
+      blankVal,
+      noiseType
     );
 #endif
 

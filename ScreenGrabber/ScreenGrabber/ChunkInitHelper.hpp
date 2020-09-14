@@ -2,10 +2,9 @@
 #define CHUNKINITHELPER_HPP
 
 //TODO
-//For the love of all that is pure and sacred,
-//please refactor this.
-//You can't just dump it into a 'helper' file
+//You can't just dump this spaghet into a 'helper' file
 //and pretend it doesn't exist. ~~,'
+//Refactor, plox
 //
 
 #include <vector>

@@ -1,21 +1,30 @@
+// ReSharper disable CppClangTidyCppcoreguidelinesNarrowingConversions
+// ReSharper disable CppClangTidyClangDiagnosticUnknownEscapeSequence
+// ReSharper disable CppClangTidyCppcoreguidelinesProTypeMemberInit
+// ReSharper disable CppClangTidyBugproneNarrowingConversions
+// ReSharper disable CppClangTidyClangDiagnosticSignCompare
+// ReSharper disable CppClangTidyBugproneExceptionEscape
+// ReSharper disable CppInconsistentNaming
+// ReSharper disable IdentifierTypo
+// ReSharper disable CppUseAuto
+//
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 
 
-enum NoiseType
+enum NoiseType : int
 {
-  NONE,
-  LOGO,
-  GREY,
-  COLOUR,
-  SHIFTER_1,
-  SHIFTER_2,
-  SHIFTER_3,
-  INCEPTION,
-  CHUNKDATA,
-  BLUR,
-  RANDOM,
-  NOISETYPE_LAST
+  NONE =      (1 << 0), 
+  LOGO =      (1 << 1), 
+  GREY =      (1 << 2),
+  COLOUR =    (1 << 3),
+  SHIFTER_1 = (1 << 4),
+  SHIFTER_2 = (1 << 5),
+  SHIFTER_3 = (1 << 6),
+  CHUNKDATA = (1 << 7),
+  BLUR =      (1 << 8),
+  RANDOM =    (1 << 9),
+  NOISETYPE_LAST = 10
 };
 
 
@@ -28,6 +37,89 @@ enum NoiseApplicator
 };
 
 int shifter = 0;
+
+
+constexpr NoiseType noiseType = static_cast<NoiseType>(BLUR | LOGO);
+constexpr int blankVal = 150;
+
+
+#include <opencv2/opencv.hpp>
+
+
+struct LogoText
+{
+  bool hasBeenInitialised = false;
+
+  const string text = "Project Luna";
+  const Scalar textColour = Scalar(255, 255, 255);
+  const HersheyFonts font = FONT_HERSHEY_PLAIN;
+  const double scale = 2.2;
+  const int thickness = 1;
+  const LineTypes line = LINE_AA;
+  const Size textRegion = getTextSize(text, font, scale, thickness, nullptr);
+
+  int y_start = -1;
+  int y_end = -1;
+  int x_start = -1;
+  int x_end = -1;
+  int height = -1;
+  int width = -1;
+  Rect region = Rect(-1,-1,-1,-1);
+
+  int text_x = -1;
+  int text_y = -1;
+  Point text_origin = Point(-1, -1);
+};
+
+LogoText logoText;
+
+inline void InitLogoText(Mat& mat, const float leeway)
+{
+  logoText.y_start = mat.rows * leeway;
+  logoText.y_end = mat.rows * (1 - leeway);
+  logoText.x_start = mat.cols * leeway;
+  logoText.x_end = mat.cols * (1 - leeway);
+  logoText.height = logoText.y_end - logoText.y_start;
+  logoText.width = logoText.x_end - logoText.x_start;
+  logoText.region = Rect(logoText.x_start, logoText.y_start, logoText.width, logoText.height);
+
+  logoText.text_x = (logoText.width - logoText.textRegion.width) / 2 + logoText.x_start;
+  logoText.text_y = (logoText.height / 2) + (logoText.textRegion.height / 2) + logoText.y_start;
+  logoText.text_origin = Point(logoText.text_x, logoText.text_y);
+
+  logoText.hasBeenInitialised = true;
+}
+
+
+struct NoiseRegion
+{
+  bool hasBeenInitialised = false;
+
+  int y_start = -1;
+  int y_end = -1;
+  int x_start = -1;
+  int x_end = -1;
+  int height = -1;
+  int width = -1;
+  Rect region = Rect(-1, -1, -1, -1);
+};
+
+NoiseRegion noiseRegion;
+
+inline void InitNoiseRegion(Mat& mat, const float leeway)
+{
+  noiseRegion.y_start = mat.rows * leeway;
+  noiseRegion.x_start = mat.cols * leeway;
+  noiseRegion.y_end = mat.rows * (1 - leeway);
+  noiseRegion.x_end = mat.cols * (1 - leeway);
+  noiseRegion.height = noiseRegion.y_end - noiseRegion.y_start;
+  noiseRegion.width = noiseRegion.x_end - noiseRegion.x_start;
+
+  noiseRegion.region = Rect(noiseRegion.x_start, noiseRegion.y_start, noiseRegion.width, noiseRegion.height);
+
+  noiseRegion.hasBeenInitialised = true;
+}
+
 
 #include <bitset>
 inline void PrintPayload(const unsigned int& payload)
@@ -120,9 +212,9 @@ inline void SetNoiseValues(int& shift1, int& shift2, int& shift3, const NoiseTyp
     ++shifter;
     break;
   case SHIFTER_3:
-    shift1 = ++shifter*shifter;
-    shift2 = ++shifter*shifter;
-    shift3 = ++shifter*shifter;
+    shift1 = ++shifter*++shifter;
+    shift2 = ++shifter*++shifter;
+    shift3 = ++shifter*++shifter;
     break;
   case NONE:
   default:
@@ -144,19 +236,14 @@ inline void FillWithNoise(
 
   int shift1 = 0, shift2 = 0, shift3 = 0;
 
-  const int y_start = mat.rows * leeway;
-  const int y_end = mat.rows * (1 - leeway);
-  const int x_start = mat.cols * leeway;
-  const int x_end = mat.cols * (1 - leeway);
-
-  for (int y = y_start; y < y_end; ++y)
+  for (int y = noiseRegion.y_start; y < noiseRegion.y_end; ++y)
   {
     if (noiseApplicator == DYNAMIC)
     {
       SetNoiseValues(shift1, shift2, shift3, noiseType);
     }
 
-    for (int x = x_start; x < x_end; ++x)
+    for (int x = noiseRegion.x_start; x < noiseRegion.x_end; ++x)
     {
       if (noiseApplicator == STATIC)
       {
@@ -171,45 +258,24 @@ inline void FillWithNoise(
 }
 
 
-#include <opencv2/opencv.hpp>
-inline void Blur(Mat& mat, const Rect region)
+inline void Blur(Mat& mat)
 {
-  //GaussianBlur(mat(region), mat(region), Size(0, 0), 9);
-  blur(mat(region), mat(region), region.size());
+  //GaussianBlur(mat(region), mat(region), Size(0, 0), 9); 
+  blur(mat(noiseRegion.region), mat(noiseRegion.region), noiseRegion.region.size());
 }
 
 
-inline void DrawLogo(Mat& mat, const int blankVal, const float leeway)
+inline void DrawLogo(Mat& mat)
 {
-  //TODO
-  //Can pull most of the setup code out and only exec once.
-  //Quite inefficient to keep doing all of this each frame. 
-
-  const int y_start = mat.rows * leeway;
-  const int y_end = mat.rows * (1 - leeway);
-  const int x_start = mat.cols * leeway;
-  const int x_end = mat.cols * (1 - leeway);
-  const int height = y_end - y_start;
-  const int width = x_end - x_start;
-
-  const Rect region(x_start, y_start, x_end - x_start, y_end - y_start);
-  Blur(mat, region);
-
-  const auto colour = Scalar(255, 255, 255);
-
-  const string text = "Project Luna";
-  const auto font = FONT_HERSHEY_PLAIN;
-  const double scale = 2.2;
-  const int thickness = 1;
-  const auto line = LINE_AA;
-
-  const auto textBox = getTextSize(text, font, scale, thickness, nullptr);
-
-  const int x = (width - textBox.width)/2 + x_start;
-  const int y = (height / 2) + (textBox.height / 2) + y_start;
-  const auto org = Point(x, y);
-
-  putText(mat, text, org, font, scale, colour, thickness, line);
+  putText(mat, 
+    logoText.text, 
+    logoText.text_origin, 
+    logoText.font, 
+    logoText.scale, 
+    logoText.textColour, 
+    logoText.thickness, 
+    logoText.line
+  );
 }
 
 
@@ -224,45 +290,8 @@ inline void BlankMat(
 }
 
 
-//#include <opencv2/opencv.hpp>
-//inline void WriteChunkDataToMat(const Mat& mat, const vector<BorderChunk>& borderChunks, const vector<BorderChunk>& previousChunks)
-//{
-//  const int arrSize = previousChunks.size();
-//  bool* indexTracker = new bool[arrSize];
-//  memset(indexTracker, false, arrSize);
-//  vector<string> strings;
-//
-//  for (BorderChunk chunk : borderChunks)
-//  {
-//    const string s = to_string(chunk.index) + " : " + to_string(chunk.r) + ", " + to_string(chunk.g) + ", " + to_string(chunk.b) + ", ";
-//    strings.emplace_back(s);
-//    indexTracker[chunk.index] = true;
-//  }
-//
-//  for (int i = 0; i < borderChunks.size(); ++i)
-//  {
-//    if (indexTracker[i] == false)
-//    {
-//      BorderChunk chunk = previousChunks[i];
-//      const string s = to_string(chunk.index) + " : " + to_string(chunk.r) + ", " + to_string(chunk.g) + ", " + to_string(chunk.b) + ", ";
-//      strings.emplace_back(s);
-//    }
-//  }
-//
-//  Point org = Point(mat.cols / 2, mat.rows / 2);
-//
-//  for(string s : strings)
-//  {
-//    org.x += 10;
-//    org.y += 10;
-//    putText(mat, s, org, FONT_HERSHEY_SIMPLEX, 1, (125, 100, 55), 1, LINE_AA);
-//  }
-//  delete[] indexTracker;
-//}
-
-
 inline void ShowVisualisation(
-  Mat& mat, const float& borderSamplePercentage, 
+  Mat& mat, const float& leeway, 
   vector<BorderChunk>& borderChunks, 
   vector<int>& skippedChunksIndexes, 
   vector<BorderChunk>& previousChunks,
@@ -274,39 +303,45 @@ inline void ShowVisualisation(
   RemoveSkippedChunks(borderChunks, skippedChunksIndexes);
   FillMatChunksWithAverageRGB(borderChunks, mat);
 
-  const float leeway = borderSamplePercentage * 2.5f;//0;
+  if (noiseRegion.hasBeenInitialised == false)
+  {
+    InitNoiseRegion(mat, leeway);
+  }
 
-  if (noiseType == RANDOM) { noiseType = static_cast<NoiseType>(rand() % NOISETYPE_LAST); }
-  if (noiseApplicator == EITHER) { noiseApplicator = static_cast<NoiseApplicator>(rand() % NOISEAPPLICATOR_LAST); }
+  if ((noiseType & RANDOM) == RANDOM)
+  {
+    noiseType = static_cast<NoiseType>(1 << rand() % NOISETYPE_LAST);
+  }
 
-  if (noiseType == CHUNKDATA)
+  if ((noiseType & BLUR) == BLUR)
+  {    
+    Blur(mat);
+  }
+
+  if ((noiseType & CHUNKDATA) == CHUNKDATA)
   {
     BlankMat(mat, 255, leeway);
     //TODO
-    //Draw the chunk data to the blanked area.
     //WriteChunkDataToMat(mat, borderChunks, previousChunks);
   }
-  else if (noiseType == LOGO)
-  {
-    DrawLogo(mat, blankVal, leeway);
-  }
-  else if (noiseType == BLUR)
-  {
-    const int y_start = mat.rows * leeway;
-    const int y_end = mat.rows * (1 - leeway);
-    const int x_start = mat.cols * leeway;
-    const int x_end = mat.cols * (1 - leeway);
-    const int height = y_end - y_start;
-    const int width = x_end - x_start;
 
-    const Rect region(x_start, y_start, x_end - x_start, y_end - y_start);
-    Blur(mat, region);
-  }
-  else if (noiseType != INCEPTION)
+  if ((noiseType & LOGO) == LOGO)
   {
+    if (logoText.hasBeenInitialised == false)
+    {
+      InitLogoText(mat, leeway);
+    }
+    DrawLogo(mat);
+  }
+  else
+  {
+    if (noiseApplicator == EITHER)
+    {
+      noiseApplicator = static_cast<NoiseApplicator>(rand() % NOISEAPPLICATOR_LAST);
+    }
     BlankMat(mat, blankVal, leeway, noiseType, noiseApplicator);
   }
-
+  
   const String windowName = "";
   namedWindow(windowName, WINDOW_NORMAL);
   imshow(windowName, mat);
