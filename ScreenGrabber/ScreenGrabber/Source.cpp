@@ -42,6 +42,7 @@ inline bool HasLEDRecentlyBeenUpdated(const int chunkIndex, vector<DWORD>& ledUp
   return false;
 }
 
+
 int GetLuminance(const BorderChunk& chunk, const Lumi& lumi)
 {
   const int val = 
@@ -457,7 +458,6 @@ int main(const int argc, char** argv)
   lumi.b = GetProperty_Float("lumiB", lumi.b, config);
 
 
-  
   Rect simpleRect = { rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top };
 
   InitialiseDeviceContextStuffs(bitmap_width, bitmap_height);
