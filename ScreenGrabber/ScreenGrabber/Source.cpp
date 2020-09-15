@@ -509,7 +509,7 @@ int main(const int argc, char** argv)
       unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
       
       //AL.
-      //GetDebugPayload(payload);
+      //GetDebugPayload(payload, chunk.index);
 
       for (const MySocket& socket : sockets)
       {

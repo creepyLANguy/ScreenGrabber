@@ -359,24 +359,15 @@ inline void ShowVisualisation(
 }
 
 
-inline void GetDebugPayload(unsigned int& payload, int i = -1, int r = -1, int g = -1, int b = -1)
+inline void GetDebugPayload(unsigned int& payload, const int i)
 {
-  if (i >= 0)
-  {
-    if (i%2 == 0)
-    {
-      r = 0;
-      g = 0;
-      b = 50;
-      payload = i << 24 | r << 16 | g << 8 | b;
-    }
-    else
-    {
-      r = 0;
-      g = 0;
-      b = 255;
-    }
-  }
+  payload = 0;
+  int r = 0;
+  int g = 0;
+  int b = 0;
+
+  //Alternative indexes are a dimmer or brighter blue.
+  i%2 == 0 ? b = 32 : b = 255;    
 
   payload = i << 24 | r << 16 | g << 8 | b;
 }
