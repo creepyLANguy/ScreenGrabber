@@ -7,11 +7,7 @@
 
 typedef char raw_type;
 
-MySocket::MySocket()
-{   
-}
-
-MySocket::MySocket(const string host, const int port)
+MySocket::MySocket(const string& host, const int port)
 {
   mHost = host;
   mPort = port;
@@ -47,7 +43,6 @@ bool MySocket::Initialise()
   return mInitialised;
 }
 
-
 unsigned long MySocket::ResolveIP()
 {
   int i = static_cast<int>(mHost.length());
@@ -73,12 +68,10 @@ unsigned long MySocket::ResolveIP()
   return inet_addr(mHost.c_str());
 }
 
-
 int MySocket::Send(void* payload) const
 {
   return send(mSock, static_cast<raw_type*>(payload), sizeof(payload), 0);
 }
-
 
 MySocket::~MySocket()
 {

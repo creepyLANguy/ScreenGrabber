@@ -85,28 +85,29 @@ inline void PopulateConfigBlob(vector<KeyValPair>& configBlob)
 {
   ifstream myFile;
   myFile.open(kConfigFileName);
-  if (myFile.is_open())
+  if (myFile.is_open() == false) { return; }
+
+  while (myFile.eof() == false)
   {
-    while (myFile.eof() == false)
+    string strLine = "";
+    getline(myFile, strLine);
+    if (strLine.length() == 0 )
     {
-      string strLine = "";
-      getline(myFile, strLine);
-      if (strLine.length() == 0 )
-      {
-        continue;
-      }
-      int delimPos = strLine.find_first_of(kConfigDelim);
-      KeyValPair kvp;
-      kvp.key = strLine.substr(0, delimPos);
-      int endIndex = strLine.find_first_of(";");
-      endIndex = endIndex == -1 ? strLine.length() : endIndex;
-      ++delimPos;
-      kvp.val = strLine.substr(delimPos, endIndex-delimPos);
-      configBlob.push_back(kvp);
-      cout << kvp.val << "\t=\t" << kvp.key << endl;
+      continue;
     }
-    cout << endl;
+    int delimPos = strLine.find_first_of(kConfigDelim);
+    KeyValPair kvp;
+    kvp.key = strLine.substr(0, delimPos);
+    int endIndex = strLine.find_first_of(";");
+    endIndex = endIndex == -1 ? strLine.length() : endIndex;
+    ++delimPos;
+    kvp.val = strLine.substr(delimPos, endIndex-delimPos);
+    configBlob.push_back(kvp);
+    cout << kvp.val << "\t=\t" << kvp.key << endl;
   }
+
+  cout << endl;
+
   myFile.close();
 }
 

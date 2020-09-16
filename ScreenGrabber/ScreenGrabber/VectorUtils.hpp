@@ -2,7 +2,7 @@
 #define VECTORUTILS_H
 
 template <class T>
-void CopyToVector(const vector<T>& src, vector<T>& dest)
+void AppendToVector(const vector<T>& src, vector<T>& dest)
 {
   for (auto v : src)
   {
@@ -15,7 +15,7 @@ template <class T>
 void OverwriteVector(const vector<T>& src, vector<T>& dest)
 {
   dest.clear();
-  CopyToVector(src, dest);
+  AppendToVector(src, dest);
 }
 
 #endif

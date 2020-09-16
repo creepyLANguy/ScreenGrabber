@@ -5,23 +5,11 @@
 
 using namespace std;
 
+struct RGB { double r, g, b; };
 
-struct RGB
-{
-  double r, g, b;
-};
+struct XYZ { double x, y, z; };
 
-
-struct XYZ
-{
-  double x, y, z;
-};
-
-
-struct LAB
-{
-  double l, a, b;
-};
+struct LAB { double l, a, b; };
 
 
 inline void RgbToXyz(RGB& rgb, XYZ& xyz)

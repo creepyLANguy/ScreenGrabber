@@ -166,7 +166,7 @@ double Calc2000(const LAB& lab1, const LAB& lab2)
 
 
 /*
- * CIE94 implemtation was lifted almost verbatim from Shaun Lynch's blog:
+ * CIE94 implementation was lifted almost verbatim from Shaun Lynch's blog:
  * https://blog.genreof.com/post/comparing-colors-using-delta-e-1994-in-c
  */
 double Calc94(const LAB& lab1, const LAB& lab2)

@@ -13,8 +13,8 @@ class MySocket
 {
 
 public:
-  MySocket();
-  MySocket(string host, int port);
+  MySocket() = default;
+  MySocket(const string& host, int port);
   bool Initialise();
   int Send(void* payload) const;
   ~MySocket();

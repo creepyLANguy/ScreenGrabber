@@ -427,7 +427,7 @@ int main(const int argc, char** argv)
 
   InitialiseBorderChunks(borderChunks, bitmap_width, bitmap_height, borderSamplePercentage, originPositionOffset, leds);
 
-  CopyToVector(borderChunks, previousChunks);
+  AppendToVector(borderChunks, previousChunks);
 
   const float brightnessPercentage = GetProperty_Float("brightness", 1.0f, config);
   

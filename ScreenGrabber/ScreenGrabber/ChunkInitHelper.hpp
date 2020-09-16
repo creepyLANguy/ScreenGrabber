@@ -2,7 +2,7 @@
 #define CHUNKINITHELPER_HPP
 
 //TODO
-//You can't just dump this spaghet into a 'helper' file
+//You can't just dump this spaghett into a 'helper' file
 //and pretend it doesn't exist. ~~,'
 //Refactor, plox
 //
@@ -76,7 +76,7 @@ inline void InitialiseBorderChunks(
     {
       AdjustChunksForGap_Horizontal(chunks_upper, gapUpper);
     }
-    CopyToVector(chunks_upper, borderChunks);
+    AppendToVector(chunks_upper, borderChunks);
   }
 
   {
@@ -99,7 +99,7 @@ inline void InitialiseBorderChunks(
     {
       AdjustChunksForGap_Vertical(chunks_right, gapRight);
     }
-    CopyToVector(chunks_right, borderChunks);
+    AppendToVector(chunks_right, borderChunks);
   }
 
   {
@@ -121,7 +121,7 @@ inline void InitialiseBorderChunks(
     {
       AdjustChunksForGap_Horizontal(chunks_lower, gapLower);
     }
-    CopyToVector(chunks_lower, borderChunks);
+    AppendToVector(chunks_lower, borderChunks);
   }
 
   {
@@ -144,17 +144,17 @@ inline void InitialiseBorderChunks(
     {
       AdjustChunksForGap_Vertical(chunks_left, gapLeft);
     }
-    CopyToVector(chunks_left, borderChunks);
+    AppendToVector(chunks_left, borderChunks);
   }
 
   {
     int i = 0;
-    for (BorderChunk& bchunk : borderChunks)
+    for (BorderChunk& borderchunk : borderChunks)
     {
-      bchunk.index = (i % leds.LED_COUNT_TOTAL) - originPositionOffset;
-      if (bchunk.index < 0)
+      borderchunk.index = (i % leds.LED_COUNT_TOTAL) - originPositionOffset;
+      if (borderchunk.index < 0)
       {
-        bchunk.index += leds.LED_COUNT_TOTAL;
+        borderchunk.index += leds.LED_COUNT_TOTAL;
       }
       ++i;
     }

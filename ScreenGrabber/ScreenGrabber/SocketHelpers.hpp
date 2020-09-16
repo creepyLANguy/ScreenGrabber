@@ -5,8 +5,11 @@
 #include "MySocket.h"
 #include <fstream>
 
-string baseError =
-  "Remember that each host needs its own port to be specified in the ports.ini file.\r\n 1) Close all instances of the application\r\n 2) Check your config files \r\n 3) Launch the application again. \r\n\r\n";
+const string baseError =
+"Remember that each host needs its own port to be specified in the ports.ini file.\r\n"
+"1) Close all instances of the application\r\n"
+"2) Check your config files \r\n"
+"3) Launch the application again. \r\n\r\n";
 
 inline void ShowError(const string s)
 {
@@ -15,7 +18,7 @@ inline void ShowError(const string s)
 
 inline void ShowError(MySocket& socket)
 {
-  cout << "FAILED TO CREATE SOCKET : " << socket.ToString() << "\r\n " << baseError;
+  cout << "FAILED TO CREATE SOCKET: " << socket.ToString() << "\r\n " << baseError;
 }
 
 inline void ShowSuccess(MySocket& socket)
@@ -105,7 +108,7 @@ inline void InitialiseSockets(vector<MySocket>& sockets)
 
   if (failures.length() > 0)
   {
-    ShowError("Failed to init the following sockets :\r\n" + failures);
+    ShowError("Failed to init the following sockets:\r\n" + failures);
   }
 
   cout << "\r\n";
