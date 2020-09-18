@@ -495,7 +495,7 @@ int main(const int argc, char** argv)
     vector<int> skippedChunksIndexesBasedOnLastUpdatedTime;
 #endif
 
-    for (const BorderChunk chunk : limitedChunks)
+    for (const BorderChunk& chunk : limitedChunks)
     {
       if (HasLEDRecentlyBeenUpdated(chunk.index, ledUpdateTracker, chunkUpdateTimeoutMS))
       {
@@ -510,6 +510,8 @@ int main(const int argc, char** argv)
       
       //AL.
       //GetDebugPayload(payload, chunk.index);
+      //GetDebugChunk(const_cast<BorderChunk&>(chunk));
+      //
 
       for (const MySocket& socket : sockets)
       {

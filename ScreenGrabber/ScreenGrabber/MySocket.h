@@ -19,9 +19,9 @@ public:
   int Send(void* payload) const;
   ~MySocket();
 
-  string GetHost() { return mHost; }
-  int GetPort() { return mPort; }
-  bool IsInitialised() { return mInitialised; }
+  string GetHost() const { return mHost; }
+  int GetPort() const { return mPort; }
+  bool IsInitialised() const { return mInitialised; }
 
   string ToString() { return mHost + ":" + std::to_string(mPort); }
 

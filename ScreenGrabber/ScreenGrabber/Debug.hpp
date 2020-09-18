@@ -367,9 +367,18 @@ inline void GetDebugPayload(unsigned int& payload, const int i)
   int b = 0;
 
   //Alternative indexes are a dimmer or brighter blue.
-  i%2 == 0 ? b = 32 : b = 255;    
+  i%2 == 0 ? b = 55 : b = 255;    
 
   payload = i << 24 | r << 16 | g << 8 | b;
+}
+
+
+inline void GetDebugChunk(BorderChunk& chunk)
+{
+  chunk.r = chunk.g = chunk.b = 0;
+
+  //Alternative indexes are a dimmer or brighter blue.
+  chunk.index%2 == 0 ? chunk.b = 55 : chunk.b = 255;    
 }
 
 #endif // DEBUG_HPP
