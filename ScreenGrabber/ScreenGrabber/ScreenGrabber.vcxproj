@@ -171,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini" />
+    <None Include="debug_config.ini" />
     <None Include="port.ini" />
     <None Include="server.ini" />
   </ItemGroup>

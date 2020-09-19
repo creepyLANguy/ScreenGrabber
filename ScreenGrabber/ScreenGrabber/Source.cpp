@@ -19,10 +19,6 @@
 #include "DeltaE.hpp"
 #include "SocketHelpers.hpp"
 
-#define DEBUG_FPS
-#define DEBUG_VISUAL
-#define DEBUG_PAYLOAD
-
 
 inline bool HasLEDRecentlyBeenUpdated(const int chunkIndex, vector<DWORD>& ledUpdateTracker, const int chunkUpdateTimeoutMS)
 {
@@ -377,11 +373,23 @@ float GetAspectRatio(vector<KeyValPair>& configBlob)
 
 int main(const int argc, char** argv)
 {
+#ifdef _DEBUG
+vector<KeyValPair> debug_config;
+PopulateConfigBlob(kConfigFileName, debug_config);
+bool debug_fps = GetProperty_Int("print_fps", 0, debug_config);
+bool debug_visual = GetProperty_Int("draw_visual", 0, debug_config);
+bool debug_payload = GetProperty_Int("print_payload", 0, debug_config);
+const bool debug_drawAllFrames = GetProperty_Int("drawAllFrames", 0, debug_config);
+const bool debug_mockPayload = GetProperty_Int("mockPayload", 0, debug_config);
+const bool debug_mockChunks = GetProperty_Int("mockChunks", 0, debug_config);
+#endif
+
+
   vector<MySocket> tempSockets, sockets;
   SetupSockets(tempSockets, sockets);
 
   vector<KeyValPair> config;
-  PopulateConfigBlob(config);
+  PopulateConfigBlob(kConfigFileName, config);
 
   vector<BorderChunk> borderChunks, previousChunks, limitedChunks;
 
@@ -491,7 +499,7 @@ int main(const int argc, char** argv)
       limitedChunks = borderChunks;
     }
 
-#ifdef DEBUG_VISUAL
+#ifdef _DEBUG
     vector<int> skippedChunksIndexesBasedOnLastUpdatedTime;
 #endif
 
@@ -499,8 +507,8 @@ int main(const int argc, char** argv)
     {
       if (HasLEDRecentlyBeenUpdated(chunk.index, ledUpdateTracker, chunkUpdateTimeoutMS))
       {
-#ifdef DEBUG_VISUAL
-        skippedChunksIndexesBasedOnLastUpdatedTime.emplace_back(chunk.index);
+#ifdef _DEBUG
+        if (debug_visual) { skippedChunksIndexesBasedOnLastUpdatedTime.emplace_back(chunk.index); }
 #endif
 
         continue;
@@ -508,38 +516,53 @@ int main(const int argc, char** argv)
 
       unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
       
-      //AL.
-      //GetDebugPayload(payload, chunk.index);
-      //GetDebugChunk(const_cast<BorderChunk&>(chunk));
-      //
+#ifdef _DEBUG      
+      if (debug_mockPayload) { GetDebugPayload(payload, chunk.index); }
+      if (debug_mockChunks) { GetDebugChunk(const_cast<BorderChunk&>(chunk)); }
+#endif
 
       for (const MySocket& socket : sockets)
       {
         socket.Send(&payload);
       }
-
-
-#ifdef DEBUG_PAYLOAD
-      PrintPayload(payload);
-      PrintChunk(chunk);
-      IncrementMargin();
+#ifdef _DEBUG
+      if (debug_payload) { PrintPayload(payload); PrintChunk(chunk); IncrementMargin(); }
 #endif
     }
 
-#ifdef DEBUG_FPS
-    PrintFramerate();
-#endif
-
-#ifdef DEBUG_VISUAL
-    ShowVisualisation(
-      mat,
-      borderSamplePercentage * 2.5f,
-      limitedChunks,
-      skippedChunksIndexesBasedOnLastUpdatedTime,
-      previousChunks,
-      blankVal,
-      noiseType
-    );
+#ifdef _DEBUG
+    if (debug_fps) { PrintFramerate(); }
+    //AL.
+    //TODO
+    //Refactor!
+    if (debug_visual)
+    {
+      if (debug_drawAllFrames)
+      {
+        ShowVisualisation(
+          mat,
+          borderSamplePercentage * 2.5f,
+          limitedChunks,
+          skippedChunksIndexesBasedOnLastUpdatedTime,
+          previousChunks,
+          blankVal,
+          noiseType
+        );
+      }
+      else if (limitedChunks.size() > 0)
+      {
+        ShowVisualisation(
+          mat,
+          borderSamplePercentage * 2.5f,
+          limitedChunks,
+          skippedChunksIndexesBasedOnLastUpdatedTime,
+          previousChunks,
+          blankVal,
+          noiseType
+        );
+        //
+      }
+    }
 #endif
 
     if (sleepMS)

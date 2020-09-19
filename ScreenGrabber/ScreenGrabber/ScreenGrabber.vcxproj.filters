@@ -61,5 +61,8 @@
     <None Include="server.ini">
       <Filter>Config</Filter>
     </None>
+    <None Include="debug_config.ini">
+      <Filter>Config</Filter>
+    </None>
   </ItemGroup>
 </Project>

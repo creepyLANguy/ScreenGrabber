@@ -2,6 +2,9 @@
 #define DEBUG_HPP
 
 
+const char* kDebugConfigFileName = "debug_config.ini";
+
+
 enum NoiseType : int
 {
   NONE =      (1 << 0), 
