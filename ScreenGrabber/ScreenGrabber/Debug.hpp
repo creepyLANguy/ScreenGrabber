@@ -2,6 +2,9 @@
 #define DEBUG_HPP
 
 
+const char* kDebugConfigFileName = "debug_config.ini";
+
+
 enum NoiseType : int
 {
   NONE =      (1 << 0), 
@@ -28,8 +31,9 @@ enum NoiseApplicator
 int shifter = 0;
 
 
-constexpr NoiseType noiseType = static_cast<NoiseType>(BLUR | LOGO);
-constexpr int blankVal = 150;
+constexpr int blankVal_default = 150;
+constexpr float blankRegionModifier_default = 2.5f;
+constexpr NoiseType noiseType_default = static_cast<NoiseType>(BLUR | LOGO);
 
 
 #include <opencv2/opencv.hpp>

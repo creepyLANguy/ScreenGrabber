@@ -19,10 +19,6 @@
 #include "DeltaE.hpp"
 #include "SocketHelpers.hpp"
 
-#define DEBUG_FPS
-#define DEBUG_VISUAL
-#define DEBUG_PAYLOAD
-
 
 inline bool HasLEDRecentlyBeenUpdated(const int chunkIndex, vector<DWORD>& ledUpdateTracker, const int chunkUpdateTimeoutMS)
 {
@@ -377,11 +373,23 @@ float GetAspectRatio(vector<KeyValPair>& configBlob)
 
 int main(const int argc, char** argv)
 {
+vector<KeyValPair> debug_config;
+PopulateConfigBlob(kDebugConfigFileName, debug_config);
+const bool console_fps = GetProperty_Int("console_fps", 0, debug_config);
+const bool debug_visual = GetProperty_Int("draw_visual", 0, debug_config);
+const bool debug_payload = GetProperty_Int("print_payload", 0, debug_config);
+const bool debug_drawAllFrames = GetProperty_Int("drawAllFrames", 0, debug_config);
+const bool debug_mockPayload = GetProperty_Int("mockPayload", 0, debug_config);
+const bool debug_mockChunks = GetProperty_Int("mockChunks", 0, debug_config);
+const int debug_blankVal = GetProperty_Int("blankVal", blankVal_default, debug_config);
+const NoiseType debug_noiseType = static_cast<NoiseType>(GetProperty_Int("noiseType", noiseType_default, debug_config));
+const float debug_blankRegionModifier = GetProperty_Float("blankRegionModifier", blankVal_default, debug_config);
+cout << debug_blankRegionModifier;
   vector<MySocket> tempSockets, sockets;
   SetupSockets(tempSockets, sockets);
 
   vector<KeyValPair> config;
-  PopulateConfigBlob(config);
+  PopulateConfigBlob(kConfigFileName, config);
 
   vector<BorderChunk> borderChunks, previousChunks, limitedChunks;
 
@@ -491,56 +499,47 @@ int main(const int argc, char** argv)
       limitedChunks = borderChunks;
     }
 
-#ifdef DEBUG_VISUAL
     vector<int> skippedChunksIndexesBasedOnLastUpdatedTime;
-#endif
 
     for (const BorderChunk& chunk : limitedChunks)
     {
       if (HasLEDRecentlyBeenUpdated(chunk.index, ledUpdateTracker, chunkUpdateTimeoutMS))
       {
-#ifdef DEBUG_VISUAL
-        skippedChunksIndexesBasedOnLastUpdatedTime.emplace_back(chunk.index);
-#endif
+        if (debug_visual) { skippedChunksIndexesBasedOnLastUpdatedTime.emplace_back(chunk.index); }
 
         continue;
       }
 
       unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
-      
-      //AL.
-      //GetDebugPayload(payload, chunk.index);
-      //GetDebugChunk(const_cast<BorderChunk&>(chunk));
-      //
+   
+      if (debug_mockPayload) { GetDebugPayload(payload, chunk.index); }
+      if (debug_mockChunks) { GetDebugChunk(const_cast<BorderChunk&>(chunk)); }
 
       for (const MySocket& socket : sockets)
       {
         socket.Send(&payload);
       }
 
-
-#ifdef DEBUG_PAYLOAD
-      PrintPayload(payload);
-      PrintChunk(chunk);
-      IncrementMargin();
-#endif
+      if (debug_payload) { PrintPayload(payload); PrintChunk(chunk); IncrementMargin(); }
     }
 
-#ifdef DEBUG_FPS
-    PrintFramerate();
-#endif
+    if (console_fps) { PrintFramerate(); }
 
-#ifdef DEBUG_VISUAL
-    ShowVisualisation(
-      mat,
-      borderSamplePercentage * 2.5f,
-      limitedChunks,
-      skippedChunksIndexesBasedOnLastUpdatedTime,
-      previousChunks,
-      blankVal,
-      noiseType
-    );
-#endif
+    if (debug_visual)
+    {
+      if (debug_drawAllFrames || limitedChunks.size() > 0)
+      {
+        ShowVisualisation(
+          mat,
+          borderSamplePercentage * debug_blankRegionModifier,
+          limitedChunks,
+          skippedChunksIndexesBasedOnLastUpdatedTime,
+          previousChunks,
+          debug_blankVal,
+          debug_noiseType
+        );
+      }      
+    }
 
     if (sleepMS)
     {

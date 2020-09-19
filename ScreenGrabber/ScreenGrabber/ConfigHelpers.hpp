@@ -81,10 +81,10 @@ inline float GetProperty_Float(const string propertyName, const float default_re
 }
 
 
-inline void PopulateConfigBlob(vector<KeyValPair>& configBlob)
+inline void PopulateConfigBlob(const string& configFileName, vector<KeyValPair>& configBlob)
 {
   ifstream myFile;
-  myFile.open(kConfigFileName);
+  myFile.open(configFileName);
   if (myFile.is_open() == false) { return; }
 
   while (myFile.eof() == false)
