@@ -383,8 +383,8 @@ const bool debug_mockPayload = GetProperty_Int("mockPayload", 0, debug_config);
 const bool debug_mockChunks = GetProperty_Int("mockChunks", 0, debug_config);
 const int debug_blankVal = GetProperty_Int("blankVal", blankVal_default, debug_config);
 const NoiseType debug_noiseType = static_cast<NoiseType>(GetProperty_Int("noiseType", noiseType_default, debug_config));
-
-
+const float debug_blankRegionModifier = GetProperty_Float("blankRegionModifier", blankVal_default, debug_config);
+cout << debug_blankRegionModifier;
   vector<MySocket> tempSockets, sockets;
   SetupSockets(tempSockets, sockets);
 
@@ -531,7 +531,7 @@ const NoiseType debug_noiseType = static_cast<NoiseType>(GetProperty_Int("noiseT
       {
         ShowVisualisation(
           mat,
-          borderSamplePercentage * 2.5f,
+          borderSamplePercentage * debug_blankRegionModifier,
           limitedChunks,
           skippedChunksIndexesBasedOnLastUpdatedTime,
           previousChunks,

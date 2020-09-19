@@ -32,6 +32,7 @@ int shifter = 0;
 
 
 constexpr int blankVal_default = 150;
+constexpr float blankRegionModifier_default = 2.5f;
 constexpr NoiseType noiseType_default = static_cast<NoiseType>(BLUR | LOGO);
 
 
