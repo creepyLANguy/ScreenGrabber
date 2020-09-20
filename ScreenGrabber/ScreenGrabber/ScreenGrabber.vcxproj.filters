@@ -36,6 +36,9 @@
     <ClInclude Include="VectorUtils.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="InitVariablesHelper.hpp">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">

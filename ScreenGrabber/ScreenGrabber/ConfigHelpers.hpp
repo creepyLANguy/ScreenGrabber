@@ -3,6 +3,7 @@
 
 #include "Defines.h"
 #include <fstream>
+#include <iostream>
 
 /*
 int GetCommandLineProperty_Int(const int argc, char** argv, char* propertyName, const int default_return)
@@ -61,7 +62,7 @@ inline bool StringsAreEqual(string str1, string str2)
 }
 
 
-inline int GetProperty_Int(const string propertyName, const int default_return, vector<KeyValPair>& configBlob)
+inline int GetProperty_Int(const string propertyName, const int default_return, const vector<KeyValPair>& configBlob)
 {
   for (const KeyValPair& kvp : configBlob)
   {
@@ -75,14 +76,22 @@ inline int GetProperty_Int(const string propertyName, const int default_return, 
 }
 
 
-inline float GetProperty_Float(const string propertyName, const float default_return, vector<KeyValPair>& configBlob)
+inline float GetProperty_Float(const string propertyName, const float default_return, const vector<KeyValPair>& configBlob)
 {
   return GetProperty_Int(propertyName, (default_return * 100), configBlob) / 100.0f;
 }
 
 
+inline float GetProperty_Bool(const string propertyName, const bool default_return, const vector<KeyValPair>& configBlob)
+{
+  return GetProperty_Int(propertyName, default_return, configBlob) == 1;
+}
+
+
 inline void PopulateConfigBlob(const string& configFileName, vector<KeyValPair>& configBlob)
 {
+  cout << configFileName << endl;
+
   ifstream myFile;
   myFile.open(configFileName);
   if (myFile.is_open() == false) { return; }

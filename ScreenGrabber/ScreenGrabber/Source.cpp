@@ -10,13 +10,11 @@
 
 
 #include "Defines.h"
-#include <iostream>
-
 #include "ChunkInitHelper.hpp"
-#include "ConfigHelpers.hpp"
 #include "VectorUtils.hpp"
 #include "Debug.hpp"
 #include "DeltaE.hpp"
+#include "InitVariablesHelper.hpp"
 #include "SocketHelpers.hpp"
 
 
@@ -319,15 +317,15 @@ void GrabScreen(Mat& mat, Rect& rect, const int bitmap_width, const int bitmap_h
 
 
 //For sports and news feed strips at the edge of the screen - we want to ignore these.
-void ReduceRectByBuffers(RECT& rect, vector<KeyValPair>& configBlob)
+void ReduceRectByBuffers(RECT& rect)
 {
   const int height = rect.bottom - rect.top;
   const int width = rect.right - rect.left;
 
-  const int bottomShift = GetProperty_Float("lowerBuffer", 0.0f, configBlob) * height;
-  const int topShift = GetProperty_Float("upperBuffer", 0.0f, configBlob) * height;
-  const int leftShift = GetProperty_Float("leftBuffer", 0.0f, configBlob) * width;
-  const int rightShift = GetProperty_Float("rightBuffer", 0.0f, configBlob) * width;
+  const int bottomShift = lowerBuffer * height;
+  const int topShift = upperBuffer * height;
+  const int leftShift = leftBuffer * width;
+  const int rightShift = rightBuffer * width;
 
   rect.bottom -= bottomShift; 
   rect.top += topShift;
@@ -336,12 +334,14 @@ void ReduceRectByBuffers(RECT& rect, vector<KeyValPair>& configBlob)
 }
 
 
-void TrimRectToRatio(RECT& rect, const float aspect_ratio)
+void TrimRectToRatio(RECT& rect)
 {
+  const float aspectRatio = (width) / static_cast<float>(height);
+
   const int display_width = rect.right - rect.left;
   const int display_height = rect.bottom - rect.top;
 
-  const int logical_width = aspect_ratio * display_height;
+  const int logical_width = aspectRatio * display_height;
   int cropped_width = logical_width;
   int cropped_height = display_height;
 
@@ -360,113 +360,30 @@ void TrimRectToRatio(RECT& rect, const float aspect_ratio)
 }
 
 
-float GetAspectRatio(vector<KeyValPair>& configBlob)
-{
-  const int width = GetProperty_Int("ratioHorizontal", 16, configBlob);
-  const int height = GetProperty_Int("ratioVertical", 9, configBlob);
-
-  const float aspectRatioValue = (width) / static_cast<float>(height);
-
-  return aspectRatioValue;
-}
-
-
 int main(const int argc, char** argv)
 {
-vector<KeyValPair> debug_config;
-PopulateConfigBlob(kDebugConfigFileName, debug_config);
-const bool console_fps = GetProperty_Int("console_fps", 0, debug_config);
-const bool debug_visual = GetProperty_Int("draw_visual", 0, debug_config);
-const bool debug_payload = GetProperty_Int("print_payload", 0, debug_config);
-const bool debug_drawAllFrames = GetProperty_Int("drawAllFrames", 0, debug_config);
-const bool debug_mockPayload = GetProperty_Int("mockPayload", 0, debug_config);
-const bool debug_mockChunks = GetProperty_Int("mockChunks", 0, debug_config);
-const int debug_blankVal = GetProperty_Int("blankVal", blankVal_default, debug_config);
-const NoiseType debug_noiseType = static_cast<NoiseType>(GetProperty_Int("noiseType", noiseType_default, debug_config));
-const float debug_blankRegionModifier = GetProperty_Float("blankRegionModifier", blankVal_default, debug_config);
-cout << debug_blankRegionModifier;
+  //Very important to init the config blobs and variables immediately.
+  InitVariables();
+
   vector<MySocket> tempSockets, sockets;
   SetupSockets(tempSockets, sockets);
 
-  vector<KeyValPair> config;
-  PopulateConfigBlob(kConfigFileName, config);
-
   vector<BorderChunk> borderChunks, previousChunks, limitedChunks;
+
+  vector<DWORD> ledUpdateTracker(leds.LED_COUNT_TOTAL);
 
   RECT rect;
   GetClientRect(hwnd, &rect);
-  TrimRectToRatio(rect, GetAspectRatio(config));
-  ReduceRectByBuffers(rect, config);
+  TrimRectToRatio(rect);
+  ReduceRectByBuffers(rect);
+  Rect simpleRect = { rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top };
 
-  LEDsCollection leds;
-  leds.LED_COUNT_UPPER = GetProperty_Int("led_count_upper", 10, config);
-  leds.LED_COUNT_LOWER = GetProperty_Int("led_count_lower", 10, config);
-  leds.LED_COUNT_LEFT = GetProperty_Int("led_count_left", 5, config);
-  leds.LED_COUNT_RIGHT = GetProperty_Int("led_count_right", 5, config);
-  leds.LED_COUNT_TOTAL = leds.LED_COUNT_UPPER + leds.LED_COUNT_LOWER + leds.LED_COUNT_LEFT + leds.LED_COUNT_RIGHT;
-  cout << "LED Count: " << leds.LED_COUNT_TOTAL << endl;
-
-  if (
-      rect.right - rect.left < leds.LED_COUNT_UPPER ||
-      rect.right - rect.left < leds.LED_COUNT_LOWER ||
-      rect.bottom - rect.top < leds.LED_COUNT_LEFT ||
-      rect.bottom - rect.top < leds.LED_COUNT_RIGHT
-      )
-  {
-    MessageBoxA(
-      nullptr,
-      "TOO MANY LEDS SPECIFIED - EXCEEDS RESOLUTION OF DISPLAY",
-      "ScreenGrabber",
-      0);
-    return -1;
-  }
-
-  const int sleepMS = GetProperty_Int("sleepMS", 0, config);
-
-  const int chunkUpdateTimeoutMS = GetProperty_Int("chunkUpdateTimeoutMS", 0, config);
-  vector<DWORD> ledUpdateTracker(leds.LED_COUNT_TOTAL);
-
-  const int downscaler = GetProperty_Int("downscale", 3, config);
   const int bitmap_width = (rect.right - rect.left) / downscaler;
   const int bitmap_height = (rect.bottom - rect.top) / downscaler;
-
-  const float borderSamplePercentage = GetProperty_Float("borderSample", 0.1f, config);
-  const int originPositionOffset = GetProperty_Int("origin", 0, config);
 
   InitialiseBorderChunks(borderChunks, bitmap_width, bitmap_height, borderSamplePercentage, originPositionOffset, leds);
 
   AppendToVector(borderChunks, previousChunks);
-
-  const float brightnessPercentage = GetProperty_Float("brightness", 1.0f, config);
-  
-  const int whiteDiffThresh = GetProperty_Float("whiteDiffThresh", 1.0f, config) * 255;
-  
-  const int outlierDiffThresh = GetProperty_Float("outlierDiffThresh", 1.0f, config) * 255;
-  
-  const int whiteLuminanceThresh = GetProperty_Float("whiteLuminanceThresh", 0.0f, config) * 255;
-
-  const int colourLuminanceThresh = GetProperty_Float("colourLuminanceThresh", 0.0f, config) * 255;
-
-  const bool optimiseTransmitWithDelta = GetProperty_Int("optimiseTransmitWithDelta", 0, config) == 1;
-  
-  const int deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
-
-  const auto deltaEType = static_cast<DeltaEType>(GetProperty_Int("deltaEType", static_cast<int>(DeltaEType::CIE2000), config));
-  double (*deltaEFunc)(const LAB&, const LAB&) = nullptr;
-  switch (deltaEType) 
-  {
-  case DeltaEType::CIE76:  deltaEFunc = &Calc76; break;
-  case DeltaEType::CIE94:  deltaEFunc = &Calc94; break;
-  case DeltaEType::CIE2000:  deltaEFunc = &Calc2000; break;
-  }
-  
-  Lumi lumi;
-  lumi.r = GetProperty_Float("lumiR", lumi.r, config);
-  lumi.g = GetProperty_Float("lumiG", lumi.g, config);
-  lumi.b = GetProperty_Float("lumiB", lumi.b, config);
-
-
-  Rect simpleRect = { rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top };
 
   InitialiseDeviceContextStuffs(bitmap_width, bitmap_height);
 
@@ -486,8 +403,7 @@ cout << debug_blankRegionModifier;
 
     for (BorderChunk& chunk : borderChunks)
     {
-      FilterChunk(chunk, whiteLuminanceThresh, whiteDiffThresh, 
-        colourLuminanceThresh, outlierDiffThresh, lumi);
+      FilterChunk(chunk, whiteLuminanceThresh, whiteDiffThresh, colourLuminanceThresh, outlierDiffThresh, lumi);
     }
 
     if (optimiseTransmitWithDelta)
