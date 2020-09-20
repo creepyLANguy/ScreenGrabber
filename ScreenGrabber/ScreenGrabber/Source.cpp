@@ -302,7 +302,7 @@ void CleanUpDeviceContextStuffs()
 }
 
 
-void GrabScreen(Mat& mat, Rect& rect, const int bitmap_width, const int bitmap_height)
+void GrabScreen(Mat& mat, const Rect& rect, const int bitmap_width, const int bitmap_height)
 {
   //Use the previously created device context with the bitmap
   SelectObject(hwindowCompatibleDC, hbwindow);
@@ -360,36 +360,8 @@ void TrimRectToRatio(RECT& rect)
 }
 
 
-int main(const int argc, char** argv)
+void RunLoop(vector<MySocket>& sockets, vector<BorderChunk>& borderChunks, vector<BorderChunk>& previousChunks, vector<BorderChunk>& limitedChunks, vector<DWORD>& ledUpdateTracker, const Rect& simpleRect, const int bitmap_width, const int bitmap_height, Mat& mat)
 {
-  //Very important to init the config blobs and variables immediately.
-  InitVariables();
-
-  vector<MySocket> tempSockets, sockets;
-  SetupSockets(tempSockets, sockets);
-
-  vector<BorderChunk> borderChunks, previousChunks, limitedChunks;
-
-  vector<DWORD> ledUpdateTracker(leds.LED_COUNT_TOTAL);
-
-  RECT rect;
-  GetClientRect(hwnd, &rect);
-  TrimRectToRatio(rect);
-  ReduceRectByBuffers(rect);
-  Rect simpleRect = { rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top };
-
-  const int bitmap_width = (rect.right - rect.left) / downscaler;
-  const int bitmap_height = (rect.bottom - rect.top) / downscaler;
-
-  InitialiseBorderChunks(borderChunks, bitmap_width, bitmap_height, borderSamplePercentage, originPositionOffset, leds);
-
-  AppendToVector(borderChunks, previousChunks);
-
-  InitialiseDeviceContextStuffs(bitmap_width, bitmap_height);
-
-  Mat mat(bitmap_height, bitmap_width, imageType);
-
-
   while (true)
   {
     GrabScreen(mat, simpleRect, bitmap_width, bitmap_height);
@@ -443,7 +415,7 @@ int main(const int argc, char** argv)
 
     if (debug_visual)
     {
-      if (debug_drawAllFrames || limitedChunks.size() > 0)
+      if (debug_drawAllFrames || limitedChunks.empty() == false)
       {
         ShowVisualisation(
           mat,
@@ -462,6 +434,48 @@ int main(const int argc, char** argv)
       Sleep(sleepMS);
     }
   }
+}
+
+
+int main(const int argc, char** argv)
+{
+  //Very important to init the config blobs and variables immediately.
+  InitVariables();
+
+  vector<MySocket> tempSockets, sockets;
+  SetupSockets(tempSockets, sockets);
+
+  vector<BorderChunk> borderChunks, previousChunks, limitedChunks;
+
+  vector<DWORD> ledUpdateTracker(leds.LED_COUNT_TOTAL);
+
+  RECT rect;
+  GetClientRect(hwnd, &rect);
+  TrimRectToRatio(rect);
+  ReduceRectByBuffers(rect);
+  const Rect simpleRect = { rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top };
+
+  const int bitmap_width = (rect.right - rect.left) / downscaler;
+  const int bitmap_height = (rect.bottom - rect.top) / downscaler;
+
+  InitialiseBorderChunks(borderChunks, bitmap_width, bitmap_height, borderSamplePercentage, originPositionOffset, leds);
+
+  AppendToVector(borderChunks, previousChunks);
+
+  InitialiseDeviceContextStuffs(bitmap_width, bitmap_height);
+
+  Mat mat(bitmap_height, bitmap_width, imageType);
+
+  RunLoop(
+    sockets, 
+    borderChunks, 
+    previousChunks, 
+    limitedChunks, 
+    ledUpdateTracker, 
+    simpleRect, 
+    bitmap_width, 
+    bitmap_height,
+    mat);
 
   //Unreachable. 
   //Meh, not massively important to clean this up, right?
