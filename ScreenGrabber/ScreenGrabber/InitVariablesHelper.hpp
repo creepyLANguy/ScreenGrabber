@@ -67,7 +67,7 @@ inline void InitNormalVariables()
   sleepMS = GetProperty_Int("sleepMS", 0, config);
   chunkUpdateTimeoutMS = GetProperty_Int("chunkUpdateTimeoutMS", 0, config);
 
-  originPositionOffset = GetProperty_Int("origin", 0, config);
+  originPositionOffset = GetProperty_Int("originIndex", 0, config);
 
   width = GetProperty_Int("ratioHorizontal", 16, config);
   height = GetProperty_Int("ratioVertical", 9, config);
