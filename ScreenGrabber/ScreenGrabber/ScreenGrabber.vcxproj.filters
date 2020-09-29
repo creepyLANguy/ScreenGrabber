@@ -58,13 +58,13 @@
     <None Include="config.ini">
       <Filter>Config</Filter>
     </None>
-    <None Include="port.ini">
-      <Filter>Config</Filter>
-    </None>
-    <None Include="server.ini">
-      <Filter>Config</Filter>
-    </None>
     <None Include="debug_config.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="hosts.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="ports.ini">
       <Filter>Config</Filter>
     </None>
   </ItemGroup>
