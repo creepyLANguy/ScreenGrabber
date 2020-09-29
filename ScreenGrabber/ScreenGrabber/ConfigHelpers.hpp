@@ -88,7 +88,7 @@ inline float GetProperty_Bool(const string propertyName, const bool default_retu
 }
 
 
-inline void PopulateConfigBlob(const string& configFileName, vector<KeyValPair>& configBlob)
+inline void PopulateConfigBlob(const string configFileName, vector<KeyValPair>& configBlob)
 {
   cout << configFileName << endl;
 

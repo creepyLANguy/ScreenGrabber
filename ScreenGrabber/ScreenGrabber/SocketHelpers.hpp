@@ -115,9 +115,9 @@ inline void InitialiseSockets(vector<MySocket>& sockets)
 }
 
 
-inline void GetFinalSocketList(const vector<MySocket>& sockets, vector<MySocket>& finalSockets)
+inline void GetFinalSocketList(vector<MySocket>& sockets, vector<MySocket>& finalSockets)
 {
-  for (MySocket socket : sockets)
+  for (MySocket& socket : sockets)
   {
     if (socket.IsInitialised())
     {
