@@ -109,7 +109,7 @@ inline void InitialiseBorderChunks(
     for (int i = 0; i < leds.LED_COUNT_LOWER; ++i)
     {
       chunk.x_start = i * chunk_lower_width;
-      chunk.x_end = chunk.x_start + chunk_upper_width;
+      chunk.x_end = chunk.x_start + chunk_lower_width;
 
       chunk.y_end = bitmap_height;
       chunk.y_start = chunk.y_end - chunk_lower_height;
