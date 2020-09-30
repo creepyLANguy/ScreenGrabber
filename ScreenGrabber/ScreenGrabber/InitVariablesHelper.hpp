@@ -6,7 +6,8 @@
 
 //Debug variables
 vector<KeyValPair> debug_config;
-bool console_fps;
+bool debug_fps_cmd;
+bool debug_fps_ide;
 bool debug_visual;
 bool debug_payload;
 bool debug_drawAllFrames;
@@ -20,7 +21,8 @@ inline void InitDebugVariables()
 {
   PopulateConfigBlob(kDebugConfigFileName, debug_config);
 
-  console_fps = GetProperty_Bool("console_fps", false, debug_config);
+  debug_fps_cmd = GetProperty_Bool("debug_fps_cmd", false, debug_config);
+  debug_fps_ide = GetProperty_Bool("debug_fps_ide", false, debug_config);
   debug_visual = GetProperty_Bool("draw_visual", false, debug_config);
   debug_payload = GetProperty_Bool("print_payload", false, debug_config);
   debug_drawAllFrames = GetProperty_Bool("drawAllFrames", false, debug_config);

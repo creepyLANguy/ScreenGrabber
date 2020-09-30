@@ -149,7 +149,7 @@ inline void PrintChunk(const BorderChunk& chunk)
 
 DWORD zeroHour = GetTickCount();
 unsigned int frameCount = 0;
-inline void PrintFramerate()
+inline void PrintFramerate(const bool cmd, const bool ide)
 {
   ++frameCount;
 
@@ -159,7 +159,15 @@ inline void PrintFramerate()
   }
 
   const string str = "FPS:" + to_string(frameCount) + "\r\n";
-  OutputDebugStringA(str.c_str());
+  if (cmd)
+  {
+    OutputDebugStringA(str.c_str());
+  }
+  if (ide)
+  {
+    cout << "\r\n" << str.c_str() << "\r\n";
+  }
+
   zeroHour = GetTickCount();
   frameCount = 0;
 }

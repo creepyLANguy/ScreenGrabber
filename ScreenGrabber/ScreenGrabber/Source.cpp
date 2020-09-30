@@ -420,7 +420,7 @@ void Run(
       if (debug_payload) { PrintPayload(payload); PrintChunk(chunk); IncrementMargin(); }
     }
 
-    if (console_fps) { PrintFramerate(); }
+    if (debug_fps_cmd || debug_fps_ide) { PrintFramerate(debug_fps_cmd, debug_fps_ide); }
 
     if (debug_visual)
     {
