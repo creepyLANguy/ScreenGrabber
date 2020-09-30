@@ -18,7 +18,7 @@
 #include "SocketHelpers.hpp"
 
 
-inline bool HasLEDRecentlyBeenUpdated(const int chunkIndex, vector<DWORD>& ledUpdateTracker, const int chunkUpdateTimeoutMS)
+inline bool HasLEDRecentlyBeenUpdated(const int chunkIndex, vector<DWORD>& ledUpdateTracker)
 {
   if (chunkUpdateTimeoutMS <= 0)
   {
@@ -47,7 +47,7 @@ int GetLuminance(const BorderChunk& chunk, const Lumi& lumi)
 }
 
 
-inline bool StripAwayOutlierHelper(int& candidateValue, const int comparableValue1, const int comparableValue2, const int outlierDiffThresh)
+inline bool StripAwayOutlierHelper(int& candidateValue, const int comparableValue1, const int comparableValue2)
 {
   if ((candidateValue < comparableValue1) && (candidateValue < comparableValue2))
   {
@@ -67,17 +67,17 @@ inline bool StripAwayOutlierHelper(int& candidateValue, const int comparableValu
 //Make sure we're only zero-ing out an outlying val 
 //iff its distance from both the other vals exceeds 
 //outlierDiffThresh, else we'd be altering the hue.
-void StripAwayOutlier(BorderChunk& chunk, const int outlierDiffThresh)
+void StripAwayOutlier(BorderChunk& chunk)
 {
-  if (StripAwayOutlierHelper(chunk.r, chunk.g, chunk.b, outlierDiffThresh))
+  if (StripAwayOutlierHelper(chunk.r, chunk.g, chunk.b))
   {
     return;
   }
-  if (StripAwayOutlierHelper(chunk.g, chunk.r, chunk.b, outlierDiffThresh))
+  if (StripAwayOutlierHelper(chunk.g, chunk.r, chunk.b))
   {
     return;
   }
-  if (StripAwayOutlierHelper(chunk.b, chunk.g, chunk.r, outlierDiffThresh))
+  if (StripAwayOutlierHelper(chunk.b, chunk.g, chunk.r))
   {
     return;
   }
@@ -135,17 +135,17 @@ void FilterChunk(
   }
   
   //Remove weakest value if the overall colour is not considered to be white.
-  StripAwayOutlier(chunk, outlierDiffThresh);
+  StripAwayOutlier(chunk);
 }
 
 
-void SetBrightness(vector<BorderChunk>& borderChunks, const float brightness)
+void SetBrightness(vector<BorderChunk>& borderChunks)
 {
   for (BorderChunk& chunk : borderChunks)
   {
-    chunk.r *= brightness;
-    chunk.g *= brightness;
-    chunk.b *= brightness;
+    chunk.r *= brightnessPercentage;
+    chunk.g *= brightnessPercentage;
+    chunk.b *= brightnessPercentage;
   }
 }
 
@@ -360,18 +360,22 @@ void TrimRectToRatio(RECT& rect)
 }
 
 
-void RunLoop(vector<MySocket>& sockets, vector<BorderChunk>& borderChunks, vector<BorderChunk>& previousChunks, vector<BorderChunk>& limitedChunks, vector<DWORD>& ledUpdateTracker, const Rect& simpleRect, const int bitmap_width, const int bitmap_height, Mat& mat)
+void Run(
+  vector<MySocket>& sockets, 
+  vector<BorderChunk>& borderChunks, 
+  vector<BorderChunk>& previousChunks, 
+  vector<BorderChunk>& limitedChunks, 
+  vector<DWORD>& ledUpdateTracker, 
+  const Rect& simpleRect, 
+  const int bitmap_width, 
+  const int bitmap_height, 
+  Mat& mat)
 {
   while (true)
   {
     GrabScreen(mat, simpleRect, bitmap_width, bitmap_height);
 
     SetAverageRGBValues(borderChunks, mat);
-
-    if (brightnessPercentage < 1)
-    {
-      SetBrightness(borderChunks, brightnessPercentage);
-    }
 
     for (BorderChunk& chunk : borderChunks)
     {
@@ -387,11 +391,16 @@ void RunLoop(vector<MySocket>& sockets, vector<BorderChunk>& borderChunks, vecto
       limitedChunks = borderChunks;
     }
 
+    if (brightnessPercentage < 1.0f)
+    {
+      SetBrightness(limitedChunks);
+    }    
+
     vector<int> skippedChunksIndexesBasedOnLastUpdatedTime;
 
     for (const BorderChunk& chunk : limitedChunks)
     {
-      if (HasLEDRecentlyBeenUpdated(chunk.index, ledUpdateTracker, chunkUpdateTimeoutMS))
+      if (HasLEDRecentlyBeenUpdated(chunk.index, ledUpdateTracker))
       {
         if (debug_visual) { skippedChunksIndexesBasedOnLastUpdatedTime.emplace_back(chunk.index); }
 
@@ -466,12 +475,12 @@ int main(const int argc, char** argv)
 
   Mat mat(bitmap_height, bitmap_width, imageType);
 
-  RunLoop(
+  Run(
     sockets, 
     borderChunks, 
     previousChunks, 
     limitedChunks, 
-    ledUpdateTracker, 
+    ledUpdateTracker,
     simpleRect, 
     bitmap_width, 
     bitmap_height,
