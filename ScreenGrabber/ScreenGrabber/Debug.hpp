@@ -42,10 +42,10 @@ struct LogoText
 {
   bool hasBeenInitialised = false;
 
-  const string text = "Project Luna";
+  const string text = "PROJECT LUNA";
   const Scalar textColour = Scalar(255, 255, 255);
-  const HersheyFonts font = FONT_HERSHEY_PLAIN;
-  const double scale = 2.2;
+  const HersheyFonts font = FONT_HERSHEY_SIMPLEX;
+  const double scale = 1;
   const int thickness = 1;
   const LineTypes line = LINE_AA;
   const Size textRegion = getTextSize(text, font, scale, thickness, nullptr);
@@ -80,6 +80,51 @@ inline void InitLogoText(Mat& mat, const float leeway)
   logoText.text_origin = Point(logoText.text_x, logoText.text_y);
 
   logoText.hasBeenInitialised = true;
+}
+
+
+struct ChunkDataText
+{
+  bool hasBeenInitialised = false;
+
+  const string text = "chunkDataText";
+  const Scalar textColour = Scalar(255, 255, 255);
+  const HersheyFonts font = FONT_HERSHEY_SIMPLEX;
+  const double scale = 0.4;
+  const int thickness = 1;
+  const LineTypes line = LINE_AA;
+  const Size textRegion = getTextSize(text, font, scale, thickness, nullptr);
+
+  int y_start = -1;
+  int y_end = -1;
+  int x_start = -1;
+  int x_end = -1;
+  int height = -1;
+  int width = -1;
+  Rect region = Rect(-1,-1,-1,-1);
+
+  int text_x = -1;
+  int text_y = -1;
+  Point text_origin = Point(-1, -1);
+};
+
+ChunkDataText chunkDataText;
+
+inline void InitChunkDataText(Mat& mat, const float leeway)
+{
+  chunkDataText.y_start = mat.rows * leeway;
+  chunkDataText.y_end = mat.rows * (1 - leeway);
+  chunkDataText.x_start = mat.cols * leeway;
+  chunkDataText.x_end = mat.cols * (1 - leeway);
+  chunkDataText.height = chunkDataText.y_end - chunkDataText.y_start;
+  chunkDataText.width = chunkDataText.x_end - chunkDataText.x_start;
+  chunkDataText.region = Rect(chunkDataText.x_start, chunkDataText.y_start, chunkDataText.width, chunkDataText.height);
+
+  chunkDataText.text_x = chunkDataText.x_start + 4;
+  chunkDataText.text_y = chunkDataText.y_start + chunkDataText.height - 4;
+  chunkDataText.text_origin = Point(chunkDataText.text_x, chunkDataText.text_y);
+
+  chunkDataText.hasBeenInitialised = true;
 }
 
 
@@ -149,6 +194,7 @@ inline void PrintChunk(const BorderChunk& chunk)
 
 DWORD zeroHour = GetTickCount();
 unsigned int frameCount = 0;
+unsigned int lastDeterminedFramerate = 0;
 inline void PrintFramerate(const bool cmd, const bool ide)
 {
   ++frameCount;
@@ -158,14 +204,16 @@ inline void PrintFramerate(const bool cmd, const bool ide)
     return;
   }
 
-  const string str = "FPS:" + to_string(frameCount) + "\r\n";
+  lastDeterminedFramerate = frameCount;
+
+  const string str = "FPS:" + to_string(lastDeterminedFramerate) + "\r\n";
   if (cmd)
   {
-    OutputDebugStringA(str.c_str());
+    cout << "\r\n" << str.c_str() << "\r\n";
   }
   if (ide)
   {
-    cout << "\r\n" << str.c_str() << "\r\n";
+    OutputDebugStringA(str.c_str());
   }
 
   zeroHour = GetTickCount();
@@ -280,6 +328,47 @@ inline void FillWithNoise(
 }
 
 
+inline void GetChunkDataString(const int borderChunksSize, const int previousChunksSize, string& s)
+{
+  const string spacer = "     ";
+  s += "FPS : ";
+  if (lastDeterminedFramerate < 10) { s += "0"; }
+  s += to_string(lastDeterminedFramerate);
+  s += spacer;
+  s += "Updates : ";
+  if (borderChunksSize < 10) { s += "0"; }
+  s += to_string(borderChunksSize);
+  s += spacer;
+  const int percentage = static_cast<int>(borderChunksSize / static_cast<double>(previousChunksSize) * 100);
+  s += "% : ";
+  if (percentage < 10) { s += "0"; }
+  s += to_string(percentage);
+  s += spacer;
+  if (percentage > 0 && percentage < 100) { s += "|"; }
+  const int dots = percentage / 10;
+  for (int i = 0; i < dots; ++i)
+  {
+    s += "|";
+  }
+}
+
+
+inline void WriteChunkDataToMat(Mat& mat, vector<BorderChunk>& borderChunks, vector<BorderChunk>& previousChunks)
+{
+  string s = "";
+  GetChunkDataString(borderChunks.size(), previousChunks.size(), s);
+  putText(mat,
+    s,
+    chunkDataText.text_origin,
+    chunkDataText.font,
+    chunkDataText.scale,
+    chunkDataText.textColour,
+    chunkDataText.thickness,
+    chunkDataText.line
+  );  
+}
+
+
 inline void Blur(Mat& mat)
 {
   //GaussianBlur(mat(region), mat(region), Size(0, 0), 9); 
@@ -342,9 +431,11 @@ inline void ShowVisualisation(
 
   if ((noiseType & CHUNKDATA) == CHUNKDATA)
   {
-    BlankMat(mat, 255, leeway);
-    //TODO
-    //WriteChunkDataToMat(mat, borderChunks, previousChunks);
+    if (chunkDataText.hasBeenInitialised == false)
+    {
+      InitChunkDataText(mat, leeway);
+    }
+    WriteChunkDataToMat(mat, borderChunks, previousChunks);
   }
 
   if ((noiseType & LOGO) == LOGO)

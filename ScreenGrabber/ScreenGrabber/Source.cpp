@@ -191,7 +191,7 @@ void GetDeltaE(BorderChunk& chunk1, BorderChunk& chunk2, double(* deltaEFunc)(co
 }
 
 
-void RemoveStaticChunks(
+void RemoveSimilarChunks(
   vector<BorderChunk>& chunks, 
   vector<BorderChunk>& previousChunks, 
   double (*deltaEFunc)(const LAB&, const LAB&), 
@@ -269,7 +269,7 @@ void OptimiseTransmitWithDelta(
   }
   else
   {
-    RemoveStaticChunks(limitedChunks, previousChunks, deltaEFunc, deltaEThresh);
+    RemoveSimilarChunks(limitedChunks, previousChunks, deltaEFunc, deltaEThresh);
   }
 }
 
