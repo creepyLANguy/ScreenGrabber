@@ -16,6 +16,7 @@ bool debug_mockChunks;
 int debug_blankVal;
 NoiseType debug_noiseType;
 float debug_blankRegionModifier;
+int debug_reportTimeMS;
 
 inline void InitDebugVariables()
 {
@@ -31,6 +32,7 @@ inline void InitDebugVariables()
   debug_blankVal = GetProperty_Int("blankVal", blankVal_default, debug_config);
   debug_noiseType = static_cast<NoiseType>(GetProperty_Int("noiseType", noiseType_default, debug_config));
   debug_blankRegionModifier = GetProperty_Float("blankRegionModifier", blankVal_default, debug_config);
+  debug_reportTimeMS = GetProperty_Int("reportTimeMS", 1000, debug_config);
 }
 
 

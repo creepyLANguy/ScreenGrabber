@@ -1,8 +1,66 @@
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 
+#include <iostream>
+#include <bitset>
+#include <opencv2/opencv.hpp>
+
 
 const char* kDebugConfigFileName = "debug_config.ini";
+
+
+auto zeroHourFPS = GetTickCount();
+auto zeroHourInfo = GetTickCount();
+unsigned int currentFrameCount = 0;
+unsigned int lastDeterminedFramerate = 0;
+unsigned int currentChunksUpdated = 0;
+unsigned int lastChunksUpdatedTotal = 0;
+unsigned int updateOccasions = 0;
+unsigned int lastUpdateOccasionsTotal = 0;
+inline void UpdateDebugTimer(const int reportTimeMS, const unsigned int updatedChunksCount)
+{
+  ++currentFrameCount;
+
+  if (updatedChunksCount > 0)
+  {
+    ++updateOccasions;
+    currentChunksUpdated += updatedChunksCount;
+  }
+
+  const auto now = GetTickCount();
+
+  if (now - zeroHourFPS > 1000)
+  {
+    lastDeterminedFramerate = currentFrameCount;
+    currentFrameCount = 0;
+    zeroHourFPS = now;
+  }
+
+  if (now - zeroHourInfo > reportTimeMS)
+  {
+    lastChunksUpdatedTotal = currentChunksUpdated;
+    lastUpdateOccasionsTotal = updateOccasions;
+    currentChunksUpdated = 0;
+    updateOccasions = 0;
+    zeroHourInfo = now;
+  }
+}
+
+
+inline void PrintFramerate(const bool cmd, const bool ide)
+{
+  const string str = "FPS:" + to_string(lastDeterminedFramerate) + "\r\n";
+  if (cmd)
+  {
+    cout << "\r\n" << str.c_str() << "\r\n";
+  }
+  if (ide)
+  {
+    OutputDebugStringA(str.c_str());
+  }
+}
+
+
 
 
 enum NoiseType : int
@@ -34,9 +92,6 @@ int shifter = 0;
 constexpr int blankVal_default = 150;
 constexpr float blankRegionModifier_default = 2.5f;
 constexpr NoiseType noiseType_default = static_cast<NoiseType>(BLUR | LOGO);
-
-
-#include <opencv2/opencv.hpp>
 
 struct LogoText
 {
@@ -179,7 +234,7 @@ inline void IncrementMargin()
   margin = string(marginCounter, marginMarker);
 }
 
-#include <bitset>
+
 inline void PrintPayload(const unsigned int& payload)
 {
   cout << margin << bitset<32>(payload) << "\r\n";
@@ -189,35 +244,6 @@ const char* sep = " | ";
 inline void PrintChunk(const BorderChunk& chunk)
 {
   cout << margin << chunk.index << sep << chunk.r << sep << chunk.g << sep << chunk.b << "\r\n\r\n";
-}
-
-
-DWORD zeroHour = GetTickCount();
-unsigned int frameCount = 0;
-unsigned int lastDeterminedFramerate = 0;
-inline void PrintFramerate(const bool cmd, const bool ide)
-{
-  ++frameCount;
-
-  if (GetTickCount() - zeroHour < 1000)
-  {
-    return;
-  }
-
-  lastDeterminedFramerate = frameCount;
-
-  const string str = "FPS:" + to_string(lastDeterminedFramerate) + "\r\n";
-  if (cmd)
-  {
-    cout << "\r\n" << str.c_str() << "\r\n";
-  }
-  if (ide)
-  {
-    OutputDebugStringA(str.c_str());
-  }
-
-  zeroHour = GetTickCount();
-  frameCount = 0;
 }
 
 
@@ -327,36 +353,42 @@ inline void FillWithNoise(
   }
 }
 
-
-inline void GetChunkDataString(const int borderChunksSize, const int previousChunksSize, string& s)
+double totalChunks = 0;
+inline void GetChunkDataString(string& s)
 {
   const string spacer = "     ";
+
   s += "FPS : ";
   if (lastDeterminedFramerate < 10) { s += "0"; }
   s += to_string(lastDeterminedFramerate);
   s += spacer;
-  s += "Updates : ";
-  if (borderChunksSize < 10) { s += "0"; }
-  s += to_string(borderChunksSize);
+
+  const unsigned int averageUpdates = (lastUpdateOccasionsTotal > 0) ? (lastChunksUpdatedTotal / lastUpdateOccasionsTotal) : 0;
+
+  s += "UPF : ";
+  if (averageUpdates < 10) { s += "0"; }
+  s += to_string(averageUpdates);
   s += spacer;
-  const int percentage = static_cast<int>(borderChunksSize / static_cast<double>(previousChunksSize) * 100);
-  s += "% : ";
+
+  const int percentage = static_cast<int>(averageUpdates / totalChunks * 100);
+  s += "%PF : ";
   if (percentage < 10) { s += "0"; }
   s += to_string(percentage);
   s += spacer;
+
   if (percentage > 0 && percentage < 100) { s += "|"; }
-  const int dots = percentage / 10;
+  const int dots = percentage / 8;
   for (int i = 0; i < dots; ++i)
   {
     s += "|";
   }
 }
 
-
-inline void WriteChunkDataToMat(Mat& mat, vector<BorderChunk>& borderChunks, vector<BorderChunk>& previousChunks)
+inline void WriteChunkDataToMat(Mat& mat)
 {
   string s = "";
-  GetChunkDataString(borderChunks.size(), previousChunks.size(), s);
+  GetChunkDataString(s);
+
   putText(mat,
     s,
     chunkDataText.text_origin,
@@ -434,8 +466,9 @@ inline void ShowVisualisation(
     if (chunkDataText.hasBeenInitialised == false)
     {
       InitChunkDataText(mat, leeway);
+      totalChunks = previousChunks.size();
     }
-    WriteChunkDataToMat(mat, borderChunks, previousChunks);
+    WriteChunkDataToMat(mat);
   }
 
   if ((noiseType & LOGO) == LOGO)
