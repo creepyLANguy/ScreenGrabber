@@ -17,10 +17,11 @@ const char kConfigDelim = ' ';
 
 constexpr auto imageType = CV_8UC4;
 
+
 //Device context stuffs
-const HWND hwnd = GetDesktopWindow();
-const HDC hwindowDC = GetDC(hwnd);
-const HDC hwindowCompatibleDC = CreateCompatibleDC(hwindowDC);
+HWND hwnd = nullptr;
+HDC hwindowDC = nullptr;
+HDC hwindowCompatibleDC = nullptr;
 HBITMAP hbwindow;
 BITMAPINFOHEADER bi;
 //

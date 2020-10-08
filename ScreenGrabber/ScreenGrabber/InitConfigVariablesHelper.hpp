@@ -18,7 +18,7 @@ NoiseType debug_noiseType;
 float debug_blankRegionModifier;
 int debug_reportTimeMS;
 
-inline void InitDebugVariables()
+inline void InitConfigVariables_Debug()
 {
   PopulateConfigBlob(kDebugConfigFileName, debug_config);
 
@@ -56,8 +56,9 @@ bool optimiseTransmitWithDelta;
 int deltaEThresh;
 DeltaEType deltaEType;
 double (*deltaEFunc)(const LAB&, const LAB&) = nullptr;
+//string captureWindowName;
 
-inline void InitNormalVariables()
+inline void InitConfigVariables_General()
 {
   PopulateConfigBlob(kConfigFileName, config);
 
@@ -102,13 +103,15 @@ inline void InitNormalVariables()
   lumi.r = GetProperty_Float("lumiR", lumi.r, config);
   lumi.g = GetProperty_Float("lumiG", lumi.g, config);
   lumi.b = GetProperty_Float("lumiB", lumi.b, config);
+
+  //captureWindowName = GetProperty_String("captureWindowName", "", config);
 }
 
 
-inline void InitVariables()
+inline void InitConfigVariables()
 {
-  InitDebugVariables();
-  InitNormalVariables();
+  InitConfigVariables_Debug();
+  InitConfigVariables_General();
 }
 
 

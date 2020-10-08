@@ -62,6 +62,20 @@ inline bool StringsAreEqual(string str1, string str2)
 }
 
 
+inline string GetProperty_String(const string propertyName, const string default_return, const vector<KeyValPair>& configBlob)
+{
+  for (const KeyValPair& kvp : configBlob)
+  {
+    if (StringsAreEqual(kvp.key, propertyName))
+    {
+      return kvp.val.c_str();
+    }
+  }
+
+  return default_return;
+}
+
+
 inline int GetProperty_Int(const string propertyName, const int default_return, const vector<KeyValPair>& configBlob)
 {
   for (const KeyValPair& kvp : configBlob)

@@ -163,7 +163,7 @@
     <ClInclude Include="DeltaE.hpp" />
     <ClInclude Include="MySocket.h" />
     <ClInclude Include="SocketHelpers.hpp" />
-    <ClInclude Include="InitVariablesHelper.hpp" />
+    <ClInclude Include="InitConfigVariablesHelper.hpp" />
     <ClInclude Include="VectorUtils.hpp" />
   </ItemGroup>
   <ItemGroup>

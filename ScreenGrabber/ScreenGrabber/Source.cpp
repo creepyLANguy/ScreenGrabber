@@ -14,7 +14,7 @@
 #include "VectorUtils.hpp"
 #include "Debug.hpp"
 #include "DeltaE.hpp"
-#include "InitVariablesHelper.hpp"
+#include "InitConfigVariablesHelper.hpp"
 #include "SocketHelpers.hpp"
 
 
@@ -274,8 +274,31 @@ void OptimiseTransmitWithDelta(
 }
 
 
+//TODO
+//Allow for specific window to be captured.
+void SetWindowHandle()
+{
+ /* const LPCSTR window = captureWindowName.c_str();
+
+  hwnd = FindWindowA(nullptr, window);
+
+  if (hwnd == nullptr)
+  {
+    cout << "Could not find window of title \"" << captureWindowName << "\"\r\n";
+    cout << "Defaulting to entire primary display.\r\n" << endl;
+
+    hwnd = GetDesktopWindow();
+  }*/
+
+  hwnd = GetDesktopWindow();
+}
+
+
 void InitialiseDeviceContextStuffs(const int bitmap_width, const int bitmap_height)
 {
+  hwindowDC = GetDC(hwnd);
+  hwindowCompatibleDC = CreateCompatibleDC(hwindowDC);
+
   SetStretchBltMode(hwindowCompatibleDC, COLORONCOLOR);
 
   //Create a bitmap
@@ -451,7 +474,9 @@ void Run(
 int main(const int argc, char** argv)
 {
   //Very important to init the config blobs and variables immediately.
-  InitVariables();
+  InitConfigVariables();
+
+  SetWindowHandle();
 
   vector<MySocket> tempSockets, sockets;
   SetupSockets(tempSockets, sockets);
