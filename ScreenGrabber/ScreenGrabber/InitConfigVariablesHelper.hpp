@@ -3,6 +3,7 @@
 
 #include "ConfigHelpers.hpp"
 #include "Debug.hpp"
+#include "RunFuncs.h"
 
 //Debug variables
 vector<KeyValPair> debug_config;
@@ -59,6 +60,8 @@ double (*deltaEFunc)(const LAB&, const LAB&) = nullptr;
 CaptureType captureType;
 string imageFile;
 int staticImageBroadcastSleepMS;
+string scriptFile;
+void (*runFunc)() = nullptr;
 
 inline void InitConfigVariables_General()
 {
@@ -107,8 +110,17 @@ inline void InitConfigVariables_General()
   lumi.b = GetProperty_Float("lumiB", lumi.b, config);
 
   captureType = static_cast<CaptureType>(GetProperty_Int("captureType", static_cast<int>(CaptureType::PRIMARYDISPLAY), config));
+  switch (captureType)
+  {
+  case CaptureType::PRIMARYDISPLAY:  runFunc = &RunScreenCapture; break;
+  case CaptureType::IMAGEFILE:  runFunc= &RunFileCapture; break;
+  case CaptureType::SCRIPT:  runFunc = &RunScriptAnimation; break;
+  }
+
   imageFile = GetProperty_String("imageFile", "", config);
   staticImageBroadcastSleepMS = GetProperty_Int("staticImageBroadcastSleepMS", 0, config);
+
+  scriptFile = GetProperty_String("scriptFile", "", config);
 }
 
 

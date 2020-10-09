@@ -162,6 +162,7 @@
     <ClInclude Include="Defines.h" />
     <ClInclude Include="DeltaE.hpp" />
     <ClInclude Include="MySocket.h" />
+    <ClInclude Include="RunFuncs.h" />
     <ClInclude Include="SocketHelpers.hpp" />
     <ClInclude Include="InitConfigVariablesHelper.hpp" />
     <ClInclude Include="VectorUtils.hpp" />
@@ -175,6 +176,7 @@
     <None Include="debug_config.ini" />
     <None Include="hosts.ini" />
     <None Include="ports.ini" />
+    <None Include="rainbow.luna" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -4,6 +4,8 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include <Windows.h>
+
+#include "MySocket.h"
 #define WIN32_LEAN_AND_MEAN
 
 using namespace cv;
@@ -25,6 +27,9 @@ HDC hwindowCompatibleDC = nullptr;
 HBITMAP hbwindow = nullptr;
 BITMAPINFOHEADER bi;
 //
+
+
+vector<MySocket> tempSockets, sockets;
 
 
 struct KeyValPair
@@ -70,7 +75,8 @@ struct Lumi
 enum class CaptureType
 {
   PRIMARYDISPLAY = 0,
-  STATICIMAGEFILE = 1,
+  IMAGEFILE = 1,
+  SCRIPT = 2,
 };
 
 #endif // DEFINES_H

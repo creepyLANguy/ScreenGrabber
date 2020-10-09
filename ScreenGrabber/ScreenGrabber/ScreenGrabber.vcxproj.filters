@@ -39,6 +39,9 @@
     <ClInclude Include="InitConfigVariablesHelper.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="RunFuncs.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
@@ -65,6 +68,9 @@
       <Filter>Config</Filter>
     </None>
     <None Include="ports.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="rainbow.luna">
       <Filter>Config</Filter>
     </None>
   </ItemGroup>

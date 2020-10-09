@@ -16,6 +16,7 @@
 #include "DeltaE.hpp"
 #include "InitConfigVariablesHelper.hpp"
 #include "SocketHelpers.hpp"
+#include "RunFuncs.h"
 
 
 inline bool HasLEDRecentlyBeenUpdated(const int chunkIndex, vector<DWORD>& ledUpdateTracker)
@@ -481,9 +482,6 @@ void RunScreenCaptureLoop(
 
 void RunScreenCapture()
 {
-  vector<MySocket> tempSockets, sockets;
-  SetupSockets(tempSockets, sockets);
-
   vector<BorderChunk> borderChunks, previousChunks, limitedChunks;
 
   vector<DWORD> ledUpdateTracker(leds.LED_COUNT_TOTAL);
@@ -588,9 +586,6 @@ void RunFileBroadcastLoop(
 
 void RunFileCapture()
 {
-  vector<MySocket> tempSockets, sockets;
-  SetupSockets(tempSockets, sockets);
-
   vector<BorderChunk> borderChunks;
 
   RECT rect;
@@ -625,19 +620,23 @@ void RunFileCapture()
 }
 
 
+void RunScriptAnimation()
+{
+  cout << "Failed to open file : " << scriptFile << endl;
+  return;
+
+
+}
+
+
 int main(const int argc, char** argv)
 {
   //Very important to init the config blobs and variables immediately.
   InitConfigVariables();
 
-  if (captureType == CaptureType::PRIMARYDISPLAY)
-  {
-    RunScreenCapture();
-  }
-  else if (captureType == CaptureType::STATICIMAGEFILE)
-  {
-    RunFileCapture();
-  }
+  SetupSockets(tempSockets, sockets);
+
+  runFunc();
 
   CleanUpDeviceContextStuffs();
 
