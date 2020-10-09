@@ -56,7 +56,9 @@ bool optimiseTransmitWithDelta;
 int deltaEThresh;
 DeltaEType deltaEType;
 double (*deltaEFunc)(const LAB&, const LAB&) = nullptr;
-//string captureWindowName;
+CaptureType captureType;
+string imageFile;
+int staticImageBroadcastSleepMS;
 
 inline void InitConfigVariables_General()
 {
@@ -104,7 +106,9 @@ inline void InitConfigVariables_General()
   lumi.g = GetProperty_Float("lumiG", lumi.g, config);
   lumi.b = GetProperty_Float("lumiB", lumi.b, config);
 
-  //captureWindowName = GetProperty_String("captureWindowName", "", config);
+  captureType = static_cast<CaptureType>(GetProperty_Int("captureType", static_cast<int>(CaptureType::PRIMARYDISPLAY), config));
+  imageFile = GetProperty_String("imageFile", "", config);
+  staticImageBroadcastSleepMS = GetProperty_Int("staticImageBroadcastSleepMS", 0, config);
 }
 
 

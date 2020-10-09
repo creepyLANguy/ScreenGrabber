@@ -22,7 +22,7 @@ constexpr auto imageType = CV_8UC4;
 HWND hwnd = nullptr;
 HDC hwindowDC = nullptr;
 HDC hwindowCompatibleDC = nullptr;
-HBITMAP hbwindow;
+HBITMAP hbwindow = nullptr;
 BITMAPINFOHEADER bi;
 //
 
@@ -66,5 +66,11 @@ struct Lumi
   double b = 0.17f;
 };
 
+
+enum class CaptureType
+{
+  PRIMARYDISPLAY = 0,
+  STATICIMAGEFILE = 1,
+};
 
 #endif // DEFINES_H

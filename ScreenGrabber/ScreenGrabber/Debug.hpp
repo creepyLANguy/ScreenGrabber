@@ -466,7 +466,7 @@ inline void ShowVisualisation(
     if (chunkDataText.hasBeenInitialised == false)
     {
       InitChunkDataText(mat, leeway);
-      totalChunks = previousChunks.size();
+      totalChunks = previousChunks.empty() ? borderChunks.size() : previousChunks.size();
     }
     WriteChunkDataToMat(mat);
   }

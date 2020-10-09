@@ -383,15 +383,23 @@ void TrimRectToRatio(RECT& rect)
 }
 
 
-void Run(
-  vector<MySocket>& sockets, 
-  vector<BorderChunk>& borderChunks, 
-  vector<BorderChunk>& previousChunks, 
-  vector<BorderChunk>& limitedChunks, 
-  vector<DWORD>& ledUpdateTracker, 
-  const Rect& simpleRect, 
-  const int bitmap_width, 
-  const int bitmap_height, 
+void GetRect_Display(RECT& rect)
+{
+  GetClientRect(hwnd, &rect); 
+  TrimRectToRatio(rect);
+  ReduceRectByBuffers(rect);
+}
+
+
+void RunScreenCaptureLoop(
+  vector<MySocket>& sockets,
+  vector<BorderChunk>& borderChunks,
+  vector<BorderChunk>& previousChunks,
+  vector<BorderChunk>& limitedChunks,
+  vector<DWORD>& ledUpdateTracker,
+  const Rect& simpleRect,
+  const int bitmap_width,
+  const int bitmap_height,
   Mat& mat)
 {
   while (true)
@@ -417,7 +425,7 @@ void Run(
     if (brightnessPercentage < 1.0f)
     {
       SetBrightness(limitedChunks);
-    }    
+    }
 
     vector<int> skippedChunksIndexesBasedOnLastUpdatedTime;
 
@@ -431,7 +439,7 @@ void Run(
       }
 
       unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
-   
+
       if (debug_mockPayload) { GetDebugPayload(payload, chunk.index); }
       if (debug_mockChunks) { GetDebugChunk(const_cast<BorderChunk&>(chunk)); }
 
@@ -460,7 +468,7 @@ void Run(
           debug_blankVal,
           debug_noiseType
         );
-      }      
+      }
     }
 
     if (sleepMS)
@@ -471,13 +479,8 @@ void Run(
 }
 
 
-int main(const int argc, char** argv)
+void RunScreenCapture()
 {
-  //Very important to init the config blobs and variables immediately.
-  InitConfigVariables();
-
-  SetWindowHandle();
-
   vector<MySocket> tempSockets, sockets;
   SetupSockets(tempSockets, sockets);
 
@@ -486,13 +489,13 @@ int main(const int argc, char** argv)
   vector<DWORD> ledUpdateTracker(leds.LED_COUNT_TOTAL);
 
   RECT rect;
-  GetClientRect(hwnd, &rect);
-  TrimRectToRatio(rect);
-  ReduceRectByBuffers(rect);
-  const Rect simpleRect = { rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top };
+  SetWindowHandle();
+  GetRect_Display(rect);
 
   const int bitmap_width = (rect.right - rect.left) / downscaler;
   const int bitmap_height = (rect.bottom - rect.top) / downscaler;
+
+  Mat mat(bitmap_height, bitmap_width, imageType);
 
   InitialiseBorderChunks(borderChunks, bitmap_width, bitmap_height, borderSamplePercentage, originPositionOffset, leds);
 
@@ -500,22 +503,143 @@ int main(const int argc, char** argv)
 
   InitialiseDeviceContextStuffs(bitmap_width, bitmap_height);
 
-  Mat mat(bitmap_height, bitmap_width, imageType);
+  const Rect simpleRect = {
+    rect.left,
+    rect.top,
+    rect.right - rect.left,
+    rect.bottom - rect.top
+  };
 
-  Run(
-    sockets, 
-    borderChunks, 
-    previousChunks, 
-    limitedChunks, 
+  RunScreenCaptureLoop(
+    sockets,
+    borderChunks,
+    previousChunks,
+    limitedChunks,
     ledUpdateTracker,
-    simpleRect, 
-    bitmap_width, 
+    simpleRect,
+    bitmap_width,
     bitmap_height,
     mat);
+}
 
-  //Unreachable. 
-  //Meh, not massively important to clean this up, right?
-  //CleanUpDeviceContextStuffs();
 
-  //return 0;
+void RunFileBroadcastLoop(
+  vector<MySocket>& sockets,
+  vector<BorderChunk>& borderChunks,
+  Mat& mat)
+{
+  vector<BorderChunk> empty_bc;
+  vector<int> empty_i;
+
+  while (true)
+  {
+    for (const BorderChunk& chunk : borderChunks)
+    {
+      unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
+
+      if (debug_mockPayload) { GetDebugPayload(payload, chunk.index); }
+      if (debug_mockChunks) { GetDebugChunk(const_cast<BorderChunk&>(chunk)); }
+
+      for (const MySocket& socket : sockets)
+      {
+        socket.Send(&payload);
+      }
+
+      if (debug_payload) { PrintPayload(payload); PrintChunk(chunk); IncrementMargin(); }
+    }
+
+    UpdateDebugTimer(debug_reportTimeMS, borderChunks.size());
+
+    if (debug_fps_cmd || debug_fps_ide) { PrintFramerate(debug_fps_cmd, debug_fps_ide); }
+
+    if (debug_visual)
+    {
+      if (debug_drawAllFrames || borderChunks.empty() == false)
+      {
+        ShowVisualisation(
+          mat,
+          borderSamplePercentage * debug_blankRegionModifier,
+          borderChunks,
+          empty_i,
+          empty_bc,
+          debug_blankVal,
+          debug_noiseType
+        );
+      }
+    }
+
+    if (staticImageBroadcastSleepMS < 0)
+    {
+      return;
+    }
+
+    if (staticImageBroadcastSleepMS > 0)
+    {
+      Sleep(staticImageBroadcastSleepMS);
+    }
+
+    if (sleepMS)
+    {
+      Sleep(sleepMS);
+    }
+  }
+}
+
+
+void RunFileCapture()
+{
+  vector<MySocket> tempSockets, sockets;
+  SetupSockets(tempSockets, sockets);
+
+  vector<BorderChunk> borderChunks;
+
+  RECT rect;
+  Mat mat = imread(imageFile);
+  if (mat.data == nullptr)
+  {
+    cout << "Failed to open file : " << imageFile << endl;
+    return;
+  }
+  resize(mat, mat, mat.size()/downscaler);
+
+  rect.left = rect.top = 0;
+  rect.right = mat.cols;
+  rect.bottom = mat.rows;
+
+  const int bitmap_width = (rect.right - rect.left);
+  const int bitmap_height = (rect.bottom - rect.top);
+
+  InitialiseBorderChunks(borderChunks, bitmap_width, bitmap_height, borderSamplePercentage, originPositionOffset, leds);
+
+  SetAverageRGBValues(borderChunks, mat);
+
+  if (brightnessPercentage < 1.0f)
+  {
+    SetBrightness(borderChunks);
+  }
+
+  RunFileBroadcastLoop(
+    sockets,
+    borderChunks,
+    mat);
+}
+
+
+int main(const int argc, char** argv)
+{
+  //Very important to init the config blobs and variables immediately.
+  InitConfigVariables();
+
+  if (captureType == CaptureType::PRIMARYDISPLAY)
+  {
+    RunScreenCapture();
+  }
+  else if (captureType == CaptureType::STATICIMAGEFILE)
+  {
+    RunFileCapture();
+  }
+
+  CleanUpDeviceContextStuffs();
+
+  return 0;
 }
