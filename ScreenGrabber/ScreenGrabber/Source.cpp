@@ -17,6 +17,7 @@
 #include "InitConfigVariablesHelper.hpp"
 #include "SocketHelpers.hpp"
 #include "RunFuncs.h"
+#include "AnimationScriptHelpers.hpp"
 
 
 inline bool HasLEDRecentlyBeenUpdated(const int chunkIndex, vector<DWORD>& ledUpdateTracker)
@@ -622,10 +623,8 @@ void RunFileCapture()
 
 void RunScriptAnimation()
 {
-  cout << "Failed to open file : " << scriptFile << endl;
-  return;
-
-
+  ReadScript();
+  RunScript();  
 }
 
 

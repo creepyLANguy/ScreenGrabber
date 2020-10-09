@@ -42,6 +42,12 @@
     <ClInclude Include="RunFuncs.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationScriptHelpers.hpp">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigVariables.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
