@@ -21,6 +21,7 @@ inline void InitConfigVariables_Debug()
   debug_noiseType = static_cast<NoiseType>(GetProperty_Int("noiseType", noiseType_default, debug_config));
   debug_blankRegionModifier = GetProperty_Float("blankRegionModifier", blankVal_default, debug_config);
   debug_reportTimeMS = GetProperty_Int("reportTimeMS", 1000, debug_config);
+  debug_scriptAnimation = GetProperty_Bool("debug_scriptAnimation", true, debug_config);
 }
 
 
@@ -82,7 +83,7 @@ inline void InitConfigVariables_General()
   staticImageBroadcastSleepMS = GetProperty_Int("staticImageBroadcastSleepMS", 0, config);
 
   scriptFile = GetProperty_String("scriptFile", "", config);
-  scriptSteps = GetProperty_Int("scriptSteps", 1, config);
+  scriptSteps = GetProperty_Int("scriptSteps", 150, config);
   scriptDelayMS = GetProperty_Int("scriptDelayMS", 33, config);
 }
 

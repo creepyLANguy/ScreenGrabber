@@ -18,6 +18,7 @@ int debug_blankVal;
 NoiseType debug_noiseType;
 float debug_blankRegionModifier;
 int debug_reportTimeMS;
+bool debug_scriptAnimation;
 
 
 //Normal execution variables

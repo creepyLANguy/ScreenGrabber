@@ -70,6 +70,12 @@ inline void BroadcastRGB(const int r, const int g, const int b)
 
 inline void RunScript()
 {
+  if (scriptSteps <= 0)
+  {
+    cout << "scriptSteps specified problematic.\nValue : " << scriptSteps << "Exiting Program." << endl;
+    return;
+  }
+
   auto it = nodes.begin();
   auto next = it + 1;
 
@@ -92,10 +98,20 @@ inline void RunScript()
       BroadcastRGB(r, g, b);
     
       cout << r << "\t|" << g << "\t|" << b << "\r\n";
-      
-      if (staticImageBroadcastSleepMS > 0)
+
+      if (scriptDelayMS > 0)
       {
-        Sleep(scriptDelayMS);
+        if (debug_scriptAnimation == true)
+        {
+          Mat mat(250, 250, CV_8UC3);
+          mat = Scalar(r, g, b);
+          imshow("scriptAnimationDebugView", mat);
+          waitKey(scriptDelayMS);
+        }
+        else
+        {
+          Sleep(scriptDelayMS);
+        }
       }
 
       ++step;
