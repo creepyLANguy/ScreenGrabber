@@ -68,7 +68,8 @@ inline void RunScript()
 {
   if (scriptSteps <= 0)
   {
-    cout << "scriptSteps specified problematic.\nValue : " << scriptSteps << "Exiting Program." << endl;
+    cout << "scriptSteps specified problematic.\nValue : " << scriptSteps << endl;
+    cout << "Exiting Program." << endl;
     return;
   }
 
