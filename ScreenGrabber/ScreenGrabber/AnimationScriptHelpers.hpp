@@ -27,15 +27,11 @@ inline bool ReadScript()
     getline(myFile, strLine);
     if (strLine.length() == 0) { continue; }
 
-
-    //AL.
-    //uh...
     string r = strLine.substr(0, strLine.find(kScriptDelim));
     strLine = strLine.substr(strLine.find(r)+strlen(r.c_str())+strlen(kScriptDelim));
     string g = strLine.substr(0, strLine.find(kScriptDelim));
     strLine = strLine.substr(strLine.find(g) + strlen(g.c_str()) + strlen(kScriptDelim));
     string b = strLine;
-    //
 
     RGB rgb;
     rgb.r = atoi(r.c_str());
