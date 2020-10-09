@@ -6,7 +6,7 @@
 #include "ConfigVariables.h"
 
 
-deque<RGB> nodes;
+vector<RGB> nodes;
 
 
 inline bool ReadScript()
@@ -55,36 +55,42 @@ inline bool ReadScript()
 }
 
 
+inline void BroadcastRGB(const int r, const int g, const int b)
+{
+  for (int i = 0; i < leds.LED_COUNT_TOTAL; ++i)
+  {
+    unsigned int payload = i << 24 | r << 16 | g << 8 | b;
+    for (const MySocket& socket : sockets)
+    {
+      socket.Send(&payload);
+    }
+  }
+}
+
+
 inline void RunScript()
 {
   auto it = nodes.begin();
-  auto next = it+1;
-
-  double step = 1;
-  double rd = (*next).r - (*it).r;
-  double gd = (*next).g - (*it).g;
-  double bd = (*next).b - (*it).b;
-  double rds = rd / scriptSteps;
-  double gds = gd / scriptSteps;
-  double bds = bd / scriptSteps;
+  auto next = it + 1;
 
   while (true)
   {
+    double step = 1;
+    double rd = (*next).r - (*it).r;
+    double gd = (*next).g - (*it).g;
+    double bd = (*next).b - (*it).b;
+    double rds = rd / scriptSteps;
+    double gds = gd / scriptSteps;
+    double bds = bd / scriptSteps;
+
     while (step <= scriptSteps)
     {
       int r = (*it).r + (rds * step);
       int g = (*it).g + (gds * step);
       int b = (*it).b + (bds * step);
 
-      for (int i = 0; i < leds.LED_COUNT_TOTAL; ++i)
-      {
-        unsigned int payload = i << 24 | r << 16 | g << 8 | b;
-        for (const MySocket& socket : sockets)
-        {
-          socket.Send(&payload);
-        }
-      }
-
+      BroadcastRGB(r, g, b);
+    
       cout << r << "\t|" << g << "\t|" << b << "\r\n";
       
       if (staticImageBroadcastSleepMS > 0)
@@ -97,7 +103,9 @@ inline void RunScript()
 
     step = 1;
     ++it;
-    ++next; 
+    if (it == nodes.end()) { it = nodes.begin(); }
+    ++next;
+    if (next == nodes.end()) { next = nodes.begin(); }
   }
 }
 
