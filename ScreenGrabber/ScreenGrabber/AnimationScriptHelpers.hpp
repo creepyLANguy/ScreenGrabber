@@ -75,6 +75,7 @@ inline void RunScript()
 
   auto it = nodes.begin();
   auto next = it + 1;
+  if (next == nodes.end()) { next = nodes.begin(); }
 
   while (true)
   {
