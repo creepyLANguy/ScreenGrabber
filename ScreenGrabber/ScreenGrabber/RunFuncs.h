@@ -4,7 +4,7 @@
 #include "AnimationScriptHelpers.hpp"
 
 
-void RunScreenCaptureLoop(
+inline void RunScreenCaptureLoop(
   vector<MySocket>& sockets,
   vector<BorderChunk>& borderChunks,
   vector<BorderChunk>& previousChunks,
@@ -92,7 +92,7 @@ void RunScreenCaptureLoop(
 }
 
 
-void RunScreenCapture()
+inline void RunScreenCapture()
 {
   vector<BorderChunk> borderChunks, previousChunks, limitedChunks;
 
@@ -133,7 +133,7 @@ void RunScreenCapture()
 }
 
 
-void RunFileBroadcastLoop(
+inline void RunFileBroadcastLoop(
   vector<MySocket>& sockets,
   vector<BorderChunk>& borderChunks,
   Mat& mat)
@@ -196,7 +196,7 @@ void RunFileBroadcastLoop(
 }
 
 
-void RunStaticImageFileCapture()
+inline void RunStaticImageFileCapture()
 {
   vector<BorderChunk> borderChunks;
 
@@ -234,13 +234,13 @@ void RunStaticImageFileCapture()
 
 //AL.
 //TODO
-void RunImageSequenceAnimation()
+inline void RunImageSequenceAnimation()
 {
 
 }
 
 
-void RunScriptAnimation()
+inline void RunScriptAnimation()
 {
   ReadScript();
   RunScript();
