@@ -164,8 +164,10 @@
     <ClInclude Include="Debug.hpp" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="DeltaE.hpp" />
+    <ClInclude Include="ImageSequenceHelpers.hpp" />
     <ClInclude Include="MySocket.h" />
-    <ClInclude Include="RunFuncs.h" />
+    <ClInclude Include="RunFuncs.hpp" />
+    <ClInclude Include="ScreenCaptureHelpers.hpp" />
     <ClInclude Include="SocketHelpers.hpp" />
     <ClInclude Include="InitConfigVariablesHelper.hpp" />
     <ClInclude Include="VectorUtils.hpp" />
@@ -181,6 +183,7 @@
     <None Include="ports.ini" />
     <None Include="SampleAnimations\breeze.luna" />
     <None Include="SampleAnimations\rainbow.luna" />
+    <None Include="StaticImageHelpers.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="SampleAnimations\sampleAnimationSequence.txt" />

@@ -3,7 +3,7 @@
 #include "ConfigVariables.h"
 #include "ConfigHelpers.hpp"
 #include "Debug.hpp"
-#include "RunFuncs.h"
+#include "RunFuncs.hpp"
 
 inline void InitConfigVariables_Debug()
 {
@@ -82,9 +82,13 @@ inline void InitConfigVariables_General()
   imageFile = GetProperty_String("imageFile", "", config);
   staticImageBroadcastSleepMS = GetProperty_Int("staticImageBroadcastSleepMS", 0, config);
 
-  scriptFile = GetProperty_String("scriptFile", "", config);
   animationSteps = GetProperty_Int("animationSteps", 150, config);
   animationDelayMS = GetProperty_Int("animationDelayMS", 33, config);
+  animationDirectory = GetProperty_String("animationDirectory", "", config);
+
+  scriptFile = animationDirectory + GetProperty_String("scriptFile", "", config);
+  imageSequenceFile = animationDirectory + GetProperty_String("imageSequenceFile", "", config);
+
 }
 
 

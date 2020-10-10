@@ -55,6 +55,18 @@ return default_return;
 */
 
 
+inline string Trim(const string& str)
+{
+  size_t first = str.find_first_not_of(' ');
+  if (string::npos == first)
+  {
+    return str;
+  }
+  size_t last = str.find_last_not_of(' ');
+  return str.substr(first, (last - first + 1));
+}
+
+
 inline bool StringsAreEqual(string str1, string str2)
 {
   return _strcmpi(str1.c_str(), str2.c_str()) == 0;
@@ -113,16 +125,16 @@ inline void PopulateConfigBlob(const string configFileName, vector<KeyValPair>& 
   {
     string strLine;
     getline(myFile, strLine);
-    if (strLine.length() == 0) { continue; }
+    if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { continue; }
 
     KeyValPair kvp;
     int delimPos = strLine.find_first_of(kConfigDelim);
-    kvp.key = strLine.substr(0, delimPos);
+    kvp.key = Trim(strLine.substr(0, delimPos));
 
     int endIndex = strLine.find_first_of(kConfigCommentDelim);
     endIndex = endIndex == -1 ? strLine.length() : endIndex;
     ++delimPos;
-    kvp.val = strLine.substr(delimPos, endIndex-delimPos);
+    kvp.val = Trim(strLine.substr(delimPos, endIndex-delimPos));
 
     configBlob.push_back(kvp);
 

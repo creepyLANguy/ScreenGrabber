@@ -27,9 +27,6 @@
     <ClInclude Include="Debug.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="DeltaE.hpp">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="SocketHelpers.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -39,17 +36,26 @@
     <ClInclude Include="InitConfigVariablesHelper.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="RunFuncs.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationScriptHelpers.hpp">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="ConfigVariables.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ImageSequenceHelpers.hpp">
+      <Filter>RunFuncHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenCaptureHelpers.hpp">
+      <Filter>RunFuncHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationScriptHelpers.hpp">
+      <Filter>RunFuncHelpers</Filter>
+    </ClInclude>
     <ClInclude Include="CoreLogic.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="DeltaE.hpp">
       <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="RunFuncs.hpp">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +73,9 @@
     </Filter>
     <Filter Include="SampleAnimations">
       <UniqueIdentifier>{217d634b-6902-43f9-aee4-361410138c6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RunFuncHelpers">
+      <UniqueIdentifier>{7019be6c-a0a2-41d2-adda-b05d099432cd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +96,9 @@
     </None>
     <None Include="SampleAnimations\rainbow.luna">
       <Filter>SampleAnimations</Filter>
+    </None>
+    <None Include="StaticImageHelpers.hpp">
+      <Filter>RunFuncHelpers</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

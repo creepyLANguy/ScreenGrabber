@@ -22,7 +22,7 @@ public:
   int GetPort() const { return mPort; }
   bool IsInitialised() const { return mInitialised; }
 
-  string ToString() { return mHost + ":" + std::to_string(mPort); }
+  string ToString() { return mHost + ":" + to_string(mPort); }
 
 private:
   unsigned long ResolveIP();

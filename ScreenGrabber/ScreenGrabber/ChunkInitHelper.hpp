@@ -47,7 +47,7 @@ inline void AdjustChunksForGap_Horizontal(vector<BorderChunk>& chunks, int gap)
 
 
 inline void InitialiseBorderChunks(
-  std::vector<BorderChunk>& borderChunks,
+  vector<BorderChunk>& borderChunks,
   const int bitmap_width,
   const int bitmap_height,
   const float borderSamplePercentage,

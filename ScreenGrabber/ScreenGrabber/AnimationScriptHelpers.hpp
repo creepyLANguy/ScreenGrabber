@@ -10,13 +10,13 @@ vector<RGB> nodes;
 
 inline bool ReadScript()
 {
-  std::cout << "Opening script file : " << scriptFile << endl << endl;
+  cout << "Opening script file : " << scriptFile << endl << endl;
 
   ifstream myFile;
   myFile.open(scriptFile);
   if (myFile.is_open() == false)
   {
-    std::cout << "Failed to open script file : " << scriptFile << endl;
+    cout << "Failed to open script file : " << scriptFile << endl;
     return false;
   }
 
@@ -24,10 +24,10 @@ inline bool ReadScript()
   {
     string strLine;
     getline(myFile, strLine);
-    if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { cout << strLine;  continue; }
+    if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { continue; }
 
     string r = strLine.substr(0, strLine.find(kScriptDelim));
-    strLine = strLine.substr(strLine.find(r)+strlen(r.c_str())+strlen(kScriptDelim));
+    strLine = strLine.substr(strLine.find(r) + strlen(r.c_str()) + strlen(kScriptDelim));
     string g = strLine.substr(0, strLine.find(kScriptDelim));
     strLine = strLine.substr(strLine.find(g) + strlen(g.c_str()) + strlen(kScriptDelim));
     string b = strLine;
@@ -42,6 +42,13 @@ inline bool ReadScript()
   }
 
   cout << endl;
+
+  if (nodes.empty())
+  {
+    std::cout << "Script yielded no keyframes." << scriptFile << endl;
+    return false;
+  }
+
   cout << "Script file successfully parsed." << endl;
 
   myFile.close();
@@ -88,9 +95,9 @@ inline void RunScript()
 
     while (step <= animationSteps)
     {
-      int r = (*it).r + (rds * step);
-      int g = (*it).g + (gds * step);
-      int b = (*it).b + (bds * step);
+      const int r = (*it).r + (rds * step);
+      const int g = (*it).g + (gds * step);
+      const int b = (*it).b + (bds * step);
 
       BroadcastRGB(r, g, b);
     
@@ -100,7 +107,7 @@ inline void RunScript()
       {
         if (debug_scriptAnimation == true)
         {
-          Mat mat(250, 250, CV_8UC3);
+          Mat mat(250, 250, imageType);
           mat = Scalar(r, g, b);
           imshow("scriptAnimationDebugView", mat);
           waitKey(animationDelayMS);

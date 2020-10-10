@@ -26,9 +26,9 @@ inline void ShowSuccess(MySocket& socket)
 }
 
 
-inline void ReadListString(std::vector<std::string>& list, const string filename)
+inline void ReadListString(vector<string>& list, const string filename)
 {
-  std::ifstream myFile_Server;
+  ifstream myFile_Server;
   myFile_Server.open(filename);
   if (myFile_Server.is_open())
   {
