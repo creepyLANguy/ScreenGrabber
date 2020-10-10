@@ -1,5 +1,4 @@
-#ifndef CONFIGHELPERS_HPP
-#define CONFIGHELPERS_HPP
+#pragma once
 
 #include "Defines.h"
 #include <fstream>
@@ -134,6 +133,3 @@ inline void PopulateConfigBlob(const string configFileName, vector<KeyValPair>& 
 
   myFile.close();
 }
-
-
-#endif // CONFIGHELPERS_HPP

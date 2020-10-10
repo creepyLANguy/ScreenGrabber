@@ -1,5 +1,4 @@
-#ifndef CONFIGVARIABLES_HPP
-#define CONFIGVARIABLES_HPP
+#pragma once
 
 #include "Debug.hpp"
 #include "Defines.h"
@@ -48,6 +47,3 @@ string scriptFile;
 void (*runFunc)() = nullptr;
 int animationSteps;
 int animationDelayMS;
-
-
-#endif 

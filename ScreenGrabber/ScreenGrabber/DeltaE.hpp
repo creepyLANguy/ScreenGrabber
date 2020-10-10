@@ -1,5 +1,4 @@
-#ifndef DELTAE_H
-#define DELTAE_H
+#pragma once
 
 #include "Colourspaces.hpp"
 #include <complex>
@@ -229,5 +228,3 @@ double Calc76(const LAB& lab1, const LAB& lab2)
 
   return delta76;
 }
-
-#endif

@@ -48,6 +48,9 @@
     <ClInclude Include="ConfigVariables.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="CoreLogic.hpp">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">

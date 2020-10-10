@@ -1,9 +1,7 @@
-#ifndef DEBUG_HPP
-#define DEBUG_HPP
+#pragma once
 
-#include <iostream>
+#include "Defines.h"
 #include <bitset>
-#include <opencv2/opencv.hpp>
 
 
 const char* kDebugConfigFileName = "debug_config.ini";
@@ -516,5 +514,3 @@ inline void GetDebugChunk(BorderChunk& chunk)
   //Alternative indexes are a dimmer or brighter blue.
   chunk.index%2 == 0 ? chunk.b = 55 : chunk.b = 255;    
 }
-
-#endif // DEBUG_HPP

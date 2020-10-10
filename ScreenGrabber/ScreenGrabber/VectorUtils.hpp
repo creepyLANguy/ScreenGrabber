@@ -1,5 +1,4 @@
-#ifndef VECTORUTILS_H
-#define VECTORUTILS_H
+#pragma once
 
 template <class T>
 void AppendToVector(const vector<T>& src, vector<T>& dest)
@@ -17,5 +16,3 @@ void OverwriteVector(const vector<T>& src, vector<T>& dest)
   dest.clear();
   AppendToVector(src, dest);
 }
-
-#endif

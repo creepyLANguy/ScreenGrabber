@@ -1,5 +1,4 @@
-#ifndef ANIMATIONSCRIPTHELPERS_HPP
-#define ANIMATIONSCRIPTHELPERS_HPP
+#pragma once
 
 #include <fstream>
 #include <iostream>
@@ -122,6 +121,3 @@ inline void RunScript()
     if (next == nodes.end()) { next = nodes.begin(); }
   }
 }
-
-
-#endif //ANIMATIONSCRIPTHELPERS_HPP

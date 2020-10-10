@@ -160,6 +160,7 @@
     <ClInclude Include="Colourspaces.hpp" />
     <ClInclude Include="ConfigHelpers.hpp" />
     <ClInclude Include="ConfigVariables.h" />
+    <ClInclude Include="CoreLogic.hpp" />
     <ClInclude Include="Debug.hpp" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="DeltaE.hpp" />

@@ -1,5 +1,4 @@
-#ifndef CHUNKINITHELPER_HPP
-#define CHUNKINITHELPER_HPP
+#pragma once
 
 //TODO
 //You can't just dump this spaghett into a 'helper' file
@@ -160,5 +159,3 @@ inline void InitialiseBorderChunks(
     }
   }
 }
-
-#endif // CHUNKINITHELPER_HPP

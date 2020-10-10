@@ -1,7 +1,7 @@
-#ifndef DEFINES_H
-#define DEFINES_H
+#pragma once
 
-#include <opencv2/highgui/highgui.hpp>
+//#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/opencv.hpp>
 
 #include <Windows.h>
 
@@ -82,5 +82,3 @@ enum class CaptureType
   IMAGESEQUENCE = 2,
   SCRIPT = 3,
 };
-
-#endif // DEFINES_H

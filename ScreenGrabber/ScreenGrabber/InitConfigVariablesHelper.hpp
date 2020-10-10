@@ -1,5 +1,4 @@
-#ifndef INITVARIABLESHELPER_HPP
-#define INITVARIABLESHELPER_HPP
+#pragma once
 
 #include "ConfigVariables.h"
 #include "ConfigHelpers.hpp"
@@ -94,6 +93,3 @@ inline void InitConfigVariables()
   InitConfigVariables_Debug();
   InitConfigVariables_General();
 }
-
-
-#endif // INITVARIABLESHELPER_HPP

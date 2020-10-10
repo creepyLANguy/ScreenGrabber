@@ -1,5 +1,4 @@
-#ifndef __MYSOCKET_INCLUDED__
-#define __MYSOCKET_INCLUDED__
+#pragma once
 
 #include <winsock.h>
 #include <string>
@@ -35,5 +34,3 @@ private:
   bool mInitialised = false;
 
 };
-
-#endif //__MYSOCKET_INCLUDED__

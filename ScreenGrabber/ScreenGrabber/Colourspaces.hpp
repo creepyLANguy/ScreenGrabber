@@ -1,5 +1,4 @@
-#ifndef COLOURSPACES_H
-#define COLOURSPACES_H
+#pragma once
 
 #include <cmath>
 
@@ -64,5 +63,3 @@ inline void XyzToLab(XYZ& xyz, LAB& lab)
   lab.a = 500 * (x - y);
   lab.b = 200 * (y - z);
 }
-
-#endif

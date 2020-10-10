@@ -1,5 +1,4 @@
-#ifndef SOCKETHELPERS_HPP
-#define SOCKETHELPERS_HPP
+#pragma once
 
 #include "Defines.h"
 #include "MySocket.h"
@@ -133,6 +132,3 @@ inline void SetupSockets(vector<MySocket>& socketsTemp, vector<MySocket>& finalS
   InitialiseSockets(socketsTemp);
   GetFinalSocketList(socketsTemp, finalSockets);
 }
-
-
-#endif // SOCKETHELPERS_HPP
