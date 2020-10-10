@@ -10,7 +10,7 @@ inline void InitialiseEssentials()
 }
 
 
-auto main(const int argc, char** argv) -> int
+int main(const int argc, char** argv)
 {
   InitialiseEssentials();
   
