@@ -16,6 +16,7 @@ const char* kPortsFileName = "ports.ini";
 
 const char* kConfigFileName = "config.ini";
 const char kConfigDelim = ' ';
+const char kConfigCommentDelim = ';';
 
 const char* kScriptDelim = " ";
 

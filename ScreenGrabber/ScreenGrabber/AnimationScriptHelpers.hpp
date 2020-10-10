@@ -25,7 +25,7 @@ inline bool ReadScript()
   {
     string strLine = "";
     getline(myFile, strLine);
-    if (strLine.length() == 0) { continue; }
+    if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { cout << strLine;  continue; }
 
     string r = strLine.substr(0, strLine.find(kScriptDelim));
     strLine = strLine.substr(strLine.find(r)+strlen(r.c_str())+strlen(kScriptDelim));

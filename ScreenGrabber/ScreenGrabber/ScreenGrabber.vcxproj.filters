@@ -62,6 +62,9 @@
     <Filter Include="Helpers">
       <UniqueIdentifier>{600c75c9-8c1c-42ea-96c7-1acd243bd259}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AnimationScripts">
+      <UniqueIdentifier>{217d634b-6902-43f9-aee4-361410138c6e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini">
@@ -77,7 +80,10 @@
       <Filter>Config</Filter>
     </None>
     <None Include="rainbow.luna">
-      <Filter>Config</Filter>
+      <Filter>AnimationScripts</Filter>
+    </None>
+    <None Include="breeze.luna">
+      <Filter>AnimationScripts</Filter>
     </None>
   </ItemGroup>
 </Project>

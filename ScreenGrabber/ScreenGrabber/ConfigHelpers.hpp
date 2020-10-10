@@ -120,7 +120,7 @@ inline void PopulateConfigBlob(const string configFileName, vector<KeyValPair>& 
     int delimPos = strLine.find_first_of(kConfigDelim);
     kvp.key = strLine.substr(0, delimPos);
 
-    int endIndex = strLine.find_first_of(";");
+    int endIndex = strLine.find_first_of(kConfigCommentDelim);
     endIndex = endIndex == -1 ? strLine.length() : endIndex;
     ++delimPos;
     kvp.val = strLine.substr(delimPos, endIndex-delimPos);
