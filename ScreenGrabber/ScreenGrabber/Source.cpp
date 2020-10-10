@@ -1,6 +1,5 @@
 #include "InitConfigVariablesHelper.hpp"
 #include "SocketHelpers.hpp"
-#include "CoreLogic.hpp"
 
 
 inline void InitialiseEssentials()
