@@ -186,7 +186,9 @@
     <None Include="StaticImageHelpers.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="SampleAnimations\sampleAnimationSequence.txt" />
+    <Text Include="SampleAnimations\complimentary.txt" />
+    <Text Include="SampleAnimations\gradient.txt" />
+    <Text Include="SampleAnimations\rainbow.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

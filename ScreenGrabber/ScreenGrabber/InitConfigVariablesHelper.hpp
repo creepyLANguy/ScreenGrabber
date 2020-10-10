@@ -82,8 +82,8 @@ inline void InitConfigVariables_General()
   imageFile = GetProperty_String("imageFile", "", config);
   staticImageBroadcastSleepMS = GetProperty_Int("staticImageBroadcastSleepMS", 0, config);
 
-  animationSteps = GetProperty_Int("animationSteps", 150, config);
-  animationDelayMS = GetProperty_Int("animationDelayMS", 33, config);
+  animationSteps = GetProperty_Int("animationSteps", 50, config);
+  animationDelayMS = GetProperty_Int("animationDelayMS", 50, config);
   animationDirectory = GetProperty_String("animationDirectory", "", config);
 
   scriptFile = animationDirectory + GetProperty_String("scriptFile", "", config);

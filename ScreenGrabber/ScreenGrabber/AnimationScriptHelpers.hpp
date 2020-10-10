@@ -85,7 +85,7 @@ inline void RunScript()
 
   while (true)
   {
-    double step = 1;
+    double step = 0;
     double rd = (*next).r - (*it).r;
     double gd = (*next).g - (*it).g;
     double bd = (*next).b - (*it).b;
@@ -121,7 +121,6 @@ inline void RunScript()
       ++step;
     }
 
-    step = 1;
     ++it;
     if (it == nodes.end()) { it = nodes.begin(); }
     ++next;

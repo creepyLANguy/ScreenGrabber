@@ -102,7 +102,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="SampleAnimations\sampleAnimationSequence.txt">
+    <Text Include="SampleAnimations\complimentary.txt">
+      <Filter>SampleAnimations</Filter>
+    </Text>
+    <Text Include="SampleAnimations\gradient.txt">
+      <Filter>SampleAnimations</Filter>
+    </Text>
+    <Text Include="SampleAnimations\rainbow.txt">
       <Filter>SampleAnimations</Filter>
     </Text>
   </ItemGroup>

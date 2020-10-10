@@ -71,6 +71,28 @@ inline void GetNextCompositeImage()
 //TODO
 inline void RunImageSequence()
 {
+  const double delta = 1.0 / animationSteps;
+
+  auto it = images.begin();
+  auto next = it + 1;
+  if (next == images.end()) { next = images.begin(); }
+
+  while (true)
+  {
+    double step = 0;
+    while (step <= animationSteps)
+    {
+      Mat mat;
+      addWeighted(*it, 1 - (delta * step), *next, delta * step, 0.0, mat);
+      imshow("imageSequenceAnimationDebugView", mat);
+      waitKey(animationDelayMS);
+      ++step;
+    }
+    ++it;
+    if (it == images.end()) { it = images.begin(); }
+    ++next;
+    if (next == images.end()) { next = images.begin(); }
+  }
   //Try and do what mode 0 is doing but instead of grabbing the screen,
   //GetNextCompositeImage based on current/next image and the step.
 }
