@@ -79,7 +79,8 @@ enum class CaptureType
 {
   PRIMARYDISPLAY = 0,
   IMAGEFILE = 1,
-  SCRIPT = 2,
+  IMAGESEQUENCE = 2,
+  SCRIPT = 3,
 };
 
 #endif // DEFINES_H

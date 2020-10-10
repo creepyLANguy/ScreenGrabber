@@ -217,7 +217,7 @@ int marginCounter = 0;
 const int marginLimit = 5;
 int marginModifier = 1;
 const char marginMarker = ' ';
-string margin = "";
+string margin;
 inline void IncrementMargin()
 {
   marginCounter += marginModifier;
@@ -386,7 +386,7 @@ inline void GetChunkDataString(string& s)
 
 inline void WriteChunkDataToMat(Mat& mat)
 {
-  string s = "";
+  string s;
   GetChunkDataString(s);
 
   putText(mat,
@@ -488,7 +488,7 @@ inline void ShowVisualisation(
     BlankMat(mat, blankVal, leeway, noiseType, noiseApplicator);
   }
   
-  const String windowName = "";
+  const String windowName;
   namedWindow(windowName, WINDOW_NORMAL);
   imshow(windowName, mat);
   waitKeyEx(1);

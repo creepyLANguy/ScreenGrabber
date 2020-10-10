@@ -46,8 +46,8 @@ string imageFile;
 int staticImageBroadcastSleepMS;
 string scriptFile;
 void (*runFunc)() = nullptr;
-int scriptSteps;
-int scriptDelayMS;
+int animationSteps;
+int animationDelayMS;
 
 
 #endif 

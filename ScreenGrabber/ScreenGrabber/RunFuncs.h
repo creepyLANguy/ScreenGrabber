@@ -2,7 +2,8 @@
 #define RUNFUNCS_H
 
 void RunScreenCapture();
-void RunFileCapture();
+void RunStaticImageFileCapture();
+void RunImageSequenceAnimation();
 void RunScriptAnimation();
 
 #endif //RUNFUNCS_H

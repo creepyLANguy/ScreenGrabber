@@ -174,12 +174,15 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="breeze.luna" />
     <None Include="config.ini" />
     <None Include="debug_config.ini" />
     <None Include="hosts.ini" />
     <None Include="ports.ini" />
-    <None Include="rainbow.luna" />
+    <None Include="SampleAnimations\breeze.luna" />
+    <None Include="SampleAnimations\rainbow.luna" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="SampleAnimations\sampleAnimationSequence.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

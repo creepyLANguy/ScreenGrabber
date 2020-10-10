@@ -33,7 +33,7 @@ inline void ReadListString(std::vector<std::string>& list, const string filename
   myFile_Server.open(filename);
   if (myFile_Server.is_open())
   {
-    string str = "";
+    string str;
     while (myFile_Server >> str)
     {
       list.emplace_back(str);
@@ -93,7 +93,7 @@ inline bool PopulateSocketList(vector<MySocket>& sockets)
 
 inline void InitialiseSockets(vector<MySocket>& sockets)
 {
-  string failures = "";
+  string failures;
   for (MySocket& socket : sockets)
   {
     if (socket.Initialise())

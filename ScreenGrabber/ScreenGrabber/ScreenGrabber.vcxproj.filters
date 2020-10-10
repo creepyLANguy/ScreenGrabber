@@ -62,7 +62,7 @@
     <Filter Include="Helpers">
       <UniqueIdentifier>{600c75c9-8c1c-42ea-96c7-1acd243bd259}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AnimationScripts">
+    <Filter Include="SampleAnimations">
       <UniqueIdentifier>{217d634b-6902-43f9-aee4-361410138c6e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -79,11 +79,16 @@
     <None Include="ports.ini">
       <Filter>Config</Filter>
     </None>
-    <None Include="rainbow.luna">
-      <Filter>AnimationScripts</Filter>
+    <None Include="SampleAnimations\breeze.luna">
+      <Filter>SampleAnimations</Filter>
     </None>
-    <None Include="breeze.luna">
-      <Filter>AnimationScripts</Filter>
+    <None Include="SampleAnimations\rainbow.luna">
+      <Filter>SampleAnimations</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="SampleAnimations\sampleAnimationSequence.txt">
+      <Filter>SampleAnimations</Filter>
+    </Text>
   </ItemGroup>
 </Project>

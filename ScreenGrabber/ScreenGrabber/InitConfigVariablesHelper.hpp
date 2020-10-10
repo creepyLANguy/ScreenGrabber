@@ -75,7 +75,8 @@ inline void InitConfigVariables_General()
   switch (captureType)
   {
   case CaptureType::PRIMARYDISPLAY:  runFunc = &RunScreenCapture; break;
-  case CaptureType::IMAGEFILE:  runFunc= &RunFileCapture; break;
+  case CaptureType::IMAGEFILE:  runFunc= &RunStaticImageFileCapture; break;
+  case CaptureType::IMAGESEQUENCE:  runFunc = &RunImageSequenceAnimation; break;
   case CaptureType::SCRIPT:  runFunc = &RunScriptAnimation; break;
   }
 
@@ -83,8 +84,8 @@ inline void InitConfigVariables_General()
   staticImageBroadcastSleepMS = GetProperty_Int("staticImageBroadcastSleepMS", 0, config);
 
   scriptFile = GetProperty_String("scriptFile", "", config);
-  scriptSteps = GetProperty_Int("scriptSteps", 150, config);
-  scriptDelayMS = GetProperty_Int("scriptDelayMS", 33, config);
+  animationSteps = GetProperty_Int("animationSteps", 150, config);
+  animationDelayMS = GetProperty_Int("animationDelayMS", 33, config);
 }
 
 

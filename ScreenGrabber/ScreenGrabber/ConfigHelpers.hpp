@@ -112,7 +112,7 @@ inline void PopulateConfigBlob(const string configFileName, vector<KeyValPair>& 
 
   while (myFile.eof() == false)
   {
-    string strLine = "";
+    string strLine;
     getline(myFile, strLine);
     if (strLine.length() == 0) { continue; }
 

@@ -23,7 +23,7 @@ inline bool ReadScript()
 
   while (myFile.eof() == false)
   {
-    string strLine = "";
+    string strLine;
     getline(myFile, strLine);
     if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { cout << strLine;  continue; }
 
@@ -66,9 +66,9 @@ inline void BroadcastRGB(const int r, const int g, const int b)
 
 inline void RunScript()
 {
-  if (scriptSteps <= 0)
+  if (animationSteps <= 0)
   {
-    cout << "scriptSteps specified problematic.\nValue : " << scriptSteps << endl;
+    cout << "animationSteps specified problematic.\nValue : " << animationSteps << endl;
     cout << "Exiting Program." << endl;
     return;
   }
@@ -83,11 +83,11 @@ inline void RunScript()
     double rd = (*next).r - (*it).r;
     double gd = (*next).g - (*it).g;
     double bd = (*next).b - (*it).b;
-    double rds = rd / scriptSteps;
-    double gds = gd / scriptSteps;
-    double bds = bd / scriptSteps;
+    double rds = rd / animationSteps;
+    double gds = gd / animationSteps;
+    double bds = bd / animationSteps;
 
-    while (step <= scriptSteps)
+    while (step <= animationSteps)
     {
       int r = (*it).r + (rds * step);
       int g = (*it).g + (gds * step);
@@ -97,18 +97,18 @@ inline void RunScript()
     
       cout << r << "\t|" << g << "\t|" << b << "\r\n";
 
-      if (scriptDelayMS > 0)
+      if (animationDelayMS > 0)
       {
         if (debug_scriptAnimation == true)
         {
           Mat mat(250, 250, CV_8UC3);
           mat = Scalar(r, g, b);
           imshow("scriptAnimationDebugView", mat);
-          waitKey(scriptDelayMS);
+          waitKey(animationDelayMS);
         }
         else
         {
-          Sleep(scriptDelayMS);
+          Sleep(animationDelayMS);
         }
       }
 
