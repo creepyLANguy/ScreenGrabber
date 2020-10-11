@@ -62,10 +62,7 @@ inline void BroadcastRGB(const int r, const int g, const int b)
   for (int i = 0; i < leds.LED_COUNT_TOTAL; ++i)
   {
     unsigned int payload = i << 24 | r << 16 | g << 8 | b;
-    for (const MySocket& socket : sockets)
-    {
-      socket.Send(&payload);
-    }
+    BroadcastPayload(payload);
   }
 }
 

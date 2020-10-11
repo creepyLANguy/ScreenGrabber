@@ -376,3 +376,12 @@ inline void GetRect_Display(RECT& rect)
   TrimRectToRatio(rect);
   ReduceRectByBuffers(rect);
 }
+
+
+inline void BroadcastPayload(unsigned int& payload)
+{
+  for (const MySocket& socket : sockets)
+  {
+    socket.Send(&payload);
+  }
+}

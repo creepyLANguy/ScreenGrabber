@@ -168,7 +168,7 @@
     <ClInclude Include="MySocket.h" />
     <ClInclude Include="RunFuncs.hpp" />
     <ClInclude Include="ScreenCaptureHelpers.hpp" />
-    <ClInclude Include="SocketHelpers.hpp" />
+    <ClInclude Include="SocketInitHelpers.hpp" />
     <ClInclude Include="InitConfigVariablesHelper.hpp" />
     <ClInclude Include="VectorUtils.hpp" />
   </ItemGroup>

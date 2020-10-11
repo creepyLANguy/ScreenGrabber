@@ -4,7 +4,6 @@
 #include "CoreLogic.hpp"
 
 inline void RunScreenCaptureLoop(
-  std::vector<MySocket>& sockets,
   vector<BorderChunk>& borderChunks,
   vector<BorderChunk>& previousChunks,
   vector<BorderChunk>& limitedChunks,
@@ -55,10 +54,7 @@ inline void RunScreenCaptureLoop(
       if (debug_mockPayload) { GetDebugPayload(payload, chunk.index); }
       if (debug_mockChunks) { GetDebugChunk(const_cast<BorderChunk&>(chunk)); }
 
-      for (const MySocket& socket : sockets)
-      {
-        socket.Send(&payload);
-      }
+      BroadcastPayload(payload);
 
       if (debug_payload) { PrintPayload(payload); PrintChunk(chunk); IncrementMargin(); }
     }
@@ -120,7 +116,6 @@ inline void RunScreenCapture()
   };
 
   RunScreenCaptureLoop(
-    sockets,
     borderChunks,
     previousChunks,
     limitedChunks,

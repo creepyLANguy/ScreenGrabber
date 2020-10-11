@@ -5,7 +5,6 @@
 
 
 inline void RunFileBroadcastLoop(
-  std::vector<MySocket>& sockets,
   vector<BorderChunk>& borderChunks,
   Mat& mat)
 {
@@ -21,10 +20,7 @@ inline void RunFileBroadcastLoop(
       if (debug_mockPayload) { GetDebugPayload(payload, chunk.index); }
       if (debug_mockChunks) { GetDebugChunk(const_cast<BorderChunk&>(chunk)); }
 
-      for (const MySocket& socket : sockets)
-      {
-        socket.Send(&payload);
-      }
+      BroadcastPayload(payload);
 
       if (debug_payload) { PrintPayload(payload); PrintChunk(chunk); IncrementMargin(); }
     }
@@ -97,7 +93,6 @@ inline void RunStaticImageFileCapture()
   }
 
   RunFileBroadcastLoop(
-    sockets,
     borderChunks,
     mat);
 }
