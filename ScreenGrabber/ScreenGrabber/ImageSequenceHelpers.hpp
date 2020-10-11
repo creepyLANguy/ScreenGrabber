@@ -6,6 +6,9 @@
 
 
 vector<Mat> images;
+double delta = 1.0;
+double step = 0;
+vector<Mat>::iterator currentImage, nextImage;
 
 
 inline bool ReadImageSequence()
@@ -60,39 +63,137 @@ inline bool ReadImageSequence()
 }
 
 
-//AL.
-//TODO
-inline void GetNextCompositeImage()
+inline void GetNextCompositeImage(Mat& mat)
 {
+  addWeighted(*currentImage, 1 - (delta * step), *nextImage, delta * step, 0.0, mat);
+
+  //imshow("imageSequenceAnimationDebugView", mat);
+  //waitKey(animationDelayMS);
+  
+  ++step;
+
+  if (step > animationSteps)
+  {
+    step = 0;
+    ++currentImage;
+    if (currentImage == images.end()) { currentImage = images.begin(); }
+    ++nextImage;
+    if (nextImage == images.end()) { nextImage = images.begin(); }
+  }
 }
 
 
-//AL.
-//TODO
-inline void RunImageSequence()
+inline void RunImageSequenceLoop(
+  std::vector<MySocket>& sockets,
+  vector<BorderChunk>& borderChunks,
+  vector<BorderChunk>& previousChunks,
+  vector<BorderChunk>& limitedChunks,
+  vector<DWORD>& ledUpdateTracker,
+  Mat& mat)
 {
-  const double delta = 1.0 / animationSteps;
-
-  auto it = images.begin();
-  auto next = it + 1;
-  if (next == images.end()) { next = images.begin(); }
-
   while (true)
   {
-    double step = 0;
-    while (step <= animationSteps)
+    GetNextCompositeImage(mat);
+
+    SetAverageRGBValues(borderChunks, mat);
+
+    for (BorderChunk& chunk : borderChunks)
     {
-      Mat mat;
-      addWeighted(*it, 1 - (delta * step), *next, delta * step, 0.0, mat);
-      imshow("imageSequenceAnimationDebugView", mat);
-      waitKey(animationDelayMS);
-      ++step;
+      FilterChunk(chunk, whiteLuminanceThresh, whiteDiffThresh, colourLuminanceThresh, outlierDiffThresh, lumi);
     }
-    ++it;
-    if (it == images.end()) { it = images.begin(); }
-    ++next;
-    if (next == images.end()) { next = images.begin(); }
+
+    if (optimiseTransmitWithDelta)
+    {
+      OptimiseTransmitWithDelta(borderChunks, previousChunks, limitedChunks, deltaEFunc, deltaEThresh);
+    }
+    else
+    {
+      limitedChunks = borderChunks;
+    }
+
+    if (brightnessPercentage < 1.0f)
+    {
+      SetBrightness(limitedChunks);
+    }
+
+    vector<int> skippedChunksIndexesBasedOnLastUpdatedTime;
+
+    for (const BorderChunk& chunk : limitedChunks)
+    {
+      if (HasLEDRecentlyBeenUpdated(chunk.index, ledUpdateTracker))
+      {
+        if (debug_visual) { skippedChunksIndexesBasedOnLastUpdatedTime.emplace_back(chunk.index); }
+
+        continue;
+      }
+
+      unsigned int payload = chunk.index << 24 | chunk.r << 16 | chunk.g << 8 | chunk.b;
+
+      if (debug_mockPayload) { GetDebugPayload(payload, chunk.index); }
+      if (debug_mockChunks) { GetDebugChunk(const_cast<BorderChunk&>(chunk)); }
+
+      for (const MySocket& socket : sockets)
+      {
+        socket.Send(&payload);
+      }
+
+      if (debug_payload) { PrintPayload(payload); PrintChunk(chunk); IncrementMargin(); }
+    }
+
+    UpdateDebugTimer(debug_reportTimeMS, limitedChunks.size());
+
+    if (debug_fps_cmd || debug_fps_ide) { PrintFramerate(debug_fps_cmd, debug_fps_ide); }
+
+    if (debug_visual)
+    {
+      if (debug_drawAllFrames || limitedChunks.empty() == false)
+      {
+        ShowVisualisation(
+          mat,
+          borderSamplePercentage * debug_blankRegionModifier,
+          limitedChunks,
+          skippedChunksIndexesBasedOnLastUpdatedTime,
+          previousChunks,
+          debug_blankVal,
+          debug_noiseType
+        );
+      }
+    }
+
+    if (animationDelayMS > 0)
+    {      
+      Sleep(animationDelayMS);
+    }
+
+    if (sleepMS)
+    {
+      Sleep(sleepMS);
+    }
   }
-  //Try and do what mode 0 is doing but instead of grabbing the screen,
-  //GetNextCompositeImage based on current/next image and the step.
+}
+
+
+inline void RunImageSequence()
+{
+  delta = 1.0 / animationSteps;
+  currentImage = images.begin();
+  nextImage = currentImage + 1;
+  if (nextImage == images.end()) { nextImage = images.begin(); }
+  Mat mat;
+
+  vector<BorderChunk> borderChunks, previousChunks, limitedChunks;
+
+  vector<DWORD> ledUpdateTracker(leds.LED_COUNT_TOTAL);
+
+  InitialiseBorderChunks(borderChunks, currentImage->cols, currentImage->rows, borderSamplePercentage, originPositionOffset, leds);
+
+  AppendToVector(borderChunks, previousChunks);
+
+  RunImageSequenceLoop(
+    sockets,
+    borderChunks,
+    previousChunks,
+    limitedChunks,
+    ledUpdateTracker,
+    mat);
 }
