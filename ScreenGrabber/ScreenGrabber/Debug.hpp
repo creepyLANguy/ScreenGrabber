@@ -455,7 +455,7 @@ inline void ShowVisualisation(
   }
 
   if ((noiseType & BLUR) == BLUR)
-  {    
+  {
     Blur(mat);
   }
 

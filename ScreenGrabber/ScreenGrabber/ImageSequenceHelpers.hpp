@@ -151,7 +151,7 @@ inline void RunImageSequenceLoop(
           skippedChunksIndexesBasedOnLastUpdatedTime,
           previousChunks,
           debug_blankVal,
-          debug_noiseType
+          NoiseType(debug_noiseType & ~BLUR)
         );
       }
     }

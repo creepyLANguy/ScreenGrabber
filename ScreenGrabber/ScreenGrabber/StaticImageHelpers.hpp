@@ -3,7 +3,6 @@
 #include "ConfigVariables.h"
 #include "CoreLogic.hpp"
 
-
 inline void RunFileBroadcastLoop(
   vector<BorderChunk>& borderChunks,
   Mat& mat)
@@ -40,7 +39,7 @@ inline void RunFileBroadcastLoop(
           empty_i,
           empty_bc,
           debug_blankVal,
-          debug_noiseType
+          debug_noiseType //NoiseType(debug_noiseType & ~BLUR)
         );
       }
     }
@@ -67,7 +66,6 @@ inline void RunStaticImageFileCapture()
 {
   vector<BorderChunk> borderChunks;
 
-  RECT rect;
   Mat mat = imread(imageFile);
   if (mat.data == nullptr)
   {
@@ -76,14 +74,7 @@ inline void RunStaticImageFileCapture()
   }
   resize(mat, mat, mat.size() / downscaler);
 
-  rect.left = rect.top = 0;
-  rect.right = mat.cols;
-  rect.bottom = mat.rows;
-
-  const int bitmap_width = (rect.right - rect.left);
-  const int bitmap_height = (rect.bottom - rect.top);
-
-  InitialiseBorderChunks(borderChunks, bitmap_width, bitmap_height, borderSamplePercentage, originPositionOffset, leds);
+  InitialiseBorderChunks(borderChunks, mat.cols, mat.rows, borderSamplePercentage, originPositionOffset, leds);
 
   SetAverageRGBValues(borderChunks, mat);
 

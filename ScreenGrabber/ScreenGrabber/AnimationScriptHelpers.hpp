@@ -83,18 +83,18 @@ inline void RunScript()
   while (true)
   {
     double step = 0;
-    double rd = (*next).r - (*it).r;
-    double gd = (*next).g - (*it).g;
-    double bd = (*next).b - (*it).b;
+    double rd = next->r - it->r;
+    double gd = next->g - it->g;
+    double bd = next->b - it->b;
     double rds = rd / animationSteps;
     double gds = gd / animationSteps;
     double bds = bd / animationSteps;
 
     while (step <= animationSteps)
     {
-      const int r = (*it).r + (rds * step);
-      const int g = (*it).g + (gds * step);
-      const int b = (*it).b + (bds * step);
+      const int r = it->r + (rds * step);
+      const int g = it->g + (gds * step);
+      const int b = it->b + (bds * step);
 
       BroadcastRGB(r, g, b);
     
