@@ -84,7 +84,6 @@ inline void GetNextCompositeImage(Mat& mat)
 
 
 inline void RunImageSequenceLoop(
-  std::vector<MySocket>& sockets,
   vector<BorderChunk>& borderChunks,
   vector<BorderChunk>& previousChunks,
   vector<BorderChunk>& limitedChunks,
@@ -132,10 +131,7 @@ inline void RunImageSequenceLoop(
       if (debug_mockPayload) { GetDebugPayload(payload, chunk.index); }
       if (debug_mockChunks) { GetDebugChunk(const_cast<BorderChunk&>(chunk)); }
 
-      for (const MySocket& socket : sockets)
-      {
-        socket.Send(&payload);
-      }
+      BroadcastPayload(payload);
 
       if (debug_payload) { PrintPayload(payload); PrintChunk(chunk); IncrementMargin(); }
     }
@@ -190,7 +186,6 @@ inline void RunImageSequence()
   AppendToVector(borderChunks, previousChunks);
 
   RunImageSequenceLoop(
-    sockets,
     borderChunks,
     previousChunks,
     limitedChunks,

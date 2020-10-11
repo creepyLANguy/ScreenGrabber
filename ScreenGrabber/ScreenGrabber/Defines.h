@@ -22,6 +22,7 @@ const char* kScriptDelim = " ";
 
 constexpr auto imageType = CV_8UC4;
 
+vector<MySocket> tempSockets, sockets;
 
 //Device context stuffs
 HWND hwnd = nullptr;
@@ -30,9 +31,6 @@ HDC hwindowCompatibleDC = nullptr;
 HBITMAP hbwindow = nullptr;
 BITMAPINFOHEADER bi;
 //
-
-
-vector<MySocket> tempSockets, sockets;
 
 
 struct KeyValPair
