@@ -21,12 +21,12 @@ inline void RunScreenCaptureLoop(
 
     for (BorderChunk& chunk : borderChunks)
     {
-      FilterChunk(chunk, whiteLuminanceThresh, whiteDiffThresh, colourLuminanceThresh, outlierDiffThresh, lumi);
+      FilterChunk(chunk);
     }
 
     if (optimiseTransmitWithDelta)
     {
-      OptimiseTransmitWithDelta(borderChunks, previousChunks, limitedChunks, deltaEFunc, deltaEThresh);
+      OptimiseTransmitWithDelta(borderChunks, previousChunks, limitedChunks);
     }
     else
     {

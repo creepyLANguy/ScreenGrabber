@@ -24,7 +24,7 @@ inline bool HasLEDRecentlyBeenUpdated(const int chunkIndex, vector<DWORD>& ledUp
 }
 
 
-inline int GetLuminance(const BorderChunk& chunk, const Lumi& lumi)
+inline int GetLuminance(const BorderChunk& chunk)
 {
   const int val =
     lumi.r * static_cast<float>(chunk.r) +
@@ -71,7 +71,7 @@ inline void StripAwayOutlier(BorderChunk& chunk)
 }
 
 
-inline bool isWhite(const BorderChunk& chunk, const int whiteDiffThresh)
+inline bool isWhite(const BorderChunk& chunk)
 {
   if (
     abs(chunk.r - chunk.g) > whiteDiffThresh ||
@@ -86,7 +86,27 @@ inline bool isWhite(const BorderChunk& chunk, const int whiteDiffThresh)
 }
 
 
-//Try and sanitise the colour info for a more clearer and simpler renderening on the strip. 
+inline void ApplyWhiteBrightnessModifier(BorderChunk& chunk)
+{
+  if (whiteBrightnessModifier == 0)
+  {
+    return;
+  }
+
+  chunk.r += whiteBrightnessModifier;
+  chunk.g += whiteBrightnessModifier;
+  chunk.b += whiteBrightnessModifier;
+
+  chunk.r = chunk.r > 255 ? 255 : chunk.r;
+  chunk.r = chunk.r < 0 ? 0 : chunk.r;
+  chunk.g = chunk.g > 255 ? 255 : chunk.g;
+  chunk.g = chunk.g < 0 ? 0 : chunk.g;
+  chunk.b = chunk.b > 255 ? 255 : chunk.b;
+  chunk.b = chunk.b < 0 ? 0 : chunk.b;  
+}
+
+
+//Try and sanitise the colour info for a more clearer and simpler rendereing on the strip. 
 //
 //Some approaches : 
 //Zero out all vals to black if the total luminosity is weak so that we aren't backlighting a dark part of the scene.
@@ -95,23 +115,22 @@ inline bool isWhite(const BorderChunk& chunk, const int whiteDiffThresh)
 //Make sure we're only zero-ing out an outlying val if its distance from both the other vals exceeds outlierDiffThresh, 
 //else we'd be altering the hue.
 //
-inline void FilterChunk(
-  BorderChunk& chunk,
-  const int whiteLuminanceThresh,
-  const int whiteDiffThresh,
-  const int colourLuminanceThresh,
-  const int outlierDiffThresh,
-  const Lumi& lumi)
+inline void FilterChunk(BorderChunk& chunk)
 {
-  const int luminance = GetLuminance(chunk, lumi);
+  const int luminance = GetLuminance(chunk);
 
   //Don't mess with individual vals if the colour is white overall.            
-  if (isWhite(chunk, whiteDiffThresh))
+  if (isWhite(chunk))
   {
     if (luminance < whiteLuminanceThresh)
     {
       chunk.r = chunk.g = chunk.b = 0;
     }
+    else
+    {
+      ApplyWhiteBrightnessModifier(chunk);
+    }
+
     return;
   }
 
@@ -168,7 +187,7 @@ inline void GetLab(BorderChunk& chunk, LAB& lab)
 }
 
 
-inline void GetDeltaE(BorderChunk& chunk1, BorderChunk& chunk2, double(*deltaEFunc)(const LAB&, const LAB&), double& deltae)
+inline void GetDeltaE(BorderChunk& chunk1, BorderChunk& chunk2, double& deltae)
 {
   LAB lab1;
   GetLab(chunk1, lab1);
@@ -180,9 +199,7 @@ inline void GetDeltaE(BorderChunk& chunk1, BorderChunk& chunk2, double(*deltaEFu
 
 inline void RemoveSimilarChunks(
   vector<BorderChunk>& chunks,
-  vector<BorderChunk>& previousChunks,
-  double (*deltaEFunc)(const LAB&, const LAB&),
-  const int deltaEThresh
+  vector<BorderChunk>& previousChunks
 )
 {
   if (deltaEThresh <= 0)
@@ -193,7 +210,7 @@ inline void RemoveSimilarChunks(
   for (int i = chunks.size() - 1; i >= 0; --i)
   {
     double deltae = 0;
-    GetDeltaE(chunks[i], previousChunks[chunks[i].index], deltaEFunc, deltae);
+    GetDeltaE(chunks[i], previousChunks[chunks[i].index], deltae);
 
     if (deltae < deltaEThresh)
     {
@@ -242,9 +259,7 @@ inline void SetAverageRGBValues(vector<BorderChunk>& borderChunks, Mat& mat)
 inline void OptimiseTransmitWithDelta(
   vector<BorderChunk>& borderChunks,
   vector<BorderChunk>& previousChunks,
-  vector<BorderChunk>& limitedChunks,
-  double (*deltaEFunc)(const LAB&, const LAB&),
-  const int deltaEThresh
+  vector<BorderChunk>& limitedChunks
 )
 {
   OverwriteVector(borderChunks, limitedChunks);
@@ -256,7 +271,7 @@ inline void OptimiseTransmitWithDelta(
   }
   else
   {
-    RemoveSimilarChunks(limitedChunks, previousChunks, deltaEFunc, deltaEThresh);
+    RemoveSimilarChunks(limitedChunks, previousChunks);
   }
 }
 
@@ -265,18 +280,6 @@ inline void OptimiseTransmitWithDelta(
 //Allow for specific window to be captured.
 inline void SetWindowHandle()
 {
-  /* const LPCSTR window = captureWindowName.c_str();
-
-   hwnd = FindWindowA(nullptr, window);
-
-   if (hwnd == nullptr)
-   {
-     cout << "Could not find window of title \"" << captureWindowName << "\"\r\n";
-     cout << "Defaulting to entire primary display.\r\n" << endl;
-
-     hwnd = GetDesktopWindow();
-   }*/
-
   hwnd = GetDesktopWindow();
 }
 

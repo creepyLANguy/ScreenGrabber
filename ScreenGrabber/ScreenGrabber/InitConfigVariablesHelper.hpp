@@ -44,17 +44,18 @@ inline void InitConfigVariables_General()
   height = GetProperty_Int("ratioVertical", 9, config);
 
   downscaler = GetProperty_Int("downscale", 3, config);
-  borderSamplePercentage = GetProperty_Float("borderSample", 0.1f, config);
+  borderSamplePercentage = GetProperty_Float("borderSamplePercentage", 0.1f, config);
   lowerBuffer = GetProperty_Float("lowerBuffer", 0.0f, config);
   upperBuffer = GetProperty_Float("upperBuffer", 0.0f, config);
   leftBuffer = GetProperty_Float("leftBuffer", 0.0f, config);
   rightBuffer = GetProperty_Float("rightBuffer", 0.0f, config);
 
-  brightnessPercentage = GetProperty_Float("brightness", 1.0f, config);
-  whiteDiffThresh = GetProperty_Float("whiteDiffThresh", 1.0f, config) * 255;
-  outlierDiffThresh = GetProperty_Float("outlierDiffThresh", 1.0f, config) * 255;
-  whiteLuminanceThresh = GetProperty_Float("whiteLuminanceThresh", 0.0f, config) * 255;
-  colourLuminanceThresh = GetProperty_Float("colourLuminanceThresh", 0.0f, config) * 255;
+  brightnessPercentage = GetProperty_Float("brightnessPercentage", 1.0f, config);
+  whiteBrightnessModifier = GetProperty_Int("whiteBrightnessModifier", 0, config);
+  whiteDiffThresh = GetProperty_Float("whiteDiffThreshPercentage", 1.0f, config) * 255;
+  outlierDiffThresh = GetProperty_Float("outlierDiffThreshPercentage", 1.0f, config) * 255;
+  whiteLuminanceThresh = GetProperty_Float("whiteLuminanceThreshPercentage", 0.0f, config) * 255;
+  colourLuminanceThresh = GetProperty_Float("colourLuminanceThreshPercentage", 0.0f, config) * 255;
   optimiseTransmitWithDelta = GetProperty_Bool("optimiseTransmitWithDelta", false, config);
   deltaEThresh = GetProperty_Int("deltaEThresh", 0, config);
 

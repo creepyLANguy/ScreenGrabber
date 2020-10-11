@@ -32,6 +32,7 @@ float borderSamplePercentage;
 float lowerBuffer, upperBuffer, leftBuffer, rightBuffer;
 int originPositionOffset;
 float brightnessPercentage;
+int whiteBrightnessModifier;
 int whiteDiffThresh;
 int outlierDiffThresh;
 int whiteLuminanceThresh;
