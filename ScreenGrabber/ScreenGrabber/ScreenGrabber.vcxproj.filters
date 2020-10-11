@@ -27,9 +27,6 @@
     <ClInclude Include="Debug.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="SocketHelpers.hpp">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="VectorUtils.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -56,6 +53,9 @@
     </ClInclude>
     <ClInclude Include="RunFuncs.hpp">
       <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketInitHelpers.hpp">
+      <Filter>Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
