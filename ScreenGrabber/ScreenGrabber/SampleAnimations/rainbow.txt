@@ -1,6 +1,6 @@
-b.png
-c.png
-g.png
-y.png
-r.png
-m.png
+rgbcmy\b.png
+rgbcmy\c.png
+rgbcmy\g.png
+rgbcmy\y.png
+rgbcmy\r.png
+rgbcmy\m.png

@@ -1,7 +1,7 @@
-grad1.png
-grad2.png
-grad3.png
-grad4.png
-grad5.png
-grad6.png
-grad7.png
+grad\grad1.png
+grad\grad2.png
+grad\grad3.png
+grad\grad4.png
+grad\grad5.png
+grad\grad6.png
+grad\grad7.png
