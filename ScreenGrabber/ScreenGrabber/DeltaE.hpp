@@ -22,7 +22,7 @@ inline double deg2Rad(double deg)
 
 
 /*
- * CIE2000 implemtation was lifted almost verbatim from Greg Fiumara's C++ implementation:
+ * CIE2000 implementation was lifted almost verbatim from Greg Fiumara's C++ implementation:
  * https://github.com/gfiumara/CIEDE2000
  */
 double Calc2000(const LAB& lab1, const LAB& lab2)

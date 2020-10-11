@@ -183,6 +183,7 @@
     <None Include="ports.ini" />
     <None Include="SampleAnimations\breeze.luna" />
     <None Include="SampleAnimations\rainbow.luna" />
+    <None Include="SampleAnimations\storm.luna" />
     <None Include="StaticImageHelpers.hpp" />
   </ItemGroup>
   <ItemGroup>

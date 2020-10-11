@@ -77,6 +77,12 @@
     <Filter Include="RunFuncHelpers">
       <UniqueIdentifier>{7019be6c-a0a2-41d2-adda-b05d099432cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SampleAnimations\ImageSequences">
+      <UniqueIdentifier>{42e52670-fb06-4793-b676-4995071ba694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SampleAnimations\Scripts">
+      <UniqueIdentifier>{3cfa40cb-e150-4258-8b94-b16edf561294}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini">
@@ -91,25 +97,28 @@
     <None Include="ports.ini">
       <Filter>Config</Filter>
     </None>
-    <None Include="SampleAnimations\breeze.luna">
-      <Filter>SampleAnimations</Filter>
-    </None>
-    <None Include="SampleAnimations\rainbow.luna">
-      <Filter>SampleAnimations</Filter>
-    </None>
     <None Include="StaticImageHelpers.hpp">
       <Filter>RunFuncHelpers</Filter>
+    </None>
+    <None Include="SampleAnimations\breeze.luna">
+      <Filter>SampleAnimations\Scripts</Filter>
+    </None>
+    <None Include="SampleAnimations\rainbow.luna">
+      <Filter>SampleAnimations\Scripts</Filter>
+    </None>
+    <None Include="SampleAnimations\storm.luna">
+      <Filter>SampleAnimations\Scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="SampleAnimations\complimentary.txt">
-      <Filter>SampleAnimations</Filter>
-    </Text>
-    <Text Include="SampleAnimations\gradient.txt">
-      <Filter>SampleAnimations</Filter>
+      <Filter>SampleAnimations\ImageSequences</Filter>
     </Text>
     <Text Include="SampleAnimations\rainbow.txt">
-      <Filter>SampleAnimations</Filter>
+      <Filter>SampleAnimations\ImageSequences</Filter>
+    </Text>
+    <Text Include="SampleAnimations\gradient.txt">
+      <Filter>SampleAnimations\ImageSequences</Filter>
     </Text>
   </ItemGroup>
 </Project>

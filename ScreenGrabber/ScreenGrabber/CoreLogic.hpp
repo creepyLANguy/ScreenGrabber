@@ -106,7 +106,7 @@ inline void ApplyWhiteBrightnessModifier(BorderChunk& chunk)
 }
 
 
-//Try and sanitise the colour info for a more clearer and simpler rendereing on the strip. 
+//Try and sanitise the colour info for a more clearer and simpler rendering on the strip. 
 //
 //Some approaches : 
 //Zero out all vals to black if the total luminosity is weak so that we aren't backlighting a dark part of the scene.
