@@ -18,7 +18,7 @@ inline void InitConfigVariables_Debug()
   debug_mockChunks = GetProperty_Bool("mockChunks", false, debug_config);
   debug_blankVal = GetProperty_Int("blankVal", blankVal_default, debug_config);
   debug_noiseType = static_cast<NoiseType>(GetProperty_Int("noiseType", noiseType_default, debug_config));
-  debug_blankRegionModifier = GetProperty_Float("blankRegionModifier", blankVal_default, debug_config);
+  debug_blankRegionModifier = GetProperty_Float("blankRegionModifier", blankRegionModifier_default, debug_config);
   debug_reportTimeMS = GetProperty_Int("reportTimeMS", 1000, debug_config);
   debug_scriptAnimation = GetProperty_Bool("debug_scriptAnimation", true, debug_config);
 }
