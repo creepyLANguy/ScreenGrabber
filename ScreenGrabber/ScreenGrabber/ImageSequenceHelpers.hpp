@@ -1,3 +1,35 @@
+/*
+Format is as follows :
+
+sS
+dD
+file xN
+...
+
+where,
+S is animationSteps, which overwrites the value specified in config.ini
+D is animationDelayMS, which overwrites the value specified in config.ini
+file is the filepath, including file extension and any file structure markup such as backslashes.
+N is amount of times this hue will repeat
+
+s dand x values are optional
+
+eg:
+
+s2
+d40
+images\img1.jpg
+images\img1.jpg
+images\img2.jpg
+
+is same as :
+
+s2
+d40
+images\img1.jpg x2
+images\img2.jpg
+*/
+
 #pragma once
 
 #include <fstream>

@@ -1,17 +1,32 @@
 /*
-animationSteps # ;overwrites the value specified in config.ini
-animationDelayMS # ;overwrites the value specified in config.ini
+Format is as follows :
 
-format is as follows: 
-G B R xn
-where n is amount of times this hue will repeat 
+sS
+dD
+R G B xN
+...
+
+where,
+S is animationSteps, which overwrites the value specified in config.ini
+D is animationDelayMS, which overwrites the value specified in config.ini
+N is amount of times this hue will repeat
+
+s d and x values are optional
+
 eg:
-0 0 0 
-0 0 0 
-0 0 0 
-is same as 
+
+s2
+d40
+0 0 0
+0 0 0
+0 0 0
+
+is same as :
+
+s2
+d40
 0 0 0 x3
- */
+*/
 
 #pragma once
 
@@ -150,9 +165,9 @@ inline void RunScript()
 
       if (animationDelayMS > 0)
       {
-        if (debug_scriptAnimation == true)
+        if (debug_scriptAnimation_show == true)
         {
-          Mat mat(250, 250, imageType);
+          Mat mat(debug_scriptAnimation_rows, debug_scriptAnimation_cols, imageType);
           mat = Scalar(b, g, r);
           imshow("scriptAnimationDebugView", mat);
           waitKey(animationDelayMS);

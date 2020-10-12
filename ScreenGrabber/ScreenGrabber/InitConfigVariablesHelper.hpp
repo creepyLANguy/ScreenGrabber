@@ -20,7 +20,9 @@ inline void InitConfigVariables_Debug()
   debug_noiseType = static_cast<NoiseType>(GetProperty_Int("noiseType", noiseType_default, debug_config));
   debug_blankRegionModifier = GetProperty_Float("blankRegionModifier", blankRegionModifier_default, debug_config);
   debug_reportTimeMS = GetProperty_Int("reportTimeMS", 1000, debug_config);
-  debug_scriptAnimation = GetProperty_Bool("debug_scriptAnimation", true, debug_config);
+  debug_scriptAnimation_show = GetProperty_Bool("debug_scriptAnimation_show", true, debug_config);
+  debug_scriptAnimation_rows = GetProperty_Int("debug_scriptAnimation_rows", 250, debug_config);
+  debug_scriptAnimation_cols = GetProperty_Int("debug_scriptAnimation_cols", 250, debug_config);
 }
 
 
