@@ -153,7 +153,7 @@ inline void RunScript()
         if (debug_scriptAnimation == true)
         {
           Mat mat(250, 250, imageType);
-          mat = Scalar(r, g, b);
+          mat = Scalar(b, g, r);
           imshow("scriptAnimationDebugView", mat);
           waitKey(animationDelayMS);
         }
