@@ -32,10 +32,9 @@
 
 s10
 d20
-grad\grad1.png
-grad\grad2.png
-grad\grad3.png
-grad\grad4.png
-grad\grad5.png
-grad\grad6.png
-grad\grad7.png
+grad2\grad1.png
+grad2\grad2.png
+grad2\grad3.png
+grad2\grad4.png
+grad2\grad5.png
+grad2\grad6.png
