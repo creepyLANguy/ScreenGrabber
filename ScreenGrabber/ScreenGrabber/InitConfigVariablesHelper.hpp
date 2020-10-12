@@ -87,10 +87,9 @@ inline void InitConfigVariables_General()
 
   animationSteps = GetProperty_Int("animationSteps", 50, config);
   animationDelayMS = GetProperty_Int("animationDelayMS", 50, config);
-  animationDirectory = GetProperty_String("animationDirectory", "", config);
 
-  scriptFile = animationDirectory + GetProperty_String("scriptFile", "", config);
-  imageSequenceFile = animationDirectory + GetProperty_String("imageSequenceFile", "", config);
+  scriptFile = GetProperty_String("scriptFile", "", config);
+  imageSequenceFile = GetProperty_String("imageSequenceFile", "", config);
 
 }
 

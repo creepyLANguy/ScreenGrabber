@@ -181,16 +181,14 @@
     <None Include="debug_config.ini" />
     <None Include="hosts.ini" />
     <None Include="ports.ini" />
-    <None Include="SampleAnimations\breeze.luna" />
-    <None Include="SampleAnimations\rainbow.luna" />
-    <None Include="SampleAnimations\storm.luna" />
+    <None Include="SampleAnimations\scripts\breeze.luna" />
+    <None Include="SampleAnimations\scripts\rainbow.luna" />
+    <None Include="SampleAnimations\scripts\storm.luna" />
+    <None Include="SampleAnimations\sequences\complimentary.seq" />
+    <None Include="SampleAnimations\sequences\gradient_discrete.seq" />
+    <None Include="SampleAnimations\sequences\gradient_smooth.seq" />
+    <None Include="SampleAnimations\sequences\rainbow.seq" />
     <None Include="StaticImageHelpers.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="SampleAnimations\complimentary.txt" />
-    <Text Include="SampleAnimations\gradient_discrete.txt" />
-    <Text Include="SampleAnimations\gradient_smooth.txt" />
-    <Text Include="SampleAnimations\rainbow.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

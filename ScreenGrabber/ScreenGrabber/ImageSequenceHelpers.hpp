@@ -79,8 +79,9 @@ inline bool ReadImageSequence()
       cout << endl;
       continue;
     }
-
-    //AL.
+  
+    //TODO
+    //Refactor
     string sd = " " + to_string(kScriptAnimationRepeatDelim);
     int repeats = 1;
     const int dotPos = strLine.find_last_of(".");
@@ -93,9 +94,6 @@ inline bool ReadImageSequence()
       strLine = strLine.substr(0, repeatPos);
     }
     //
-
-
-    strLine = animationDirectory + strLine;
 
     Mat mat = imread(strLine);
     if (mat.data == nullptr)

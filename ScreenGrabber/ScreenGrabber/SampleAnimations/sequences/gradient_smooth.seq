@@ -31,10 +31,10 @@
 ;Begin: 
 
 s50
-d50
-rgbcmy\b.png
-rgbcmy\c.png
-rgbcmy\g.png
-rgbcmy\y.png
-rgbcmy\r.png
-rgbcmy\m.png
+d10
+SampleAnimations\sequences\grad2\grad1.png
+;SampleAnimations\sequences\grad2\grad2.png
+SampleAnimations\sequences\grad2\grad3.png
+;SampleAnimations\sequences\grad2\grad4.png
+SampleAnimations\sequences\grad2\grad5.png
+;SampleAnimations\sequences\grad2\grad6.png

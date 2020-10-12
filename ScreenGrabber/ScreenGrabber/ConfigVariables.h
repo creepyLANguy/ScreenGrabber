@@ -51,4 +51,3 @@ string scriptFile;
 void (*runFunc)() = nullptr;
 int animationSteps;
 int animationDelayMS;
-string animationDirectory;

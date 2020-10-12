@@ -100,28 +100,26 @@
     <None Include="StaticImageHelpers.hpp">
       <Filter>RunFuncHelpers</Filter>
     </None>
-    <None Include="SampleAnimations\breeze.luna">
+    <None Include="SampleAnimations\sequences\complimentary.seq">
+      <Filter>SampleAnimations\ImageSequences</Filter>
+    </None>
+    <None Include="SampleAnimations\sequences\gradient_discrete.seq">
+      <Filter>SampleAnimations\ImageSequences</Filter>
+    </None>
+    <None Include="SampleAnimations\sequences\gradient_smooth.seq">
+      <Filter>SampleAnimations\ImageSequences</Filter>
+    </None>
+    <None Include="SampleAnimations\sequences\rainbow.seq">
+      <Filter>SampleAnimations\ImageSequences</Filter>
+    </None>
+    <None Include="SampleAnimations\scripts\breeze.luna">
       <Filter>SampleAnimations\Scripts</Filter>
     </None>
-    <None Include="SampleAnimations\rainbow.luna">
+    <None Include="SampleAnimations\scripts\rainbow.luna">
       <Filter>SampleAnimations\Scripts</Filter>
     </None>
-    <None Include="SampleAnimations\storm.luna">
+    <None Include="SampleAnimations\scripts\storm.luna">
       <Filter>SampleAnimations\Scripts</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="SampleAnimations\complimentary.txt">
-      <Filter>SampleAnimations\ImageSequences</Filter>
-    </Text>
-    <Text Include="SampleAnimations\rainbow.txt">
-      <Filter>SampleAnimations\ImageSequences</Filter>
-    </Text>
-    <Text Include="SampleAnimations\gradient_discrete.txt">
-      <Filter>SampleAnimations\ImageSequences</Filter>
-    </Text>
-    <Text Include="SampleAnimations\gradient_smooth.txt">
-      <Filter>SampleAnimations\ImageSequences</Filter>
-    </Text>
   </ItemGroup>
 </Project>
