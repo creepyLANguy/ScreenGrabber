@@ -39,6 +39,7 @@ inline bool ReadScript()
   while (myFile.eof() == false)
   {
     getline(myFile, strLine);
+    strLine = Trim(strLine);
     if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { continue; }
 
     if (strLine[0] == kScriptAnimationStepsDelim)
@@ -137,7 +138,7 @@ inline void RunScript()
     double gds = gd / animationSteps;
     double bds = bd / animationSteps;
 
-    while (step <= animationSteps)
+    while (step < animationSteps)
     {
       const int r = it->r + (rds * step);
       const int g = it->g + (gds * step);

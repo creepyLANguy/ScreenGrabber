@@ -125,6 +125,7 @@ inline void PopulateConfigBlob(const string configFileName, vector<KeyValPair>& 
   while (myFile.eof() == false)
   {;
     getline(myFile, strLine);
+    strLine = Trim(strLine);
     if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { continue; }
 
     KeyValPair kvp;
