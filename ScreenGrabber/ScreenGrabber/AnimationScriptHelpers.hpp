@@ -1,3 +1,18 @@
+/*
+animationSteps # ;overwrites the value specified in config.ini
+animationDelayMS # ;overwrites the value specified in config.ini
+
+format is as follows: 
+G B R xn
+where n is amount of times this hue will repeat 
+eg:
+0 0 0 
+0 0 0 
+0 0 0 
+is same as 
+0 0 0 x3
+ */
+
 #pragma once
 
 #include <fstream>
@@ -20,25 +35,54 @@ inline bool ReadScript()
     return false;
   }
 
+  string strLine;
   while (myFile.eof() == false)
   {
-    string strLine;
     getline(myFile, strLine);
     if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { continue; }
 
+    if (strLine[0] == kScriptAnimationStepsDelim)
+    {
+      animationSteps = atoi(strLine.substr(1).c_str());
+      cout << "Updated animationSteps as per script." << endl;
+      cout << "New Value: " << animationSteps << endl;
+      cout << endl;
+      continue;
+    }
+
+    if (strLine[0] == kScriptAnimationDelayDelim)
+    {
+      animationDelayMS = atoi(strLine.substr(1).c_str());
+      cout << "Updated animationDelayMS as per script." << endl;
+      cout << "New Value: " << animationDelayMS << endl;
+      cout << endl;
+      continue;
+    }
+
     string r = strLine.substr(0, strLine.find(kScriptDelim));
-    strLine = strLine.substr(strLine.find(r) + strlen(r.c_str()) + strlen(kScriptDelim));
+    strLine = strLine.substr(strLine.find(r) + strlen(r.c_str()) + 1);
     string g = strLine.substr(0, strLine.find(kScriptDelim));
-    strLine = strLine.substr(strLine.find(g) + strlen(g.c_str()) + strlen(kScriptDelim));
+    strLine = strLine.substr(strLine.find(g) + strlen(g.c_str()) + 1);
     string b = strLine;
 
+    int repeats = 1;
+    if (strLine.find(kScriptAnimationRepeatDelim) != string::npos)
+    {
+      strLine = strLine.substr(strLine.find(kScriptAnimationRepeatDelim) + 1);
+      repeats = strlen(strLine.c_str()) > 0 ? atoi(strLine.c_str()) : 1;
+    }
+    
     RGB rgb;
     rgb.r = atoi(r.c_str());
     rgb.g = atoi(g.c_str());
     rgb.b = atoi(b.c_str());
-    nodes.emplace_back(rgb);
 
-    cout << rgb.r << " " << rgb.g << " " << rgb.b << endl;
+    for (int i = 0; i < repeats; ++i)
+    {
+      nodes.emplace_back(rgb);
+    }
+
+    cout << rgb.r << " " << rgb.g << " " << rgb.b << " x" << repeats << endl;
   }
 
   cout << endl;
@@ -46,10 +90,13 @@ inline bool ReadScript()
   if (nodes.empty())
   {
     std::cout << "Script yielded no keyframes." << scriptFile << endl;
+    cout << endl;
     return false;
   }
 
   cout << "Script file successfully parsed." << endl;
+  cout << "Total keyframes: " << nodes.size() << endl;
+  cout << endl;
 
   myFile.close();
 

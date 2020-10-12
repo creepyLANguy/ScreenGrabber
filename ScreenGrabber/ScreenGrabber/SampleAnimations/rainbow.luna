@@ -1,3 +1,33 @@
+;Format is as follows: 
+
+;sS 
+;dD  
+;G B R xN
+;...
+
+;where,
+;S is animationSteps, which overwrites the value specified in config.ini
+;D is animationDelayMS, which overwrites the value specified in config.ini
+;N is amount of times this hue will repeat 
+
+;s d and x values are optional
+
+;eg:
+
+;s2 
+;d40
+;0 0 0 
+;0 0 0 
+;0 0 0 
+
+;is same as: 
+
+;s2 
+;d40
+;0 0 0 x3
+
+;Begin: 
+
 255 0 0
 255 255 0 
 0 255 0

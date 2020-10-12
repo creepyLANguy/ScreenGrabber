@@ -23,9 +23,9 @@ inline bool ReadImageSequence()
     return false;
   }
 
+  string strLine;
   while (myFile.eof() == false)
   {
-    string strLine;
     getline(myFile, strLine);
     if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { continue; }
     strLine = animationDirectory + strLine;

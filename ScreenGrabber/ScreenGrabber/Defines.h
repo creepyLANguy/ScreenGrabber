@@ -18,7 +18,10 @@ const char* kConfigFileName = "config.ini";
 const char kConfigDelim = ' ';
 const char kConfigCommentDelim = ';';
 
-const char* kScriptDelim = " ";
+const char kScriptDelim = ' ';
+const char kScriptAnimationStepsDelim = 's';
+const char kScriptAnimationDelayDelim = 'd';
+const char kScriptAnimationRepeatDelim = 'x';
 
 constexpr auto imageType = CV_8UC4;
 
