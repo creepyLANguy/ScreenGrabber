@@ -71,7 +71,7 @@ enum NoiseType : int
   SHIFTER_2 = (1 << 5),
   SHIFTER_3 = (1 << 6),
   CHUNKDATA = (1 << 7),
-  BLUR =      (1 << 8),
+  BLUR =      (1 << 8), //Ignored for animated image sequence
   RANDOM =    (1 << 9),
   NOISETYPE_LAST = 10
 };

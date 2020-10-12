@@ -117,7 +117,10 @@
     <Text Include="SampleAnimations\rainbow.txt">
       <Filter>SampleAnimations\ImageSequences</Filter>
     </Text>
-    <Text Include="SampleAnimations\gradient.txt">
+    <Text Include="SampleAnimations\gradient_discrete.txt">
+      <Filter>SampleAnimations\ImageSequences</Filter>
+    </Text>
+    <Text Include="SampleAnimations\gradient_smooth.txt">
       <Filter>SampleAnimations\ImageSequences</Filter>
     </Text>
   </ItemGroup>

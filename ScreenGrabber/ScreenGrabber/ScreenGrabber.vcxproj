@@ -188,7 +188,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="SampleAnimations\complimentary.txt" />
-    <Text Include="SampleAnimations\gradient.txt" />
+    <Text Include="SampleAnimations\gradient_discrete.txt" />
+    <Text Include="SampleAnimations\gradient_smooth.txt" />
     <Text Include="SampleAnimations\rainbow.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
