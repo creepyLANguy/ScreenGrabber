@@ -2,6 +2,7 @@
 
 #include "ConfigVariables.h"
 #include "ConfigHelpers.hpp"
+#include "ConfigSanityChecker.hpp"
 #include "Debug.hpp"
 #include "RunFuncs.hpp"
 
@@ -100,4 +101,5 @@ inline void InitConfigVariables()
 {
   InitConfigVariables_Debug();
   InitConfigVariables_General();
+  CheckConfigValues();
 }

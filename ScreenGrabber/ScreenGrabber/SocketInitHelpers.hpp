@@ -12,17 +12,18 @@ const string baseError =
 
 inline void ShowError(const string s)
 {
-  cout << s << baseError;
+  cout << s << baseError << endl;
 }
 
 inline void ShowError(MySocket& socket)
 {
-  cout << "FAILED TO CREATE SOCKET: " << socket.ToString() << "\r\n " << baseError;
+  cout << "FAILED TO CREATE SOCKET: " << socket.ToString() << endl;
+  cout << baseError << endl;
 }
 
 inline void ShowSuccess(MySocket& socket)
 {
-  cout << "Socket created: " << socket.ToString() << "\r\n";
+  cout << "Socket created: " << socket.ToString() << endl;
 }
 
 
@@ -66,17 +67,17 @@ inline bool PopulateSocketList(vector<MySocket>& sockets)
 
   if (hosts.size() == 0)
   {
-    ShowError("HOSTS LIST IS EMPTY!\r\n");
+    ShowError("HOSTS LIST IS EMPTY!");
     return false;
   }
   if (ports.size() == 0)
   {
-    ShowError("PORTS LIST IS EMPTY!\r\n");
+    ShowError("PORTS LIST IS EMPTY!");
     return false;
   }
   if (hosts.size() != ports.size())
   {
-    ShowError("WARNING!!!\r\nHOSTS LIST AND PORTS LIST ARE DIFFERENT LENGTHS!\r\n");
+    ShowError("WARNING!!!\r\nHOSTS LIST AND PORTS LIST ARE DIFFERENT LENGTHS!");
   }
 
   //Go by shorter max between hosts list and ports list to at least get some potentially usable ports created. 

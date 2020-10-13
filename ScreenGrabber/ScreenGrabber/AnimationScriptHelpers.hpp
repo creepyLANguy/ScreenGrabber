@@ -134,7 +134,8 @@ inline void RunScript()
 {
   if (animationSteps <= 0)
   {
-    cout << "animationSteps specified problematic.\nValue : " << animationSteps << endl;
+    cout << "animationSteps specified problematic." << endl;
+    cout << "Value : " << animationSteps << endl;
     cout << "Exiting Program." << endl;
     return;
   }
@@ -161,7 +162,7 @@ inline void RunScript()
 
       BroadcastRGB(r, g, b);
     
-      cout << r << "\t|" << g << "\t|" << b << "\r\n";
+      cout << r << "\t|" << g << "\t|" << b << endl;
 
       if (animationDelayMS > 0)
       {
