@@ -19,7 +19,7 @@ inline void InitConfigVariables_Debug()
   debug_blankVal = GetProperty_Int("blankVal", blankVal_default, debug_config);
   debug_noiseType = static_cast<NoiseType>(GetProperty_Int("noiseType", noiseType_default, debug_config));
   debug_blankRegionModifier = GetProperty_Float("blankRegionModifier", blankRegionModifier_default, debug_config);
-  debug_reportTimeMS = GetProperty_Int("reportTimeMS", 1000, debug_config);
+  debug_reportTimeMS = GetProperty_Int("reportTimeMS", 200, debug_config);
   debug_scriptAnimation_show = GetProperty_Bool("debug_scriptAnimation_show", true, debug_config);
   debug_scriptAnimation_rows = GetProperty_Int("debug_scriptAnimation_rows", 250, debug_config);
   debug_scriptAnimation_cols = GetProperty_Int("debug_scriptAnimation_cols", 250, debug_config);
@@ -67,6 +67,7 @@ inline void InitConfigVariables_General()
   case DeltaEType::CIE76:  deltaEFunc = &Calc76; break;
   case DeltaEType::CIE94:  deltaEFunc = &Calc94; break;
   case DeltaEType::CIE2000:  deltaEFunc = &Calc2000; break;
+  default: cout << "WARNING! DeltaE func not set as invalid value was specified!" << endl << endl;
   }
 
   lumi.r = GetProperty_Float("lumiR", lumi.r, config);
@@ -80,6 +81,7 @@ inline void InitConfigVariables_General()
   case CaptureType::IMAGEFILE:  runFunc= &RunStaticImageFileCapture; break;
   case CaptureType::IMAGESEQUENCE:  runFunc = &RunImageSequenceAnimation; break;
   case CaptureType::SCRIPT:  runFunc = &RunScriptAnimation; break;
+  default: cout << "WARNING! runFunc not set as invalid value was specified!" << endl << endl;
   }
 
   imageFile = GetProperty_String("imageFile", "", config);
