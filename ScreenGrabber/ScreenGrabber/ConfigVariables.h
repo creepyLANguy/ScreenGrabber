@@ -31,7 +31,7 @@ int chunkUpdateTimeoutMS;
 int width, height;
 int downscaler;
 float borderSamplePercentage;
-float lowerBuffer, upperBuffer, leftBuffer, rightBuffer;
+float lowerBufferPercentage, upperBufferPercentage, leftBufferPercentage, rightBufferPercentage;
 int originPositionOffset;
 float brightnessPercentage;
 int whiteBrightnessModifier;
