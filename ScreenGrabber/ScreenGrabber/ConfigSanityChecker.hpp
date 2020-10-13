@@ -2,23 +2,30 @@
 
 #include "ConfigVariables.h"
 
+#define WARN(Variable, Warning) Print((#Variable), Warning)
 
-string lessThanZero = " is less than zero.\r\n";
-string lessThanOrEqualToZero = " is less than or equal to zero.\r\n";
-string equalToZero = " is equal to zero.\r\n";
-string moreThanOrEqualToZero = " is more than or equal to zero.\r\n";
-string moreThanZero = " is more than zero.\r\n";
 
-inline void PrintWarning(string variableName, string warning)
+const char* cautioner = "WARNING:\r\n";
+const char* lessThanZero = " is less than zero.\r\n";
+const char* lessThanOrEqualToZero = " is less than or equal to zero.\r\n";
+const char* equalToZero = " is equal to zero.\r\n";
+const char* moreThanOrEqualToZero = " is more than or equal to zero.\r\n";
+const char* moreThanZero = " is more than zero.\r\n";
+
+inline void Print(const char* variableName, const char* warning)
 {
-  cout << variableName << warning << endl;
+  cout << cautioner << variableName << warning << endl;
 }
+
 
 inline void CheckConfigValues_General()
 {
-  if (width <= 0)
+  //AL.
+  //TODO
+  
+  //if (width <= 0)
   {
-    
+    WARN(width, lessThanOrEqualToZero);
   }
 
   cout << endl;
@@ -27,6 +34,9 @@ inline void CheckConfigValues_General()
 
 inline void CheckConfigValues_Debug()
 {
+  //AL.
+  //TODO
+
   cout << endl;
 }
 
