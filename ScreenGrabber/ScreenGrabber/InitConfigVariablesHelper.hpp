@@ -2,6 +2,7 @@
 
 #include "ConfigVariables.h"
 #include "ConfigHelpers.hpp"
+#include "ConfigSanityChecker.hpp"
 #include "Debug.hpp"
 #include "RunFuncs.hpp"
 
@@ -47,10 +48,10 @@ inline void InitConfigVariables_General()
 
   downscaler = GetProperty_Int("downscale", 3, config);
   borderSamplePercentage = GetProperty_Float("borderSamplePercentage", 0.1f, config);
-  lowerBuffer = GetProperty_Float("lowerBuffer", 0.0f, config);
-  upperBuffer = GetProperty_Float("upperBuffer", 0.0f, config);
-  leftBuffer = GetProperty_Float("leftBuffer", 0.0f, config);
-  rightBuffer = GetProperty_Float("rightBuffer", 0.0f, config);
+  lowerBufferPercentage = GetProperty_Float("lowerBufferPercentage", 0.0f, config);
+  upperBufferPercentage = GetProperty_Float("upperBufferPercentage", 0.0f, config);
+  leftBufferPercentage = GetProperty_Float("leftBufferPercentage", 0.0f, config);
+  rightBufferPercentage = GetProperty_Float("rightBufferPercentage", 0.0f, config);
 
   brightnessPercentage = GetProperty_Float("brightnessPercentage", 1.0f, config);
   whiteBrightnessModifier = GetProperty_Int("whiteBrightnessModifier", 0, config);
@@ -100,4 +101,5 @@ inline void InitConfigVariables()
 {
   InitConfigVariables_Debug();
   InitConfigVariables_General();
+  CheckConfigValues();
 }

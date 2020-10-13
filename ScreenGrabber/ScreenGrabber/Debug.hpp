@@ -50,7 +50,7 @@ inline void PrintFramerate(const bool cmd, const bool ide)
   const string str = "FPS:" + to_string(lastDeterminedFramerate) + "\r\n";
   if (cmd)
   {
-    cout << "\r\n" << str.c_str() << "\r\n";
+    cout << "\r\n" << str.c_str() << endl;
   }
   if (ide)
   {
@@ -235,13 +235,13 @@ inline void IncrementMargin()
 
 inline void PrintPayload(const unsigned int& payload)
 {
-  cout << margin << bitset<32>(payload) << "\r\n";
+  cout << margin << bitset<32>(payload) << endl;
 }
 
 const char* sep = " | ";
 inline void PrintChunk(const BorderChunk& chunk)
 {
-  cout << margin << chunk.index << sep << chunk.r << sep << chunk.g << sep << chunk.b << "\r\n\r\n";
+  cout << margin << chunk.index << sep << chunk.r << sep << chunk.g << sep << chunk.b << endl << endl;
 }
 
 

@@ -335,10 +335,10 @@ inline void ReduceRectByBuffers(RECT& rect)
   const int height = rect.bottom - rect.top;
   const int width = rect.right - rect.left;
 
-  const int bottomShift = lowerBuffer * height;
-  const int topShift = upperBuffer * height;
-  const int leftShift = leftBuffer * width;
-  const int rightShift = rightBuffer * width;
+  const int bottomShift = lowerBufferPercentage * height;
+  const int topShift = upperBufferPercentage * height;
+  const int leftShift = leftBufferPercentage * width;
+  const int rightShift = rightBufferPercentage * width;
 
   rect.bottom -= bottomShift;
   rect.top += topShift;

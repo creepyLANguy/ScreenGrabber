@@ -159,6 +159,7 @@
     <ClInclude Include="ChunkInitHelper.hpp" />
     <ClInclude Include="Colourspaces.hpp" />
     <ClInclude Include="ConfigHelpers.hpp" />
+    <ClInclude Include="ConfigSanityChecker.hpp" />
     <ClInclude Include="ConfigVariables.h" />
     <ClInclude Include="CoreLogic.hpp" />
     <ClInclude Include="Debug.hpp" />

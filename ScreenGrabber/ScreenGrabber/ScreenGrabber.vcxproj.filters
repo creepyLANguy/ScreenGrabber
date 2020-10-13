@@ -57,6 +57,9 @@
     <ClInclude Include="SocketInitHelpers.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="ConfigSanityChecker.hpp">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">

@@ -121,7 +121,8 @@ inline bool ReadImageSequence()
 
   if (animationSteps <= 0)
   {
-    cout << "animationSteps specified problematic.\nValue : " << animationSteps << endl;
+    cout << "animationSteps specified problematic." << endl;
+    cout << "Value : " << animationSteps << endl;
     cout << "Exiting Program." << endl;
     return false;
   }
