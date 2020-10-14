@@ -2,88 +2,134 @@
 
 #include "ConfigVariables.h"
 
-#define WARN(Variable, Warning) PrintWarning((#Variable), Warning)
+#define WARN(Variable, CheckType) PrintWarning((#Variable), CheckType)
+#define WARNIF(Variable, CheckType) Check(Variable, CheckType, (#Variable))
+//AL.
+//#define CHECK(Variable, CheckType, Comp) Check((#Variable), CheckType, Comp)
 
 
-const char* lessThanZero = " is less than zero.\r\n";
-const char* lessThanOrEqualToZero = " is less than or equal to zero.\r\n";
-const char* equalToZero = " is equal to zero.\r\n";
-const char* moreThanOrEqualToZero = " is more than or equal to zero.\r\n";
-const char* moreThanZero = " is more than zero.\r\n";
-const char* lessThanMin = " is likely less than the minimum allowed value.\r\n";
-const char* moreThanMax = " is likely more than the maximum allowed value.\r\n";
-const char* notOneOrZero = " is not a 1 or 0, as is required for feature toggles.\r\n";
-const char* notAnOption = " is not the value of any corresponding options.\r\n";
-
-
-inline void PrintWarning(const char* variableName, const char* warning)
+enum class CheckType
 {
-  cout << "WARNING:\r\n" << variableName << warning << endl;
+  NONE,
+  LESSTHANZERO,
+  LESSTHANOREQUALTOZERO,
+  EQUALTOZERO,
+  MORETHANOREQUALTOZERO,
+  MORETHANZERO,
+  LESSTHANMIN,
+  MORETHANMAX,
+  NOTONEORZERO,
+  NOTANOPTION,
+};
+
+
+std::map<CheckType, const char*> check_map = {
+  {CheckType::NONE, " - CHECK TYPE NOT IMPLEMENTED!"},
+  {CheckType::LESSTHANZERO, " is less than zero."},
+  {CheckType::LESSTHANOREQUALTOZERO,  " is less than or equal to zero."},
+  {CheckType::EQUALTOZERO,  " is equal to zero."},
+  {CheckType::MORETHANOREQUALTOZERO, " is more than or equal to zero."},
+  {CheckType::MORETHANZERO, " is more than zero."},
+  {CheckType::LESSTHANMIN, " is likely less than the minimum allowed value."},
+  {CheckType::MORETHANMAX,  " is likely more than the maximum allowed value."},
+  {CheckType::NOTONEORZERO,  " is not a 1 or 0, as is required for feature toggles."},
+  {CheckType::NOTANOPTION,  " is not the value of any corresponding options."}
+};
+
+
+inline void PrintWarning(const char* variableName, const CheckType checkType)
+{
+  const char* warning = check_map.find(checkType)->second;
+  cout << "WARNING:\r\n" << variableName << warning << endl << endl;
 }
 
 
-inline void CheckConfigValues_General()
+template <class T>
+void Check(const T variable, const CheckType checkType, const char* variableName)
 {
-  //AL.
-  //TODO
-  
-  if (width <= 0) { WARN(width, lessThanOrEqualToZero); }
-  if (height <= 0) { WARN(height, lessThanOrEqualToZero); }
+  switch (checkType)
+  {
+  case CheckType::LESSTHANZERO:
+    if (variable < 0) { PrintWarning(variableName, checkType); }
+    break;
+  case CheckType::LESSTHANOREQUALTOZERO:
+    if (variable <= 0) { PrintWarning(variableName, checkType); }
+    break;
+  case CheckType::EQUALTOZERO:
+    if (variable == 0) { PrintWarning(variableName, checkType); }
+    break;
+  case CheckType::MORETHANOREQUALTOZERO:
+    if (variable >= 0) { PrintWarning(variableName, checkType); }
+    break;
+  case CheckType::MORETHANZERO:
+    if (variable > 0) { PrintWarning(variableName, checkType); }
+    break;
+  default:
+    PrintWarning(variableName, CheckType::NONE);
+    break;
+  }
+}
 
-  if (borderSamplePercentage <= 0) { WARN(borderSamplePercentage, lessThanOrEqualToZero); }
-  if (borderSamplePercentage > 100) { WARN(borderSamplePercentage, moreThanMax); }
 
-  if (lowerBufferPercentage < 0) { WARN(lowerBuffer, lessThanZero); }
-  if (upperBufferPercentage < 0) { WARN(upperBuffer, lessThanZero); }
-  if (leftBufferPercentage < 0) { WARN(leftBuffer, lessThanZero); }
-  if (rightBufferPercentage < 0) { WARN(rightBuffer, lessThanZero); }
+void CheckConfigValues_General()
+{
+  WARNIF(width, CheckType::LESSTHANOREQUALTOZERO);
+  WARNIF(height, CheckType::LESSTHANOREQUALTOZERO);
 
-  if (lowerBufferPercentage > (1.0 - borderSamplePercentage)) { WARN(lowerBuffer, moreThanMax); }
-  if (upperBufferPercentage > (1.0 - borderSamplePercentage)) { WARN(upperBuffer, moreThanMax); }
-  if (leftBufferPercentage > (1.0 - borderSamplePercentage)) { WARN(leftBuffer, moreThanMax); }
-  if (rightBufferPercentage > (1.0 - borderSamplePercentage)) { WARN(rightBuffer, moreThanMax); }
+  WARNIF(borderSamplePercentage, CheckType::LESSTHANOREQUALTOZERO);
+  if (borderSamplePercentage > 100) { WARN(borderSamplePercentage, CheckType::MORETHANMAX); }
 
-  if (downscaler <= 0) { WARN(downscaler, lessThanOrEqualToZero); }
+  WARNIF(lowerBufferPercentage, CheckType::LESSTHANZERO);
+  WARNIF(upperBufferPercentage, CheckType::LESSTHANZERO);
+  WARNIF(leftBufferPercentage, CheckType::LESSTHANZERO);
+  WARNIF(rightBufferPercentage, CheckType::LESSTHANZERO);
 
-  if (sleepMS < 0) { WARN(sleepMS, lessThanZero); }
-  if (chunkUpdateTimeoutMS < 0) { WARN(chunkUpdateTimeoutMS, lessThanZero); }
+  if (lowerBufferPercentage > (1.0 - borderSamplePercentage)) { WARN(lowerBuffer, CheckType::MORETHANMAX); }
+  if (upperBufferPercentage > (1.0 - borderSamplePercentage)) { WARN(upperBuffer, CheckType::MORETHANMAX); }
+  if (leftBufferPercentage > (1.0 - borderSamplePercentage)) { WARN(leftBuffer, CheckType::MORETHANMAX); }
+  if (rightBufferPercentage > (1.0 - borderSamplePercentage)) { WARN(rightBuffer, CheckType::MORETHANMAX); }
 
-  if (brightnessPercentage < 0) { WARN(brightnessPercentage, lessThanZero); }
-  if (brightnessPercentage > 100) { WARN(brightnessPercentage, moreThanMax); }
-  
-  if (whiteDiffThresh < 0) { WARN(whiteDiffThresh, lessThanZero); }
-  if (outlierDiffThresh < 0) { WARN(outlierDiffThresh, lessThanZero); }
-  if (whiteLuminanceThresh < 0) { WARN(whiteLuminanceThresh, lessThanZero); }
-  if (colourLuminanceThresh < 0) { WARN(colourLuminanceThresh, lessThanZero); }
+  WARNIF(downscaler, CheckType::LESSTHANOREQUALTOZERO);
 
-  if (deltaEThresh < 0) { WARN(deltaEThresh, lessThanZero); }
-  if (static_cast<int>(deltaEType) < 0) { WARN(deltaEType, notAnOption); }
+  WARNIF(sleepMS, CheckType::LESSTHANZERO);
+  WARNIF(chunkUpdateTimeoutMS, CheckType::LESSTHANZERO);
+
+  WARNIF(brightnessPercentage, CheckType::LESSTHANZERO);
+  if (brightnessPercentage > 100) { WARN(brightnessPercentage, CheckType::MORETHANMAX); }
+
+  WARNIF(whiteDiffThresh, CheckType::LESSTHANZERO);
+  WARNIF(outlierDiffThresh, CheckType::LESSTHANZERO);
+  WARNIF(whiteLuminanceThresh, CheckType::LESSTHANZERO);
+  WARNIF(colourLuminanceThresh, CheckType::LESSTHANZERO);
+
+  WARNIF(deltaEThresh, CheckType::LESSTHANZERO);
+  if (static_cast<int>(deltaEType) < 0) { WARN(deltaEType, CheckType::NOTANOPTION); }
   //< 0 instead of stating SimpleRGBComparison cos it's not explicitly defined
   //in code and is executed when the deltae func is null.
 
-  if (captureType < CaptureType::PRIMARYDISPLAY) { WARN(deltaEType, notAnOption); }
+  if (captureType < CaptureType::PRIMARYDISPLAY) { WARN(deltaEType, CheckType::NOTANOPTION); }
 
-  if (animationSteps <= 0) { WARN(animationSteps, lessThanOrEqualToZero); }
-  if (animationDelayMS < 0) { WARN(animationDelayMS, lessThanZero); }
+  WARNIF(animationSteps, CheckType::LESSTHANOREQUALTOZERO);
+  WARNIF(animationDelayMS, CheckType::LESSTHANZERO);
 }
 
 
-inline void CheckConfigValues_Debug()
+void CheckConfigValues_Debug()
 {
-  if (debug_blankVal < 0) { WARN(debug_blankVal, lessThanZero); }
+  WARNIF(debug_blankVal, CheckType::LESSTHANZERO);
 
-  if (debug_noiseType < ::NONE) { WARN(debug_noiseType, notAnOption); }
+  if (debug_noiseType < ::NONE) { WARN(debug_noiseType, CheckType::NOTANOPTION); }
 
-  if (debug_blankRegionModifier < 0) { WARN(debug_blankRegionModifier, lessThanZero); }
+  WARNIF(debug_blankRegionModifier,CheckType::LESSTHANZERO);
 
-  if (debug_reportTimeMS < 0) { WARN(debug_reportTimeMS, lessThanZero); }
+  WARNIF(debug_reportTimeMS, CheckType::LESSTHANZERO);
 
-  if (debug_scriptAnimation_cols <= 0) { WARN(debug_scriptAnimation_cols, lessThanOrEqualToZero); }
-  if (debug_scriptAnimation_rows <= 0) { WARN(debug_scriptAnimation_rows, lessThanOrEqualToZero); }  
+  WARNIF(debug_scriptAnimation_cols, CheckType::LESSTHANOREQUALTOZERO);
+  WARNIF(debug_scriptAnimation_cols, CheckType::LESSTHANOREQUALTOZERO);
 }
 
 
-inline void CheckConfigValues()
+void CheckConfigValues()
 {
   CheckConfigValues_General();
   CheckConfigValues_Debug();
