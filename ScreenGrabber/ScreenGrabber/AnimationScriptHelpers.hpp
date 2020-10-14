@@ -33,6 +33,7 @@ d40
 #include <fstream>
 #include <iostream>
 #include "ConfigVariables.h"
+#include "ScriptUtils.hpp"
 
 
 vector<RGB> nodes;
@@ -55,25 +56,10 @@ inline bool ReadScript()
   {
     getline(myFile, strLine);
     strLine = Trim(strLine);
+
     if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { continue; }
 
-    if (strLine[0] == kScriptAnimationStepsDelim)
-    {
-      animationSteps = atoi(strLine.substr(1).c_str());
-      cout << "Updated animationSteps as per script." << endl;
-      cout << "New Value: " << animationSteps << endl;
-      cout << endl;
-      continue;
-    }
-
-    if (strLine[0] == kScriptAnimationDelayDelim)
-    {
-      animationDelayMS = atoi(strLine.substr(1).c_str());
-      cout << "Updated animationDelayMS as per script." << endl;
-      cout << "New Value: " << animationDelayMS << endl;
-      cout << endl;
-      continue;
-    }
+    if (CheckForScriptOverWritesInLine(strLine)) { continue; }
 
     string r = strLine.substr(0, strLine.find(kScriptDelim));
     strLine = strLine.substr(strLine.find(r) + strlen(r.c_str()) + 1);

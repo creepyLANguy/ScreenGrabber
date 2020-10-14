@@ -60,6 +60,9 @@
     <ClInclude Include="ConfigSanityChecker.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="ScriptUtils.hpp">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">

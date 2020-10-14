@@ -3,7 +3,7 @@
 #include "Defines.h"
 #include "ChunkInitHelper.hpp"
 #include "VectorUtils.hpp"
-#include "DeltaE.hpp"
+
 
 inline bool HasLEDRecentlyBeenUpdated(const int chunkIndex, vector<DWORD>& ledUpdateTracker)
 {
@@ -388,3 +388,4 @@ inline void BroadcastPayload(unsigned int& payload)
     socket.Send(&payload);
   }
 }
+

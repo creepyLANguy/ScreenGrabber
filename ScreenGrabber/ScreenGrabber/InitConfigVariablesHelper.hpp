@@ -6,6 +6,7 @@
 #include "Debug.hpp"
 #include "RunFuncs.hpp"
 
+
 inline void InitConfigVariables_Debug()
 {
   PopulateConfigBlob(kDebugConfigFileName, debug_config);

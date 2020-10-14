@@ -35,6 +35,7 @@ images\img2.jpg
 #include <fstream>
 #include <iostream>
 #include "ConfigVariables.h"
+#include "ScriptUtils.hpp"
 
 
 vector<Mat> images;
@@ -42,6 +43,18 @@ double delta = 1.0;
 double step = 0;
 vector<Mat>::iterator currentImage, nextImage;
 
+
+inline int GetRepeatPos(const string& strLine)
+{
+  const int dotPos = strLine.find_last_of(".");
+  const int repeatPos = strLine.find_last_of(kScriptAnimationRepeatDelim);
+  if ( (dotPos < repeatPos) && (dotPos != repeatPos) )
+  {
+    return repeatPos;
+  }
+
+  return -1;
+}
 
 inline bool ReadImageSequence()
 {
@@ -60,40 +73,19 @@ inline bool ReadImageSequence()
   {
     getline(myFile, strLine);
     strLine = Trim(strLine);
+
     if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { continue; }
 
-    if (strLine[0] == kScriptAnimationStepsDelim)
-    {
-      animationSteps = atoi(strLine.substr(1).c_str());
-      cout << "Updated animationSteps as per script." << endl;
-      cout << "New Value: " << animationSteps << endl;
-      cout << endl;
-      continue;
-    }
+    if (CheckForScriptOverWritesInLine(strLine)) { continue; }
 
-    if (strLine[0] == kScriptAnimationDelayDelim)
-    {
-      animationDelayMS = atoi(strLine.substr(1).c_str());
-      cout << "Updated animationDelayMS as per script." << endl;
-      cout << "New Value: " << animationDelayMS << endl;
-      cout << endl;
-      continue;
-    }
-  
-    //TODO
-    //Refactor
-    string sd = " " + to_string(kScriptAnimationRepeatDelim);
     int repeats = 1;
-    const int dotPos = strLine.find_last_of(".");
-    const int repeatPos = strLine.find_last_of(sd);
-    const bool foundRepeat = (dotPos < repeatPos) && (dotPos != repeatPos);
-    if (foundRepeat)
+    int repeatPos = GetRepeatPos(strLine);
+    if (repeatPos > 0)
     {
-      string s = strLine.substr(repeatPos+2);      
-      repeats = strlen(s.c_str()) > 0 ? atoi(s.c_str()) : 1;
+      const string repeatString = strLine.substr(repeatPos + 1);
+      repeats = strlen(repeatString.c_str()) > 0 ? atoi(repeatString.c_str()) : 1;
       strLine = strLine.substr(0, repeatPos);
     }
-    //
 
     Mat mat = imread(strLine);
     if (mat.data == nullptr)
