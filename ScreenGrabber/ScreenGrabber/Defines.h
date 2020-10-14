@@ -1,11 +1,10 @@
 #pragma once
 
-//#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
-
+#include "Colourspaces.hpp"
+#include "MySocket.h"
 #include <Windows.h>
 
-#include "MySocket.h"
 #define WIN32_LEAN_AND_MEAN
 
 using namespace cv;
@@ -26,6 +25,9 @@ const char kScriptAnimationRepeatDelim = 'x';
 constexpr auto imageType = CV_8UC4;
 
 vector<MySocket> tempSockets, sockets;
+
+double (*deltaEFunc)(const LAB&, const LAB&) = nullptr;
+void (*runFunc)() = nullptr;
 
 //Device context stuffs
 HWND hwnd = nullptr;
