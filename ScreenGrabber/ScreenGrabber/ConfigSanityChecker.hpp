@@ -4,8 +4,6 @@
 
 #define WARN(Variable, CheckType) PrintWarning((#Variable), CheckType)
 #define WARNIF(Variable, CheckType) Check(Variable, CheckType, (#Variable))
-//AL.
-//#define CHECK(Variable, CheckType, Comp) Check((#Variable), CheckType, Comp)
 
 
 enum class CheckType
@@ -71,7 +69,7 @@ void Check(const T variable, const CheckType checkType, const char* variableName
 }
 
 
-void CheckConfigValues_General()
+inline void CheckConfigValues_General()
 {
   WARNIF(width, CheckType::LESSTHANOREQUALTOZERO);
   WARNIF(height, CheckType::LESSTHANOREQUALTOZERO);
@@ -114,11 +112,11 @@ void CheckConfigValues_General()
 }
 
 
-void CheckConfigValues_Debug()
+inline void CheckConfigValues_Debug()
 {
   WARNIF(debug_blankVal, CheckType::LESSTHANZERO);
 
-  if (debug_noiseType < ::NONE) { WARN(debug_noiseType, CheckType::NOTANOPTION); }
+  if (debug_noiseType < NoiseType::NONE) { WARN(debug_noiseType, CheckType::NOTANOPTION); }
 
   WARNIF(debug_blankRegionModifier,CheckType::LESSTHANZERO);
 
@@ -129,9 +127,8 @@ void CheckConfigValues_Debug()
 }
 
 
-void CheckConfigValues()
+inline void CheckConfigValues()
 {
   CheckConfigValues_General();
   CheckConfigValues_Debug();
-  cout << endl;
 }
