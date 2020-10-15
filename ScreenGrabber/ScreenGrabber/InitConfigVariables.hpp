@@ -4,7 +4,7 @@
 #include "ConfigHelpers.hpp"
 #include "ConfigSanityChecker.hpp"
 #include "Debug.hpp"
-#include "RunFuncs.hpp"
+#include "RunModes.hpp"
 
 
 inline void InitConfigVariables_Debug()
@@ -97,7 +97,7 @@ inline void InitConfigVariables_General()
 
 }
 
-
+//This function must be called as soon as the program starts!
 inline void InitConfigVariables()
 {
   InitConfigVariables_Debug();

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Defines.h"
-#include "ChunkInitHelper.hpp"
+#include "GlobalDefinitions.h"
+#include "InitChunks.hpp"
 #include "VectorUtils.hpp"
 
 

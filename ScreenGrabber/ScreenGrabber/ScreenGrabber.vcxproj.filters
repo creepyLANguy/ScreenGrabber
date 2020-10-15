@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="MySocket.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="MySocket.cpp">
+      <Filter>MySocket</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MySocket.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Defines.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ChunkInitHelper.hpp">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Colourspaces.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -30,31 +21,13 @@
     <ClInclude Include="VectorUtils.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="InitConfigVariablesHelper.hpp">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="ConfigVariables.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageSequenceHelpers.hpp">
-      <Filter>RunFuncHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="ScreenCaptureHelpers.hpp">
-      <Filter>RunFuncHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationScriptHelpers.hpp">
-      <Filter>RunFuncHelpers</Filter>
+      <Filter>DefinitionHeaders</Filter>
     </ClInclude>
     <ClInclude Include="CoreLogic.hpp">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="DeltaE.hpp">
-      <Filter>Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="RunFuncs.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="SocketInitHelpers.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="ConfigSanityChecker.hpp">
@@ -63,11 +36,35 @@
     <ClInclude Include="ScriptUtils.hpp">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="GlobalDefinitions.h">
+      <Filter>DefinitionHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationScriptLogic.hpp">
+      <Filter>ModeLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageSequenceLogic.hpp">
+      <Filter>ModeLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenCaptureLogic.hpp">
+      <Filter>ModeLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="RunModes.hpp">
+      <Filter>ModeLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="MySocket.h">
+      <Filter>MySocket</Filter>
+    </ClInclude>
+    <ClInclude Include="InitChunks.hpp">
+      <Filter>InitHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="InitConfigVariables.hpp">
+      <Filter>InitHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="InitSockets.hpp">
+      <Filter>InitHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{f721b279-98ba-4528-ab80-042c388aebcf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Config">
       <UniqueIdentifier>{2da5c5ac-8e13-449d-b9a7-6e4921455efe}</UniqueIdentifier>
     </Filter>
@@ -80,14 +77,23 @@
     <Filter Include="SampleAnimations">
       <UniqueIdentifier>{217d634b-6902-43f9-aee4-361410138c6e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="RunFuncHelpers">
-      <UniqueIdentifier>{7019be6c-a0a2-41d2-adda-b05d099432cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SampleAnimations\ImageSequences">
       <UniqueIdentifier>{42e52670-fb06-4793-b676-4995071ba694}</UniqueIdentifier>
     </Filter>
     <Filter Include="SampleAnimations\Scripts">
       <UniqueIdentifier>{3cfa40cb-e150-4258-8b94-b16edf561294}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ModeLogic">
+      <UniqueIdentifier>{7019be6c-a0a2-41d2-adda-b05d099432cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DefinitionHeaders">
+      <UniqueIdentifier>{f721b279-98ba-4528-ab80-042c388aebcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MySocket">
+      <UniqueIdentifier>{19a0ac7f-da63-4495-bce3-58ec22dda7a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InitHelpers">
+      <UniqueIdentifier>{80045ddb-b942-4cdf-b575-33a9861b9fc4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,9 +108,6 @@
     </None>
     <None Include="ports.ini">
       <Filter>Config</Filter>
-    </None>
-    <None Include="StaticImageHelpers.hpp">
-      <Filter>RunFuncHelpers</Filter>
     </None>
     <None Include="SampleAnimations\sequences\complimentary.seq">
       <Filter>SampleAnimations\ImageSequences</Filter>
@@ -126,6 +129,9 @@
     </None>
     <None Include="SampleAnimations\scripts\storm.luna">
       <Filter>SampleAnimations\Scripts</Filter>
+    </None>
+    <None Include="StaticImageLogic.hpp">
+      <Filter>ModeLogic</Filter>
     </None>
   </ItemGroup>
 </Project>

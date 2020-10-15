@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ScreenCaptureHelpers.hpp"
-#include "StaticImageHelpers.hpp"
-#include "ImageSequenceHelpers.hpp"
-#include "AnimationScriptHelpers.hpp"
+#include "ScreenCaptureLogic.hpp"
+#include "StaticImageLogic.hpp"
+#include "ImageSequenceLogic.hpp"
+#include "AnimationScriptLogic.hpp"
 
 inline void RunScreenCaptureBroadcast()
 {

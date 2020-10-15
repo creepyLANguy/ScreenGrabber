@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Defines.h"
+#include "GlobalDefinitions.h"
 #include <bitset>
 
 
@@ -15,6 +15,8 @@ unsigned int currentChunksUpdated = 0;
 unsigned int lastChunksUpdatedTotal = 0;
 unsigned int updateOccasions = 0;
 unsigned int lastUpdateOccasionsTotal = 0;
+
+
 inline void UpdateDebugTimer(const int reportTimeMS, const unsigned int updatedChunksCount)
 {
   ++currentFrameCount;

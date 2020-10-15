@@ -1,21 +1,21 @@
-#include "InitConfigVariablesHelper.hpp"
-#include "SocketInitHelpers.hpp"
+#include "InitConfigVariables.hpp"
+#include "CoreLogic.hpp"
+#include "InitSockets.hpp"
 
-
-inline void InitialiseEssentials()
-{  
-  InitConfigVariables(); //Make sure this is done asap.
-  SetupSockets(tempSockets, sockets);
-}
-
-
-int main(const int argc, char** argv)
+void Run()
 {
-  InitialiseEssentials();
-  
+  InitConfigVariables(); //Must be called immediately
+
+  SetupSockets(tempSockets, sockets);
+
   runFunc();
 
   CleanUpDeviceContextStuffs();
+}
+
+int main(const int argc, char** argv)
+{
+  Run();
 
   return 0;
 }

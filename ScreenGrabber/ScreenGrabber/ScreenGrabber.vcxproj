@@ -155,23 +155,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AnimationScriptHelpers.hpp" />
-    <ClInclude Include="ChunkInitHelper.hpp" />
+    <ClInclude Include="AnimationScriptLogic.hpp" />
+    <ClInclude Include="InitChunks.hpp" />
     <ClInclude Include="Colourspaces.hpp" />
     <ClInclude Include="ConfigHelpers.hpp" />
     <ClInclude Include="ConfigSanityChecker.hpp" />
     <ClInclude Include="ConfigVariables.h" />
     <ClInclude Include="CoreLogic.hpp" />
     <ClInclude Include="Debug.hpp" />
-    <ClInclude Include="Defines.h" />
+    <ClInclude Include="GlobalDefinitions.h" />
     <ClInclude Include="DeltaE.hpp" />
-    <ClInclude Include="ImageSequenceHelpers.hpp" />
+    <ClInclude Include="ImageSequenceLogic.hpp" />
     <ClInclude Include="MySocket.h" />
-    <ClInclude Include="RunFuncs.hpp" />
-    <ClInclude Include="ScreenCaptureHelpers.hpp" />
+    <ClInclude Include="RunModes.hpp" />
+    <ClInclude Include="ScreenCaptureLogic.hpp" />
     <ClInclude Include="ScriptUtils.hpp" />
-    <ClInclude Include="SocketInitHelpers.hpp" />
-    <ClInclude Include="InitConfigVariablesHelper.hpp" />
+    <ClInclude Include="InitSockets.hpp" />
+    <ClInclude Include="InitConfigVariables.hpp" />
     <ClInclude Include="VectorUtils.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +190,7 @@
     <None Include="SampleAnimations\sequences\gradient_discrete.seq" />
     <None Include="SampleAnimations\sequences\gradient_smooth.seq" />
     <None Include="SampleAnimations\sequences\rainbow.seq" />
-    <None Include="StaticImageHelpers.hpp" />
+    <None Include="StaticImageLogic.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Debug.hpp"
-#include "Defines.h"
+#include "GlobalDefinitions.h"
 #include "DeltaE.hpp"
 
 //Debug variables

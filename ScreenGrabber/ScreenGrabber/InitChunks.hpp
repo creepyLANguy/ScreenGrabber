@@ -7,7 +7,7 @@
 //
 
 #include <vector>
-#include "Defines.h"
+#include "GlobalDefinitions.h"
 #include "VectorUtils.hpp"
 
 inline void AdjustChunksForGap_Vertical(vector<BorderChunk>& chunks, int gap)
