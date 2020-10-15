@@ -35,6 +35,7 @@ float lowerBufferPercentage, upperBufferPercentage, leftBufferPercentage, rightB
 int originPositionOffset;
 float brightnessPercentage;
 int whiteBrightnessModifier;
+int redShift, blueShift, greenShift;
 int whiteDiffThresh;
 int outlierDiffThresh;
 int whiteLuminanceThresh;

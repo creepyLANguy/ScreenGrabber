@@ -69,7 +69,7 @@ inline string Trim(const string& str)
 
 inline bool StringsAreEqual(string str1, string str2)
 {
-  return _strcmpi(str1.c_str(), str2.c_str()) == 0;
+  return _strcmpi(Trim(str1).c_str(), Trim(str2).c_str()) == 0;
 }
 
 

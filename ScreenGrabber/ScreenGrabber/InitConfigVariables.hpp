@@ -56,6 +56,11 @@ inline void InitConfigVariables_General()
 
   brightnessPercentage = GetProperty_Float("brightnessPercentage", 1.0f, config);
   whiteBrightnessModifier = GetProperty_Int("whiteBrightnessModifier", 0, config);
+
+  redShift = GetProperty_Int("redShift ", 0, config);
+  blueShift = GetProperty_Int("blueShift ", 0, config);
+  greenShift = GetProperty_Int("greenShift ", 0, config);
+
   whiteDiffThresh = GetProperty_Float("whiteDiffThreshPercentage", 1.0f, config) * 255;
   outlierDiffThresh = GetProperty_Float("outlierDiffThreshPercentage", 1.0f, config) * 255;
   whiteLuminanceThresh = GetProperty_Float("whiteLuminanceThreshPercentage", 0.0f, config) * 255;
@@ -94,7 +99,6 @@ inline void InitConfigVariables_General()
 
   scriptFile = GetProperty_String("scriptFile", "", config);
   imageSequenceFile = GetProperty_String("imageSequenceFile", "", config);
-
 }
 
 //This function must be called as soon as the program starts!

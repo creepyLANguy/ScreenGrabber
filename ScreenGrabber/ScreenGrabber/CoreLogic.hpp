@@ -145,7 +145,33 @@ inline void FilterChunk(BorderChunk& chunk)
 }
 
 
-inline void SetBrightness(vector<BorderChunk>& borderChunks)
+inline void AdjustTemperature(vector<BorderChunk>& borderChunks)
+{
+  for (BorderChunk& chunk : borderChunks)
+  {
+    chunk.r += redShift;
+    chunk.r = chunk.r < 0 ? 0 : chunk.r;
+    chunk.r = chunk.r > 255 ? 255 : chunk.r;
+
+    chunk.b += blueShift;
+    chunk.b = chunk.b < 0 ? 0 : chunk.b;
+    chunk.b = chunk.b > 255 ? 255 : chunk.b;
+  }
+}
+
+
+inline void AdjustTint(vector<BorderChunk>& borderChunks)
+{
+  for (BorderChunk& chunk : borderChunks)
+  {
+    chunk.g += greenShift;
+    chunk.g = chunk.g < 0 ? 0 : chunk.g;
+    chunk.g = chunk.g > 255 ? 255 : chunk.g;
+  }
+}
+
+
+inline void AdjustBrightness(vector<BorderChunk>& borderChunks)
 {
   for (BorderChunk& chunk : borderChunks)
   {

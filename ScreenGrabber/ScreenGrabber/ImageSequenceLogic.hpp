@@ -35,6 +35,7 @@ images\img2.jpg
 #include <fstream>
 #include <iostream>
 #include "ConfigVariables.h"
+#include "CoreLogic.hpp"
 #include "ScriptUtils.hpp"
 
 
@@ -172,9 +173,19 @@ inline void RunImageSequenceLoop(
       limitedChunks = borderChunks;
     }
 
+    if (redShift != 0 || blueShift != 0)
+    {
+      AdjustTemperature(limitedChunks);
+    }
+
+    if (greenShift != 0)
+    {
+      AdjustTint(limitedChunks);
+    }
+
     if (brightnessPercentage < 1.0f)
     {
-      SetBrightness(limitedChunks);
+      AdjustBrightness(limitedChunks);
     }
 
     vector<int> skippedChunksIndexesBasedOnLastUpdatedTime;

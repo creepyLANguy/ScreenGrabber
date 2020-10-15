@@ -33,9 +33,19 @@ inline void RunScreenCaptureLoop(
       limitedChunks = borderChunks;
     }
 
+    if (redShift != 0 || blueShift != 0)
+    {
+      AdjustTemperature(limitedChunks);
+    }
+
+    if (greenShift != 0)
+    {
+      AdjustTint(limitedChunks);
+    }
+
     if (brightnessPercentage < 1.0f)
     {
-      SetBrightness(limitedChunks);
+      AdjustBrightness(limitedChunks);
     }
 
     vector<int> skippedChunksIndexesBasedOnLastUpdatedTime;

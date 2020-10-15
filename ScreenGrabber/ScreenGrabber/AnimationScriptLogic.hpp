@@ -142,9 +142,23 @@ inline void RunScript()
 
     while (step < animationSteps)
     {
-      const int r = it->r + (rds * step);
-      const int g = it->g + (gds * step);
-      const int b = it->b + (bds * step);
+      int r = it->r + (rds * step);
+      int g = it->g + (gds * step);
+      int b = it->b + (bds * step);
+
+      r *= brightnessPercentage;
+      g *= brightnessPercentage;
+      b *= brightnessPercentage;
+
+      r += redShift;
+      r = r < 0 ? 0 : r;
+      r = r > 255 ? 255 : r;
+      b += blueShift;
+      b = b < 0 ? 0 : b;
+      b = b > 255 ? 255 : b;
+      g += greenShift;
+      g = g < 0 ? 0 : g;
+      g = g > 255 ? 255 : g;
 
       BroadcastRGB(r, g, b);
     
