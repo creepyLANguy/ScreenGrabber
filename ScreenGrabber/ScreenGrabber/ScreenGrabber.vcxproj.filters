@@ -10,16 +10,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colourspaces.hpp">
-      <Filter>Helpers</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="ConfigHelpers.hpp">
-      <Filter>Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.hpp">
-      <Filter>Helpers</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="VectorUtils.hpp">
-      <Filter>Helpers</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="ConfigVariables.h">
       <Filter>DefinitionHeaders</Filter>
@@ -28,13 +25,13 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="DeltaE.hpp">
-      <Filter>Helpers</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="ConfigSanityChecker.hpp">
-      <Filter>Helpers</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="ScriptUtils.hpp">
-      <Filter>Helpers</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="GlobalDefinitions.h">
       <Filter>DefinitionHeaders</Filter>
@@ -63,6 +60,9 @@
     <ClInclude Include="InitSockets.hpp">
       <Filter>InitHelpers</Filter>
     </ClInclude>
+    <ClInclude Include="Debug.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Config">
@@ -70,9 +70,6 @@
     </Filter>
     <Filter Include="Source">
       <UniqueIdentifier>{a518c423-1bb7-4a6c-9c9e-90f07bf7b732}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Helpers">
-      <UniqueIdentifier>{600c75c9-8c1c-42ea-96c7-1acd243bd259}</UniqueIdentifier>
     </Filter>
     <Filter Include="SampleAnimations">
       <UniqueIdentifier>{217d634b-6902-43f9-aee4-361410138c6e}</UniqueIdentifier>
@@ -94,6 +91,9 @@
     </Filter>
     <Filter Include="InitHelpers">
       <UniqueIdentifier>{80045ddb-b942-4cdf-b575-33a9861b9fc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{600c75c9-8c1c-42ea-96c7-1acd243bd259}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
