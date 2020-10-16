@@ -30,8 +30,8 @@
 
 ;Begin: 
 
-s50
-d10
+s15
+d5
 SampleAnimations\sequences\grad2\grad1.png
 ;SampleAnimations\sequences\grad2\grad2.png
 SampleAnimations\sequences\grad2\grad3.png

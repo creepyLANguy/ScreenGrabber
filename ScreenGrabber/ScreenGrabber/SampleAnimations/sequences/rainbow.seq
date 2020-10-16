@@ -30,8 +30,8 @@
 
 ;Begin: 
 
-s50
-d50
+s25
+d25
 SampleAnimations\sequences\rgbcmy\b.png
 SampleAnimations\sequences\rgbcmy\c.png
 SampleAnimations\sequences\rgbcmy\g.png

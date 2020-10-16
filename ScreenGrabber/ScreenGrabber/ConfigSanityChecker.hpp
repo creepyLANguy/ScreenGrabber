@@ -71,6 +71,10 @@ void Check(const T variable, const CheckType checkType, const char* variableName
 
 inline void CheckConfigValues_General()
 {
+  //AL.
+  //TODO
+  //Check led counts and offset
+
   WARNIF(width, CheckType::LESSTHANOREQUALTOZERO);
   WARNIF(height, CheckType::LESSTHANOREQUALTOZERO);
 

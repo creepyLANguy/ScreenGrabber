@@ -502,8 +502,8 @@ inline void GetDebugPayload(unsigned int& payload, const int i)
   int g = 0;
   int b = 0;
 
-  //Alternative indexes are a dimmer or brighter blue.
-  i%2 == 0 ? b = 55 : b = 255;    
+  //Alternative indexes are red or blue.
+  i%2 == 0 ? r = 255 : b = 255;    
 
   payload = i << 24 | r << 16 | g << 8 | b;
 }

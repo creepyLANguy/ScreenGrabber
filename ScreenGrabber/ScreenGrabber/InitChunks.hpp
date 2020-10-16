@@ -6,9 +6,31 @@
 //Refactor, plox
 //
 
+#include <stack>
 #include <vector>
 #include "GlobalDefinitions.h"
 #include "VectorUtils.hpp"
+
+
+//AL.
+//TODO
+//refactor pls
+void ReverseBottomRowIndexes(vector<BorderChunk>& chunks)
+{
+  stack<int> indexes;
+  const int startOfBottomIndex = leds.LED_COUNT_UPPER + leds.LED_COUNT_RIGHT;
+  for (int i = startOfBottomIndex; i < startOfBottomIndex + leds.LED_COUNT_LOWER; ++i)
+  {
+    indexes.push(chunks[i].index);
+  }
+  for (int i = startOfBottomIndex; i < startOfBottomIndex + leds.LED_COUNT_LOWER; ++i)
+  {
+    chunks[i].index = indexes.top();
+    indexes.pop();
+  }
+}
+//
+
 
 inline void AdjustChunksForGap_Vertical(vector<BorderChunk>& chunks, int gap)
 {
@@ -157,5 +179,8 @@ inline void InitialiseBorderChunks(
       }
       ++i;
     }
+
+    //Else the lights are triggered in reverse here - remember, it's a strip. 
+    ReverseBottomRowIndexes(borderChunks);
   }
 }
