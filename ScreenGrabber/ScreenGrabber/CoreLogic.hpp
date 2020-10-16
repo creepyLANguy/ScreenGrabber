@@ -145,22 +145,18 @@ inline void FilterChunk(BorderChunk& chunk)
 }
 
 
-inline void AdjustTemperature(vector<BorderChunk>& borderChunks)
+inline void ApplyRedShift(vector<BorderChunk>& borderChunks)
 {
   for (BorderChunk& chunk : borderChunks)
   {
     chunk.r += redShift;
     chunk.r = chunk.r < 0 ? 0 : chunk.r;
     chunk.r = chunk.r > 255 ? 255 : chunk.r;
-
-    chunk.b += blueShift;
-    chunk.b = chunk.b < 0 ? 0 : chunk.b;
-    chunk.b = chunk.b > 255 ? 255 : chunk.b;
   }
 }
 
 
-inline void AdjustTint(vector<BorderChunk>& borderChunks)
+inline void ApplyGreenShift(vector<BorderChunk>& borderChunks)
 {
   for (BorderChunk& chunk : borderChunks)
   {
@@ -171,8 +167,43 @@ inline void AdjustTint(vector<BorderChunk>& borderChunks)
 }
 
 
+inline void ApplyBlueShift(vector<BorderChunk>& borderChunks)
+{
+  for (BorderChunk& chunk : borderChunks)
+  {
+    chunk.b += blueShift;
+    chunk.b = chunk.b < 0 ? 0 : chunk.b;
+    chunk.b = chunk.b > 255 ? 255 : chunk.b;
+  }
+}
+
+
+inline void ApplyRGBShifts(vector<BorderChunk>& borderChunks)
+{
+  if (redShift != 0)
+  {
+    ApplyRedShift(borderChunks);
+  }
+
+  if (greenShift != 0)
+  {
+    ApplyGreenShift(borderChunks);
+  }
+
+  if (blueShift != 0)
+  {
+    ApplyBlueShift(borderChunks);
+  }
+}
+
+
 inline void AdjustBrightness(vector<BorderChunk>& borderChunks)
 {
+  if (brightnessPercentage >= 1.0f)
+  {
+    return;
+  }
+
   for (BorderChunk& chunk : borderChunks)
   {
     chunk.r *= brightnessPercentage;

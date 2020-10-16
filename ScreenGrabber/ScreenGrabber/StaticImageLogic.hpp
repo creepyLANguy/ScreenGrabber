@@ -78,20 +78,9 @@ inline void RunStaticImageFileCapture()
 
   SetAverageRGBValues(borderChunks, mat);
 
-  if (redShift != 0 || blueShift != 0)
-  {
-    AdjustTemperature(borderChunks);
-  }
+  ApplyRGBShifts(borderChunks);
 
-  if (greenShift != 0)
-  {
-    AdjustTint(borderChunks);
-  }
-
-  if (brightnessPercentage < 1.0f)
-  {
-    AdjustBrightness(borderChunks);
-  }
+  AdjustBrightness(borderChunks);
 
   RunFileBroadcastLoop(
     borderChunks,
