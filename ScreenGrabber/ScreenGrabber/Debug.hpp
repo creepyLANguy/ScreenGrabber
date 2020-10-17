@@ -1,3 +1,7 @@
+//This file is rather horrendous,
+//but tis really damn useful for troubleshooting 
+//and actually seeing visually what's going on.
+
 #pragma once
 
 #include "GlobalDefinitions.h"
