@@ -183,6 +183,14 @@ inline void InitialiseBorderChunks(
     AppendToVector(chunks_left, borderChunks);
   }
 
+  /*
+  We assume strip is mounted as: origin->top->right->bottom->left
+  o --- >
+  ^     |
+  |     v
+  < -----
+  so if origin is physically elsewhere, apply an adjustment to the logical origin and indexes of the chunks. 
+  */
   {
     int i = 0;
     for (BorderChunk& borderchunk : borderChunks)
@@ -194,9 +202,11 @@ inline void InitialiseBorderChunks(
       }
       ++i;
     }
+  }
 
-    //Else the lights are triggered in reverse here - remember, it's a strip. 
+  //Else the lights are triggered in reverse on these sides due to continuous nature of physical strip.
+  {
     ReverseIndexes_Lower(borderChunks);
     ReverseIndexes_Left(borderChunks);
-  }
+  }  
 }
