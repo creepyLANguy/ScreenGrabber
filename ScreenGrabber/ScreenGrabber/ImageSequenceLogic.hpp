@@ -209,6 +209,7 @@ inline void RunImageSequenceLoop(
         ShowVisualisation(
           mat,
           borderSamplePercentage * debug_blankRegionModifier,
+          borderChunks,
           limitedChunks,
           skippedChunksIndexesBasedOnLastUpdatedTime,
           previousChunks,

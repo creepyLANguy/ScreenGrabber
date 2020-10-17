@@ -36,6 +36,7 @@ inline void RunFileBroadcastLoop(
           mat,
           borderSamplePercentage * debug_blankRegionModifier,
           borderChunks,
+          borderChunks,
           empty_i,
           empty_bc,
           debug_blankVal,

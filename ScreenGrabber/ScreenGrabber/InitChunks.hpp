@@ -15,7 +15,7 @@
 //AL.
 //TODO
 //refactor pls
-void ReverseBottomRowIndexes(vector<BorderChunk>& chunks)
+void ReverseIndexes_Lower(vector<BorderChunk>& chunks)
 {
   stack<int> indexes;
   const int startOfBottomIndex = leds.LED_COUNT_UPPER + leds.LED_COUNT_RIGHT;
@@ -24,6 +24,21 @@ void ReverseBottomRowIndexes(vector<BorderChunk>& chunks)
     indexes.push(chunks[i].index);
   }
   for (int i = startOfBottomIndex; i < startOfBottomIndex + leds.LED_COUNT_LOWER; ++i)
+  {
+    chunks[i].index = indexes.top();
+    indexes.pop();
+  }
+}
+
+void ReverseIndexes_Left(vector<BorderChunk>& chunks)
+{
+  stack<int> indexes;
+  const int startOfLeftIndex = leds.LED_COUNT_UPPER + leds.LED_COUNT_RIGHT + leds.LED_COUNT_LOWER;
+  for (int i = startOfLeftIndex; i < startOfLeftIndex + leds.LED_COUNT_LEFT; ++i)
+  {
+    indexes.push(chunks[i].index);
+  }
+  for (int i = startOfLeftIndex; i < startOfLeftIndex + leds.LED_COUNT_LEFT; ++i)
   {
     chunks[i].index = indexes.top();
     indexes.pop();
@@ -181,6 +196,7 @@ inline void InitialiseBorderChunks(
     }
 
     //Else the lights are triggered in reverse here - remember, it's a strip. 
-    ReverseBottomRowIndexes(borderChunks);
+    ReverseIndexes_Lower(borderChunks);
+    ReverseIndexes_Left(borderChunks);
   }
 }

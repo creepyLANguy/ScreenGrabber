@@ -353,6 +353,7 @@ inline void FillWithNoise(
   }
 }
 
+
 double totalChunks = 0;
 inline void GetChunkDataString(string& s)
 {
@@ -384,7 +385,8 @@ inline void GetChunkDataString(string& s)
   }
 }
 
-inline void WriteChunkDataToMat(Mat& mat)
+
+inline void WriteChunkUpdateSummaryToMat(Mat& mat)
 {
   string s;
   GetChunkDataString(s);
@@ -398,6 +400,35 @@ inline void WriteChunkDataToMat(Mat& mat)
     chunkDataText.thickness,
     chunkDataText.line
   );  
+}
+
+
+//AL.
+//TODO
+//Clean this up, Perhaps make separate font instance things for these 2 new ones.
+inline void WriteChunkIndexesToMat(vector<BorderChunk>& borderChunks, Mat& mat)
+{
+  for(const BorderChunk& chunk : borderChunks)
+  {
+    putText(mat,
+      to_string(chunk.index),
+      Point(chunk.x_start + ((chunk.x_end - chunk.x_start)/2) + 1, chunk.y_start + ((chunk.y_end - chunk.y_start) / 2) + 4 + 1),
+      chunkDataText.font,
+      chunkDataText.scale/1.5,
+      Scalar(100,100,100),
+      chunkDataText.thickness,
+      chunkDataText.line
+    );
+    putText(mat,
+      to_string(chunk.index),
+      Point(chunk.x_start + ((chunk.x_end - chunk.x_start)/2), chunk.y_start + ((chunk.y_end - chunk.y_start) / 2) + 4),
+      chunkDataText.font,
+      chunkDataText.scale/1.5,
+      chunkDataText.textColour,
+      chunkDataText.thickness,
+      chunkDataText.line
+    );    
+  }
 }
 
 
@@ -435,6 +466,7 @@ inline void BlankMat(
 
 inline void ShowVisualisation(
   Mat& mat, const float& leeway, 
+  vector<BorderChunk>& preoptimisedChunks, 
   vector<BorderChunk>& borderChunks, 
   vector<int>& skippedChunksIndexes, 
   vector<BorderChunk>& previousChunks,
@@ -468,7 +500,8 @@ inline void ShowVisualisation(
       InitChunkDataText(mat, leeway);
       totalChunks = previousChunks.empty() ? borderChunks.size() : previousChunks.size();
     }
-    WriteChunkDataToMat(mat);
+    WriteChunkUpdateSummaryToMat(mat);
+    WriteChunkIndexesToMat(preoptimisedChunks, mat);
   }
 
   if ((noiseType & LOGO) == LOGO)
