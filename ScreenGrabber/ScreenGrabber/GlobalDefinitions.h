@@ -80,8 +80,9 @@ struct Lumi
 
 enum class CaptureType
 {
-  PRIMARYDISPLAY = 0,
-  IMAGEFILE = 1,
-  IMAGESEQUENCE = 2,
-  SCRIPT = 3,
+  BLACKOUT = 0,
+  PRIMARYDISPLAY = 1,
+  IMAGEFILE = 2,
+  IMAGESEQUENCE = 3,
+  SCRIPT = 4,
 };

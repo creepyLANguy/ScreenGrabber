@@ -63,6 +63,9 @@
     <ClInclude Include="Debug.hpp">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="BlackoutLogic.hpp">
+      <Filter>ModeLogic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Config">

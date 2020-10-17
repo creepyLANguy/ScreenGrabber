@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AnimationScriptLogic.hpp" />
+    <ClInclude Include="BlackoutLogic.hpp" />
     <ClInclude Include="InitChunks.hpp" />
     <ClInclude Include="Colourspaces.hpp" />
     <ClInclude Include="ConfigHelpers.hpp" />

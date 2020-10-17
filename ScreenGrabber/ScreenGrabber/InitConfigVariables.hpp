@@ -84,8 +84,9 @@ inline void InitConfigVariables_General()
   captureType = static_cast<CaptureType>(GetProperty_Int("captureType", static_cast<int>(CaptureType::PRIMARYDISPLAY), config));
   switch (captureType)
   {
-  case CaptureType::PRIMARYDISPLAY:  runFunc = &RunScreenCapture; break;
-  case CaptureType::IMAGEFILE:  runFunc= &RunStaticImageFileCapture; break;
+  case CaptureType::BLACKOUT:  runFunc = &RunBlackoutBroadcast; break;
+  case CaptureType::PRIMARYDISPLAY:  runFunc = &RunScreenCaptureBroadcast; break;
+  case CaptureType::IMAGEFILE:  runFunc= &RunStaticImageBroadcast; break;
   case CaptureType::IMAGESEQUENCE:  runFunc = &RunImageSequenceAnimation; break;
   case CaptureType::SCRIPT:  runFunc = &RunScriptAnimation; break;
   default: cout << "WARNING! runFunc not set as invalid value was specified!" << endl << endl;
