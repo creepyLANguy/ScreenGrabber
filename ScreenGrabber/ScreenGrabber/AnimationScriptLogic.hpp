@@ -108,11 +108,8 @@ inline bool ReadScript()
 
 inline void BroadcastRGB(const int r, const int g, const int b)
 {
-  for (int i = 0; i < leds.LED_COUNT_TOTAL; ++i)
-  {
-    unsigned int payload = i << 24 | r << 16 | g << 8 | b;
-    BroadcastPayload(payload);
-  }
+  unsigned int payload = 255 << 24 | r << 16 | g << 8 | b;
+  BroadcastPayload(payload);
 }
 
 
