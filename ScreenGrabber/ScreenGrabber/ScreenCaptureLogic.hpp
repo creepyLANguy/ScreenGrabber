@@ -69,6 +69,7 @@ inline void RunScreenCaptureLoop(
         ShowVisualisation(
           mat,
           borderSamplePercentage * debug_blankRegionModifier,
+          borderChunks,
           limitedChunks,
           skippedChunksIndexesBasedOnLastUpdatedTime,
           previousChunks,
