@@ -78,11 +78,18 @@ struct Lumi
 };
 
 
-enum class CaptureType
+enum class Mode
 {
   BLACKOUT = 0,
   PRIMARYDISPLAY = 1,
   IMAGEFILE = 2,
   IMAGESEQUENCE = 3,
   SCRIPT = 4,
+};
+
+
+enum class ReservedIndex
+{
+  CONFIGURE_STRIP = 254,
+  UPDATE_ALL_LEDS = 255  
 };

@@ -104,7 +104,7 @@ inline void CheckConfigValues_General()
   WARNIF(chunkUpdateTimeoutMS, Is::LessThanZero);
 
   WARNIF(brightnessPercentage, Is::LessThanZero);
-  if (brightnessPercentage > 100) { WARN(brightnessPercentage, Is::MoreThanMax); }
+  if (brightnessPercentage > 1.0) { WARN(brightnessPercentage, Is::MoreThanMax); }
 
   WARNIF(whiteDiffThresh, Is::LessThanZero);
   WARNIF(outlierDiffThresh, Is::LessThanZero);
@@ -116,7 +116,7 @@ inline void CheckConfigValues_General()
   //< 0 instead of stating SimpleRGBComparison cos it's not explicitly defined
   //in code and is executed when the deltae func is null.
 
-  if (captureType < CaptureType::PRIMARYDISPLAY) { WARN(deltaEType, Is::NotAnOption); }
+  if (mode < Mode::PRIMARYDISPLAY) { WARN(deltaEType, Is::NotAnOption); }
 
   WARNIF(animationSteps, Is::LessThanOrEqualToZero);
   WARNIF(animationDelayMS, Is::LessThanZero);

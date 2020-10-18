@@ -445,4 +445,3 @@ inline void BroadcastPayload(unsigned int& payload)
     socket.Send(&payload);
   }
 }
-

@@ -43,7 +43,7 @@ int colourLuminanceThresh;
 bool optimiseTransmitWithDelta;
 int deltaEThresh;
 DeltaEType deltaEType;
-CaptureType captureType;
+Mode mode;
 string imageFile;
 int staticImageBroadcastSleepMS;
 string imageSequenceFile;

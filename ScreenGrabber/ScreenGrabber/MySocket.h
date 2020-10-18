@@ -5,9 +5,6 @@
 
 using namespace std;
 
-const string kDefaultAddress = "127.0.0.1";
-const int kDefaultPort = 8888;
-
 class MySocket
 {
 
@@ -28,8 +25,8 @@ private:
   unsigned long ResolveIP();
 
 private:
-  string mHost = kDefaultAddress;
-  int mPort = kDefaultPort;
+  string mHost;
+  int mPort;
   SOCKET mSock = 0;
   bool mInitialised = false;
 

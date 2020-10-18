@@ -108,7 +108,7 @@ inline bool ReadScript()
 
 inline void BroadcastRGB(const int r, const int g, const int b)
 {
-  unsigned int payload = 255 << 24 | r << 16 | g << 8 | b;
+  unsigned int payload = static_cast<int>(ReservedIndex::UPDATE_ALL_LEDS) << 24 | r << 16 | g << 8 | b;
   BroadcastPayload(payload);
 }
 

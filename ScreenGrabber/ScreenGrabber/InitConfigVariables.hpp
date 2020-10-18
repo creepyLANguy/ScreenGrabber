@@ -81,14 +81,14 @@ inline void InitConfigVariables_General()
   lumi.g = GetProperty_Float("lumiG", lumi.g, config);
   lumi.b = GetProperty_Float("lumiB", lumi.b, config);
 
-  captureType = static_cast<CaptureType>(GetProperty_Int("captureType", static_cast<int>(CaptureType::PRIMARYDISPLAY), config));
-  switch (captureType)
+  mode = static_cast<Mode>(GetProperty_Int("mode", static_cast<int>(Mode::PRIMARYDISPLAY), config));
+  switch (mode)
   {
-  case CaptureType::BLACKOUT:  runFunc = &RunBlackoutBroadcast; break;
-  case CaptureType::PRIMARYDISPLAY:  runFunc = &RunScreenCaptureBroadcast; break;
-  case CaptureType::IMAGEFILE:  runFunc= &RunStaticImageBroadcast; break;
-  case CaptureType::IMAGESEQUENCE:  runFunc = &RunImageSequenceAnimation; break;
-  case CaptureType::SCRIPT:  runFunc = &RunScriptAnimation; break;
+  case Mode::BLACKOUT:  runFunc = &RunBlackoutBroadcast; break;
+  case Mode::PRIMARYDISPLAY:  runFunc = &RunScreenCaptureBroadcast; break;
+  case Mode::IMAGEFILE:  runFunc= &RunStaticImageBroadcast; break;
+  case Mode::IMAGESEQUENCE:  runFunc = &RunImageSequenceAnimation; break;
+  case Mode::SCRIPT:  runFunc = &RunScriptAnimation; break;
   default: cout << "WARNING! runFunc not set as invalid value was specified!" << endl << endl;
   }
 
