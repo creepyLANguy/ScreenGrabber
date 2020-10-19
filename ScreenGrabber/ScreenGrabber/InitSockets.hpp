@@ -2,7 +2,7 @@
 
 #include "GlobalDefinitions.h"
 #include "MySocket.h"
-#include <fstream>
+#include "ConfigUtils.hpp"
 
 const string baseError =
 "Remember that each host needs its own port to be specified in the ports.ini file.\r\n"
@@ -10,7 +10,7 @@ const string baseError =
 "2) Check your config files \r\n"
 "3) Launch the application again. \r\n\r\n";
 
-inline void ShowError(const string s)
+inline void ShowError(const string& s)
 {
   cout << s << baseError << endl;
 }
@@ -27,43 +27,13 @@ inline void ShowSuccess(MySocket& socket)
 }
 
 
-inline void ReadListString(vector<string>& list, const string filename)
-{
-  ifstream myFile_Server;
-  myFile_Server.open(filename);
-  if (myFile_Server.is_open())
-  {
-    string str;
-    while (myFile_Server >> str)
-    {
-      list.emplace_back(str);
-    }
-  }
-  myFile_Server.close();
-}
-
-
-inline void ReadList(vector<int>& list, const string filename)
-{
-  vector<string> stringList;
-  ReadListString(stringList, filename);
-  for (const string& s : stringList)
-  {
-    if (s.length() > 0)
-    {
-      list.emplace_back(atoi(s.c_str()));
-    }
-  }
-}
-
-
 inline bool PopulateSocketList(vector<MySocket>& sockets)
 {
   vector<string> hosts;
-  ReadListString(hosts, kHostsFileName);
+  ReadList_String(hosts, kHostsFileName);
 
   vector<int> ports;
-  ReadList(ports, kPortsFileName);
+  ReadList_Int(ports, kPortsFileName);
 
   if (hosts.size() == 0)
   {

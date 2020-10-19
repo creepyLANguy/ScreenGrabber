@@ -157,9 +157,10 @@
   <ItemGroup>
     <ClInclude Include="AnimationScriptLogic.hpp" />
     <ClInclude Include="BlackoutLogic.hpp" />
+    <ClInclude Include="CommandLineUtils.h" />
     <ClInclude Include="InitChunks.hpp" />
     <ClInclude Include="Colourspaces.hpp" />
-    <ClInclude Include="ConfigHelpers.hpp" />
+    <ClInclude Include="ConfigUtils.hpp" />
     <ClInclude Include="ConfigSanityChecker.hpp" />
     <ClInclude Include="ConfigVariables.h" />
     <ClInclude Include="CoreLogic.hpp" />
@@ -186,6 +187,7 @@
     <None Include="ports.ini" />
     <None Include="SampleAnimations\scripts\breeze.luna" />
     <None Include="SampleAnimations\scripts\rainbow.luna" />
+    <None Include="SampleAnimations\scripts\single_colour.luna" />
     <None Include="SampleAnimations\scripts\storm.luna" />
     <None Include="SampleAnimations\sequences\complimentary.seq" />
     <None Include="SampleAnimations\sequences\gradient_discrete.seq" />

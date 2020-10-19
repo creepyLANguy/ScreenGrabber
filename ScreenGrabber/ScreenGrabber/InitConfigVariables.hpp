@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ConfigVariables.h"
-#include "ConfigHelpers.hpp"
+#include "ConfigUtils.hpp"
 #include "ConfigSanityChecker.hpp"
 #include "Debug.hpp"
 #include "RunModes.hpp"

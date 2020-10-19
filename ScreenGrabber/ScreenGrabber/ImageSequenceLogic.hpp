@@ -75,7 +75,7 @@ inline bool ReadImageSequence()
     getline(myFile, strLine);
     strLine = Trim(strLine);
 
-    if (strLine.length() == 0 || strLine[0] == kConfigCommentDelim) { continue; }
+    if (IsCommentOrEmpty(strLine)) { continue; }
 
     if (CheckForScriptOverWritesInLine(strLine)) { continue; }
 
