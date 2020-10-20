@@ -187,6 +187,20 @@ inline void InitChunkDataText(Mat& mat, const float leeway)
 }
 
 
+struct ChunkIndexText
+{
+  const string text = "chunkIndexText";
+  const Scalar textColour = Scalar(255, 255, 255);
+  const HersheyFonts font = FONT_HERSHEY_SIMPLEX;
+  const double scale = 0.4 / 1.5;
+  const int thickness = 1;
+  const LineTypes line = LINE_AA;
+  const Size textRegion = getTextSize(text, font, scale, thickness, nullptr);
+};
+
+ChunkIndexText chunkIndexText;
+
+
 struct NoiseRegion
 {
   bool hasBeenInitialised = false;
@@ -414,23 +428,27 @@ inline void WriteChunkIndexesToMat(vector<BorderChunk>& borderChunks, Mat& mat)
 {
   for(const BorderChunk& chunk : borderChunks)
   {
+    const int x = chunk.x_start + ((chunk.x_end - chunk.x_start) / 2);
+    const int y = chunk.y_start + ((chunk.y_end - chunk.y_start) / 2) + 4;
+
     putText(mat,
       to_string(chunk.index),
-      Point(chunk.x_start + ((chunk.x_end - chunk.x_start)/2) + 1, chunk.y_start + ((chunk.y_end - chunk.y_start) / 2) + 4 + 1),
-      chunkDataText.font,
-      chunkDataText.scale/1.5,
+      Point( x + 1, y + 1),
+      chunkIndexText.font,
+      chunkIndexText.scale,
       Scalar(100,100,100),
-      chunkDataText.thickness,
-      chunkDataText.line
-    );
+      chunkIndexText.thickness,
+      chunkIndexText.line
+    ); //shadow
+
     putText(mat,
       to_string(chunk.index),
-      Point(chunk.x_start + ((chunk.x_end - chunk.x_start)/2), chunk.y_start + ((chunk.y_end - chunk.y_start) / 2) + 4),
-      chunkDataText.font,
-      chunkDataText.scale/1.5,
-      chunkDataText.textColour,
-      chunkDataText.thickness,
-      chunkDataText.line
+      Point(x, y),
+      chunkIndexText.font,
+      chunkIndexText.scale,
+      chunkIndexText.textColour,
+      chunkIndexText.thickness,
+      chunkIndexText.line
     );    
   }
 }

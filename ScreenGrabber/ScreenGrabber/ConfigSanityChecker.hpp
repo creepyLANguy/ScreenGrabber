@@ -71,9 +71,6 @@ void Check(const T variable, const Is checkType, const char* variableName)
 
 inline void CheckConfigValues_General()
 {
-  //AL.
-  //TODO
-  //Check led counts and offset
   WARNIF(leds.LED_COUNT_LEFT, Is::LessThanOrEqualToZero);
   WARNIF(leds.LED_COUNT_RIGHT, Is::LessThanOrEqualToZero);
   WARNIF(leds.LED_COUNT_UPPER, Is::LessThanOrEqualToZero);

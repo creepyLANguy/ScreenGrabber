@@ -15,7 +15,7 @@
 //AL.
 //TODO
 //refactor pls
-void ReverseIndexes_Lower(vector<BorderChunk>& chunks)
+inline void ReverseIndexes_Lower(vector<BorderChunk>& chunks)
 {
   stack<int> indexes;
   const int startOfBottomIndex = leds.LED_COUNT_UPPER + leds.LED_COUNT_RIGHT;
@@ -30,7 +30,7 @@ void ReverseIndexes_Lower(vector<BorderChunk>& chunks)
   }
 }
 
-void ReverseIndexes_Left(vector<BorderChunk>& chunks)
+inline void ReverseIndexes_Left(vector<BorderChunk>& chunks)
 {
   stack<int> indexes;
   const int startOfLeftIndex = leds.LED_COUNT_UPPER + leds.LED_COUNT_RIGHT + leds.LED_COUNT_LOWER;
