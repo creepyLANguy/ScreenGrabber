@@ -445,3 +445,11 @@ inline void BroadcastPayload(unsigned int& payload)
     socket.Send(&payload);
   }
 }
+
+
+inline void PerformServerConfigWait()
+{
+  cout << "Waiting so server can reconfigure.\nWait time in milliseconds : " << kPostServerConfigWaitMS << endl;
+  Sleep(kPostServerConfigWaitMS);
+  cout << "Wait time complete. Continuing execution..." << endl << endl;
+}
