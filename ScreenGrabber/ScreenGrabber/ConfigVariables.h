@@ -33,6 +33,7 @@ int downscaler;
 float borderSamplePercentage;
 float lowerBufferPercentage, upperBufferPercentage, leftBufferPercentage, rightBufferPercentage;
 int originPositionOffset;
+int physicalStripBrightness;
 float brightnessPercentage;
 int whiteBrightnessModifier;
 int redShift, blueShift, greenShift;

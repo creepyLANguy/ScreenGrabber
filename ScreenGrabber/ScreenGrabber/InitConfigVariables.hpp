@@ -54,6 +54,7 @@ inline void InitConfigVariables_General()
   leftBufferPercentage = GetProperty_Float("leftBufferPercentage", 0.0f, config);
   rightBufferPercentage = GetProperty_Float("rightBufferPercentage", 0.0f, config);
 
+  physicalStripBrightness = GetProperty_Int("physicalStripBrightness", 50, config);
   brightnessPercentage = GetProperty_Float("brightnessPercentage", 1.0f, config);
   whiteBrightnessModifier = GetProperty_Int("whiteBrightnessModifier", 0, config);
 
@@ -84,6 +85,7 @@ inline void InitConfigVariables_General()
   mode = static_cast<Mode>(GetProperty_Int("mode", static_cast<int>(Mode::PRIMARYDISPLAY), config));
   switch (mode)
   {
+  case Mode::CONFIG: runFunc = &RunServerConfigBroadcast; break;
   case Mode::BLACKOUT:  runFunc = &RunBlackoutBroadcast; break;
   case Mode::PRIMARYDISPLAY:  runFunc = &RunScreenCaptureBroadcast; break;
   case Mode::IMAGEFILE:  runFunc= &RunStaticImageBroadcast; break;

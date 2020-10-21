@@ -80,6 +80,7 @@ struct Lumi
 
 enum class Mode
 {
+  CONFIG = -1,
   BLACKOUT = 0,
   PRIMARYDISPLAY = 1,
   IMAGEFILE = 2,
@@ -90,6 +91,6 @@ enum class Mode
 
 enum class ReservedIndex
 {
-  CONFIGURE_STRIP = 254,
+  CONFIGURE_SERVER = 250,
   UPDATE_ALL_LEDS = 255  
 };

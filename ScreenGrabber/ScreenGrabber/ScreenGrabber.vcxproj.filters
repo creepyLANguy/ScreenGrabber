@@ -69,6 +69,9 @@
     <ClInclude Include="CommandLineUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="ServerConfigLogic.hpp">
+      <Filter>ModeLogic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Config">
