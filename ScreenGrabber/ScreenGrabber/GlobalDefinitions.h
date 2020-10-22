@@ -22,8 +22,6 @@ const char kScriptAnimationStepsDelim = 's';
 const char kScriptAnimationDelayDelim = 'd';
 const char kScriptAnimationRepeatDelim = 'x';
 
-const int kPostServerConfigWaitMS = 3000;
-
 constexpr auto imageType = CV_8UC4;
 
 vector<MySocket> tempSockets, sockets;

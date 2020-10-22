@@ -82,6 +82,9 @@ inline void InitConfigVariables_General()
   lumi.g = GetProperty_Float("lumiG", lumi.g, config);
   lumi.b = GetProperty_Float("lumiB", lumi.b, config);
 
+  resetServer = GetProperty_Bool("resetServer", true, config);
+  resetServerWaitMS = GetProperty_Int("resetServerWaitMS", 0, config);
+
   mode = static_cast<Mode>(GetProperty_Int("mode", static_cast<int>(Mode::PRIMARYDISPLAY), config));
   switch (mode)
   {

@@ -21,9 +21,11 @@ void Run()
 
   RunBlackoutBroadcast();
 
-  RunServerConfigBroadcast();
-  PerformServerConfigWait();
-
+  if (resetServer == true)
+  {
+    RunServerConfigBroadcast();
+  }
+  
   runFunc();
 
   CleanUpDeviceContextStuffs();

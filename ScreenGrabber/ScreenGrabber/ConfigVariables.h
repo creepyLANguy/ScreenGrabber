@@ -51,3 +51,5 @@ string imageSequenceFile;
 string scriptFile;
 int animationSteps;
 int animationDelayMS;
+bool resetServer;
+int resetServerWaitMS;

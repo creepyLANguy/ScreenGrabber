@@ -62,6 +62,9 @@ void Check(const T variable, const Is checkType, const char* variableName)
   case Is::MoreThanZero:
     if (variable > 0) { PrintWarning(variableName, checkType); }
     break;
+  case Is::NotOneOrZero:
+    if (variable < 0 || variable > 1) { PrintWarning(variableName, checkType); }
+    break;
   default:
     PrintWarning(variableName, Is::UnimplementedCheck);
     break;
@@ -115,6 +118,9 @@ inline void CheckConfigValues_General()
   if (static_cast<int>(deltaEType) < 0) { WARN(deltaEType, Is::NotAnOption); }
   //< 0 instead of stating SimpleRGBComparison cos it's not explicitly defined
   //in code and is executed when the deltae func is null.
+
+  WARNIF(resetServer, Is::NotOneOrZero);
+  WARNIF(resetServerWaitMS, Is::LessThanZero);
 
   if (mode < Mode::CONFIG) { WARN(deltaEType, Is::NotAnOption); }
 

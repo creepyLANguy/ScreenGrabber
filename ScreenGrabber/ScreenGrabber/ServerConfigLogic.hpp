@@ -11,4 +11,11 @@ inline void RunServerConfig()
   BroadcastPayload(payload);
 
   cout << "Server config sent." << endl << endl;
+
+  //Don't delay if only resetting server and exiting. 
+  if (mode == Mode::CONFIG) { return; }
+
+  cout << "Waiting so server can reconfigure.\nWait time in milliseconds : " << resetServerWaitMS << endl;
+  Sleep(resetServerWaitMS);
+  cout << "Wait time complete. Continuing execution..." << endl << endl;
 }
