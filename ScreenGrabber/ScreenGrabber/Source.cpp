@@ -25,8 +25,11 @@ void Run()
   {
     RunServerConfigBroadcast();
   }
-  
-  runFunc();
+
+  if (mode != Mode::CONFIG)
+  {
+    runFunc();
+  }  
 
   CleanUpDeviceContextStuffs();
 }
