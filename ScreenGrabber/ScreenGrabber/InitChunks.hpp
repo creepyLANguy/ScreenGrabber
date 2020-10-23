@@ -12,39 +12,19 @@
 #include "VectorUtils.hpp"
 
 
-//AL.
-//TODO
-//refactor pls
-inline void ReverseIndexes_Lower(vector<BorderChunk>& chunks)
+inline void ReverseIndexes(vector<BorderChunk>& chunks, const int startIndex, const int ledCount)
 {
   stack<int> indexes;
-  const int startOfBottomIndex = leds.LED_COUNT_UPPER + leds.LED_COUNT_RIGHT;
-  for (int i = startOfBottomIndex; i < startOfBottomIndex + leds.LED_COUNT_LOWER; ++i)
+  for (int i = startIndex; i < startIndex + ledCount; ++i)
   {
     indexes.push(chunks[i].index);
   }
-  for (int i = startOfBottomIndex; i < startOfBottomIndex + leds.LED_COUNT_LOWER; ++i)
+  for (int i = startIndex; i < startIndex + ledCount; ++i)
   {
     chunks[i].index = indexes.top();
     indexes.pop();
   }
 }
-
-inline void ReverseIndexes_Left(vector<BorderChunk>& chunks)
-{
-  stack<int> indexes;
-  const int startOfLeftIndex = leds.LED_COUNT_UPPER + leds.LED_COUNT_RIGHT + leds.LED_COUNT_LOWER;
-  for (int i = startOfLeftIndex; i < startOfLeftIndex + leds.LED_COUNT_LEFT; ++i)
-  {
-    indexes.push(chunks[i].index);
-  }
-  for (int i = startOfLeftIndex; i < startOfLeftIndex + leds.LED_COUNT_LEFT; ++i)
-  {
-    chunks[i].index = indexes.top();
-    indexes.pop();
-  }
-}
-//
 
 
 inline void AdjustChunksForGap_Vertical(vector<BorderChunk>& chunks, int gap)
@@ -206,7 +186,10 @@ inline void InitialiseBorderChunks(
 
   //Else the lights are triggered in reverse on these sides due to continuous nature of physical strip.
   {
-    ReverseIndexes_Lower(borderChunks);
-    ReverseIndexes_Left(borderChunks);
+    const int startIndexLower = leds.LED_COUNT_UPPER + leds.LED_COUNT_RIGHT;
+    ReverseIndexes(borderChunks, startIndexLower, leds.LED_COUNT_LOWER);
+
+    const int startIndexLeft = leds.LED_COUNT_UPPER + leds.LED_COUNT_RIGHT + leds.LED_COUNT_LOWER;
+    ReverseIndexes(borderChunks, startIndexLeft, leds.LED_COUNT_LEFT);
   }  
 }

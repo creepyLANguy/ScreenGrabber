@@ -421,9 +421,6 @@ inline void WriteChunkUpdateSummaryToMat(Mat& mat)
 }
 
 
-//AL.
-//TODO
-//Clean this up, Perhaps make separate font instance things for these 2 new ones.
 inline void WriteChunkIndexesToMat(vector<BorderChunk>& borderChunks, Mat& mat)
 {
   for(const BorderChunk& chunk : borderChunks)
