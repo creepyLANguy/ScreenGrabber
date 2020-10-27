@@ -75,7 +75,7 @@ inline void InitConfigVariables_General()
   case DeltaEType::CIE76:  deltaEFunc = &Calc76; break;
   case DeltaEType::CIE94:  deltaEFunc = &Calc94; break;
   case DeltaEType::CIE2000:  deltaEFunc = &Calc2000; break;
-  default: cout << "WARNING! DeltaE func not set as invalid value was specified!" << endl << endl;
+  default: cout << "WARNING! DeltaE func not set as invalid value was specified in config!" << endl << endl;
   }
 
   lumi.r = GetProperty_Float("lumiR", lumi.r, config);
@@ -94,7 +94,7 @@ inline void InitConfigVariables_General()
   case Mode::IMAGEFILE:  runFunc= &RunStaticImageBroadcast; break;
   case Mode::IMAGESEQUENCE:  runFunc = &RunImageSequenceAnimation; break;
   case Mode::SCRIPT:  runFunc = &RunScriptAnimation; break;
-  default: cout << "WARNING! runFunc not set as invalid value was specified!" << endl << endl;
+  default: cout << "WARNING! runFunc not set as invalid value was specified in config!" << endl << endl;
   }
 
   imageFile = GetProperty_String("imageFile", "", config);
