@@ -3,8 +3,6 @@
 #include "Colourspaces.hpp"
 #include <complex>
 
-using namespace std;
-
 static const double M_PI = 3.14159265358979323846264338327950288;
 
 enum class DeltaEType

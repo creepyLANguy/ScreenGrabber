@@ -7,8 +7,8 @@
 
 #define WIN32_LEAN_AND_MEAN
 
-using namespace cv;
 using namespace std;
+using namespace cv;
 
 const char* kHostsFileName = "hosts.ini";
 const char* kPortsFileName = "ports.ini";

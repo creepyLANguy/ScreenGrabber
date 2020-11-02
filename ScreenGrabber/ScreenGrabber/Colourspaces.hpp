@@ -2,8 +2,6 @@
 
 #include <cmath>
 
-using namespace std;
-
 struct RGB { double r, g, b; };
 
 struct XYZ { double x, y, z; };
