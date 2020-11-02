@@ -2,11 +2,11 @@
 
 inline int GetIndexOfValue(const string key, const vector<string>& args)
 {
-  for (int i = 0; i < args.size(); ++i)
+  for (size_t i = 0; i < args.size(); ++i)
   {
     if (StringsAreEqual(key, args[i]))
     {
-      return i + 1;
+      return ++i;
     }
   }
 
@@ -21,7 +21,7 @@ inline int Int(const string s)
 
 inline float Float(const string s)
 {
-  return Int(s) / 100.0f;
+  return static_cast<float>(Int(s)) / 100.0f;
 }
 
 inline bool Bool(const string s)
