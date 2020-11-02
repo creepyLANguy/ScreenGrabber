@@ -1,51 +1,46 @@
 #pragma once
 
-/*
-int GetCommandLineProperty_Int(const int argc, char** argv, char* propertyName, const int default_return)
+inline int Int(const string s)
 {
-for (int i = 0; i < argc; ++i)
-{
-if (!_strcmpi(propertyName, argv[i]))
-{
-return atoi(argv[++i]);
-}
+  return atoi(s.c_str());
 }
 
-return default_return;
+inline float Float(const string s)
+{
+  return Int(s) / 100.0f;
 }
 
-
-float GetCommandLineProperty_Float(const int argc, char** argv, char* propertyName, const float default_return)
+inline float Bool(const string s)
 {
-return GetCommandLineProperty_Int(argc, argv, propertyName, (default_return *100)) / 100.0f;
+  return Int(s) == 1;
 }
 
 
-char* GetCommandLineProperty_String(const int argc, char** argv, char* propertyName, char* default_return)
+inline int GetIndexOfValue(const string key, vector<string> v)
 {
-for (int i = 0; i < argc; ++i)
-{
-if (!_strcmpi(propertyName, argv[i]))
-{
-return argv[++i];
-}
+  for (int i = 0; i < v.size(); ++i)
+  {
+    if (StringsAreEqual(key, v[i]))
+    {
+      return i + 1;
+    }
+  }
+
+  return - 1;
 }
 
-return default_return;
-}
 
+inline void ProcessCommandLine(const int argc, char** argv)
+{
+  vector<string> v(argv, argv + argc);
 
-/*
-const char* GetProperty_String(const char* propertyName, const char* default_return, vector<KeyValPair>& configBlob)
-{
-for (KeyValPair kvp : configBlob)
-{
-if (_strcmpi(kvp.key.c_str(), propertyName) == 0)
-{
-return kvp.val.c_str();
-}
-}
+  int index = 0;
 
-return default_return;
+  //AL.
+  //TODO
+  //Do this sorta thing for all the variables...
+  //Alternatively do a nice map-based solution. But... effort... 
+  index = GetIndexOfValue(width_s, v);
+  if (index > 0) { width = Int(v[index]); }
+  //
 }
-*/
