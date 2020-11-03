@@ -78,7 +78,7 @@ inline void CheckConfigValues_General()
   WARNIF(leds.LED_COUNT_RIGHT, Is::LessThanOrEqualToZero);
   WARNIF(leds.LED_COUNT_UPPER, Is::LessThanOrEqualToZero);
   WARNIF(leds.LED_COUNT_LOWER, Is::LessThanOrEqualToZero);
-  if (leds.LED_COUNT_TOTAL > 255) { WARN(leds.LED_COUNT_TOTAL, Is::MoreThanMax); }
+  if (leds.LED_COUNT_TOTAL > 250) { WARN(leds.LED_COUNT_TOTAL, Is::MoreThanMax); }
 
   WARNIF(originPositionOffset, Is::LessThanZero);
 
