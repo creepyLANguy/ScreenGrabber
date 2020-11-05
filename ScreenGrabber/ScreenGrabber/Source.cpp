@@ -1,5 +1,5 @@
 #include "InitConfigVariables.hpp"
-#include "CommandLineUtils.h"
+#include "CommandLineUtils.hpp"
 #include "CoreLogic.hpp"
 #include "InitSockets.hpp"
 

@@ -66,11 +66,14 @@
     <ClInclude Include="ConfigUtils.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="CommandLineUtils.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="ServerConfigLogic.hpp">
       <Filter>ModeLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandLineUtils.hpp">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +106,9 @@
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{600c75c9-8c1c-42ea-96c7-1acd243bd259}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{32454d2a-a670-46e1-bd27-5904b78c22cb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -145,5 +151,15 @@
     <None Include="SampleAnimations\scripts\single_colour.luna">
       <Filter>SampleAnimations\Scripts</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ico.ico">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

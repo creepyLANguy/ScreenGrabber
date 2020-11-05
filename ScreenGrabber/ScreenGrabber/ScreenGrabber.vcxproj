@@ -159,7 +159,7 @@
   <ItemGroup>
     <ClInclude Include="AnimationScriptLogic.hpp" />
     <ClInclude Include="BlackoutLogic.hpp" />
-    <ClInclude Include="CommandLineUtils.h" />
+    <ClInclude Include="CommandLineUtils.hpp" />
     <ClInclude Include="InitChunks.hpp" />
     <ClInclude Include="Colourspaces.hpp" />
     <ClInclude Include="ConfigUtils.hpp" />
@@ -171,6 +171,7 @@
     <ClInclude Include="DeltaE.hpp" />
     <ClInclude Include="ImageSequenceLogic.hpp" />
     <ClInclude Include="MySocket.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RunModes.hpp" />
     <ClInclude Include="ScreenCaptureLogic.hpp" />
     <ClInclude Include="ScriptUtils.hpp" />
@@ -197,6 +198,12 @@
     <None Include="SampleAnimations\sequences\gradient_smooth.seq" />
     <None Include="SampleAnimations\sequences\rainbow.seq" />
     <None Include="StaticImageLogic.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ico.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
