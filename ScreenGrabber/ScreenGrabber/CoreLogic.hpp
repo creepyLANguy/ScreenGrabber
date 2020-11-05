@@ -343,6 +343,8 @@ inline void SetWindowHandle()
 
 inline void InitialiseDeviceContextStuffs(const int bitmap_width, const int bitmap_height)
 {
+  SetProcessDPIAware();
+
   hwindowDC = GetDC(hwnd);
   hwindowCompatibleDC = CreateCompatibleDC(hwindowDC);
 
