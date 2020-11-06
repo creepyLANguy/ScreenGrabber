@@ -16,6 +16,8 @@ MAINTAIN THIS SEQUENCE:
 */
 int main(const int argc, char** argv)
 {
+  SetConsoleTitle(kApplicationName);
+
   InitConfigVariables();
 
   ProcessCommandLine(argc, argv);

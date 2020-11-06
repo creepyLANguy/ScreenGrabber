@@ -539,11 +539,14 @@ inline void ShowVisualisation(
     }
     BlankMat(mat, blankVal, leeway, noiseType, noiseApplicator);
   }
-  
-  const String windowName;
-  namedWindow(windowName, WINDOW_NORMAL);
-  imshow(windowName, mat);
+
+  namedWindow(kVisualiserWindowName, WINDOW_NORMAL);
+  imshow(kVisualiserWindowName, mat);
   waitKeyEx(1);
+
+  //user has closed the visualiser so exit the loop and allow program to terminate
+  keepRunning = getWindowProperty(kVisualiserWindowName, WND_PROP_VISIBLE) != 0;
+  cout << "USER INITIATED EXIT" << endl;
 }
 
 

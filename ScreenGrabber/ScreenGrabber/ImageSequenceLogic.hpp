@@ -150,7 +150,7 @@ inline void RunImageSequenceLoop(
   vector<DWORD>& ledUpdateTracker,
   Mat& mat)
 {
-  while (true)
+  while (keepRunning)
   {
     GetNextCompositeImage(mat);
 

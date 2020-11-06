@@ -10,6 +10,12 @@
 using namespace std;
 using namespace cv;
 
+bool keepRunning = true;
+
+const wchar_t* kApplicationName = L"Project Luna";
+const char* kVisualiserWindowName = "Project Luna - Debug Visualiser";
+const char* kScriptWindowName = "Project Luna - Script Animation Visualiser";
+
 const char* kHostsFileName = "hosts.ini";
 const char* kPortsFileName = "ports.ini";
 

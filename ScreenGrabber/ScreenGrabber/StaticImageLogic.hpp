@@ -10,7 +10,7 @@ inline void RunFileBroadcastLoop(
   vector<BorderChunk> empty_bc;
   vector<int> empty_i;
 
-  while (true)
+  while (keepRunning)
   {
     for (const BorderChunk& chunk : borderChunks)
     {

@@ -13,7 +13,7 @@ inline void RunScreenCaptureLoop(
   const int bitmap_height,
   Mat& mat)
 {
-  while (true)
+  while (keepRunning)
   {
     GrabScreen(mat, simpleRect, bitmap_width, bitmap_height);
 

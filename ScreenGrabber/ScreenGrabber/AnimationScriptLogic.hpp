@@ -127,7 +127,7 @@ inline void RunScript()
   auto next = it + 1;
   if (next == nodes.end()) { next = nodes.begin(); }
 
-  while (true)
+  while (keepRunning)
   {
     double step = 0;
     double rd = next->r - it->r;
@@ -167,7 +167,7 @@ inline void RunScript()
         {
           Mat mat(debug_scriptAnimation_rows, debug_scriptAnimation_cols, imageType);
           mat = Scalar(b, g, r);
-          imshow("scriptAnimationDebugView", mat);
+          imshow(kScriptWindowName, mat);
           waitKey(animationDelayMS);
         }
         else
