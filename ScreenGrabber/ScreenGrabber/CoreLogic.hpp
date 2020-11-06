@@ -432,7 +432,8 @@ inline void GetRectForSelectedDisplay(RECT& rect)
   //cout << "trying to locate display specified : "specified"
   //if configed is blank or can't find, cout "could not find, defaulting to primary
   //else rect = located display's rect
-  GetClientRect(hwnd, &rect);
+  rect = displays[0].rcMonitor;
+  //GetClientRect(hwnd, &rect);
   //
 
   TrimRectToRatio(rect);
