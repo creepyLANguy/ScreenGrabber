@@ -589,12 +589,14 @@ inline void PrintDetectedDisplays()
   for (auto display : displays)
   {
     wcout << display.szDevice << endl;
-    cout << "left:\t" << display.rcMonitor.left << endl;
-    cout << "top:\t" << display.rcMonitor.top << endl;
-    cout << "right:\t" << display.rcMonitor.right << endl;
-    cout << "bottom:\t" << display.rcMonitor.bottom << endl;
-    cout << "width:\t" << display.rcMonitor.right - display.rcMonitor.left << endl;
-    cout << "height:\t" << display.rcMonitor.bottom - display.rcMonitor.top << endl;
+    cout << "left\t:\t" << display.rcMonitor.left << endl;
+    cout << "top\t:\t" << display.rcMonitor.top << endl;
+    cout << "right\t:\t" << display.rcMonitor.right << endl;
+    cout << "bottom\t:\t" << display.rcMonitor.bottom << endl;
+    cout << "width\t:\t" << display.rcMonitor.right - display.rcMonitor.left << endl;
+    cout << "height\t:\t" << display.rcMonitor.bottom - display.rcMonitor.top << endl;
+    const string role = display.dwFlags == MONITORINFOF_PRIMARY ? "true" : "false";
+    cout << "primary\t:\t" << role << endl;
     cout << endl << endl;
   }
 }
