@@ -333,19 +333,12 @@ inline void OptimiseTransmitWithDelta(
 }
 
 
-//TODO
-//Allow for specific window to be captured.
-inline void SetWindowHandle()
-{
-  hwnd = GetDesktopWindow();
-}
-
-
 inline void InitialiseDeviceContextStuffs(const int bitmap_width, const int bitmap_height)
 {
   SetProcessDPIAware();
 
   hwindowDC = GetDC(hwnd);
+
   hwindowCompatibleDC = CreateCompatibleDC(hwindowDC);
 
   SetStretchBltMode(hwindowCompatibleDC, COLORONCOLOR);
@@ -432,11 +425,34 @@ inline void TrimRectToRatio(RECT& rect)
 }
 
 
-inline void GetRect_Display(RECT& rect)
+inline void GetRectForSelectedDisplay(RECT& rect)
 {
+  //AL.
+  //TODO
+  //cout << "trying to locate display specified : "specified"
+  //if configed is blank or can't find, cout "could not find, defaulting to primary
+  //else rect = located display's rect
   GetClientRect(hwnd, &rect);
+  //
+
   TrimRectToRatio(rect);
   ReduceRectByBuffers(rect);
+}
+
+
+BOOL CALLBACK EnumDispProc(HMONITOR hmon, HDC hdc, RECT* rect, LPARAM lParam)
+{
+  MONITORINFOEX info;
+  info.cbSize = sizeof(info);
+  GetMonitorInfo(static_cast<HMONITOR>(hmon), static_cast<LPMONITORINFO>(&info));
+  displays.emplace_back(info);
+
+  return TRUE;
+}
+
+inline void GetAllDisplays()
+{
+  EnumDisplayMonitors(0, 0, EnumDispProc, 0);
 }
 
 

@@ -130,9 +130,6 @@ inline void GetNextCompositeImage(Mat& mat)
 {
   addWeighted(*currentImage, 1 - (delta * step), *nextImage, delta * step, 0.0, mat);
 
-  //imshow("imageSequenceAnimationDebugView", mat);
-  //waitKey(animationDelayMS);
-  
   ++step;
 
   if (step >= animationSteps)

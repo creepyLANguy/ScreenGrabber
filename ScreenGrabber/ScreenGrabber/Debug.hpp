@@ -568,3 +568,29 @@ inline void GetDebugChunk(BorderChunk& chunk)
   //Alternative indexes are a dimmer or brighter blue.
   chunk.index%2 == 0 ? chunk.b = 55 : chunk.b = 255;    
 }
+
+inline void PrintDetectedDisplays()
+{
+  cout << "Displays detected: " << endl << endl;
+
+  for (auto display : displays)
+  {
+    /*
+    char buff[CCHDEVICENAME] = {0};
+    WideCharToMultiByte(
+      CP_UTF8, 0, 
+      display.szDevice, CCHDEVICENAME, 
+      buff, CCHDEVICENAME, 
+      "?", nullptr);
+    cout << buff << endl;
+    */
+    wcout << display.szDevice << endl;
+    cout << "left:\t" << display.rcMonitor.left << endl;
+    cout << "top:\t" << display.rcMonitor.top << endl;
+    cout << "right:\t" << display.rcMonitor.right << endl;
+    cout << "bottom:\t" << display.rcMonitor.bottom << endl;
+    cout << "width:\t" << display.rcMonitor.right - display.rcMonitor.left << endl;
+    cout << "height:\t" << display.rcMonitor.bottom - display.rcMonitor.top << endl;
+    cout << endl << endl;
+  }
+}

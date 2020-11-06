@@ -93,9 +93,13 @@ inline void RunScreenCapture()
 
   vector<DWORD> ledUpdateTracker(leds.LED_COUNT_TOTAL);
 
+  hwnd = GetDesktopWindow();
+
+  GetAllDisplays();
+  PrintDetectedDisplays();
+  
   RECT rect;
-  SetWindowHandle();
-  GetRect_Display(rect);
+  GetRectForSelectedDisplay(rect);
 
   const int bitmap_width = (rect.right - rect.left) / downscaler;
   const int bitmap_height = (rect.bottom - rect.top) / downscaler;

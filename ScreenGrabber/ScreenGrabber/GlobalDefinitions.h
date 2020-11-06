@@ -30,6 +30,7 @@ double (*deltaEFunc)(const LAB&, const LAB&) = nullptr;
 void (*runFunc)() = nullptr;
 
 //Device context stuffs
+vector <MONITORINFOEX> displays;
 HWND hwnd = nullptr;
 HDC hwindowDC = nullptr;
 HDC hwindowCompatibleDC = nullptr;
