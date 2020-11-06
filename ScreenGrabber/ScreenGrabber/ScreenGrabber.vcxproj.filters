@@ -153,13 +153,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="ico.ico">
-      <Filter>Resources</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="Resource.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ico.ico">
+      <Filter>Resources</Filter>
+    </Image>
   </ItemGroup>
 </Project>
