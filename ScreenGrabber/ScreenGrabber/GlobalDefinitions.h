@@ -4,6 +4,7 @@
 #include "Colourspaces.hpp"
 #include "MySocket.h"
 #include <Windows.h>
+#include "resource.h"
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -15,6 +16,9 @@ bool keepRunning = true;
 const wchar_t* kApplicationName = L"Project Luna";
 const char* kVisualiserWindowName = "Project Luna - Debug Visualiser";
 const char* kScriptWindowName = "Project Luna - Script Animation Visualiser";
+
+HICON hIconSmall = (HICON)LoadImage(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 16, 16, 0);
+HICON hIconLarge = (HICON)LoadImage(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 256, 256, 0);
 
 const char* kHostsFileName = "hosts.ini";
 const char* kPortsFileName = "ports.ini";

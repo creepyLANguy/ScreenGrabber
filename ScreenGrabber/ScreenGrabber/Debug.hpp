@@ -483,6 +483,14 @@ inline void BlankMat(
 }
 
 
+void SetVisualiserWindowIcon(const char* windowName)
+{
+  HWND hwnd = FindWindowA("Main HighGUI class", windowName);
+  SendMessage(hwnd, WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(hIconSmall));
+  SendMessage(hwnd, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(hIconLarge));
+}
+
+
 inline void ShowVisualisation(
   Mat& mat, const float& leeway, 
   vector<BorderChunk>& preoptimisedChunks, 
@@ -544,6 +552,8 @@ inline void ShowVisualisation(
   imshow(kVisualiserWindowName, mat);
   waitKeyEx(1);
 
+  SetVisualiserWindowIcon(kVisualiserWindowName);
+
   //user has closed the visualiser so exit the loop and allow program to terminate
   keepRunning = getWindowProperty(kVisualiserWindowName, WND_PROP_VISIBLE) != 0;
 }
@@ -570,6 +580,7 @@ inline void GetDebugChunk(BorderChunk& chunk)
   //Alternative indexes are a dimmer or brighter blue.
   chunk.index%2 == 0 ? chunk.b = 55 : chunk.b = 255;    
 }
+
 
 inline void PrintDetectedDisplays()
 {
