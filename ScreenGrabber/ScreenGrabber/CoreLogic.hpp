@@ -427,17 +427,33 @@ inline void TrimRectToRatio(RECT& rect)
 
 inline void GetRectForSelectedDisplay(RECT& rect)
 {
-  //AL.
-  //TODO
-  //cout << "trying to locate display specified : "specified"
-  //if configed is blank or can't find, cout "could not find, defaulting to primary
-  //else rect = located display's rect
-  rect = displays[0].rcMonitor;
-  //GetClientRect(hwnd, &rect);
-  //
+  //Assign the primary display by default.
+  GetClientRect(hwnd, &rect);
 
-  TrimRectToRatio(rect);
-  ReduceRectByBuffers(rect);
+  if (displayName.length() == 0)
+  {
+    cout << "No display specified in config." << endl;
+    cout << "Defaulting to your primary display." << endl << endl;
+    return;
+  }
+
+  cout << "Trying to locate specified display: " << displayName << endl;
+  for (auto display : displays)
+  {   
+    char buff[CCHDEVICENAME] = {0};
+    WideCharToMultiByte(CP_UTF8, 0, display.szDevice, CCHDEVICENAME, buff, CCHDEVICENAME, "?", nullptr);
+    const string fullName(buff);
+
+    if (fullName.find(displayName) != string::npos)
+    {
+      rect = display.rcMonitor;
+      cout << "Matched with: " << buff << endl << endl;
+      return;
+    }
+  }
+
+  cout << "Could not match display specified in config with any detected display." << endl;
+  cout << "Defaulting to your primary display." << endl << endl;
 }
 
 

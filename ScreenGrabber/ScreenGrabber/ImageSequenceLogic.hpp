@@ -84,7 +84,7 @@ inline bool ReadImageSequence()
     if (repeatPos > 0)
     {
       const string repeatString = strLine.substr(repeatPos + 1);
-      repeats = strlen(repeatString.c_str()) > 0 ? atoi(repeatString.c_str()) : 1;
+      repeats = repeatString.length() > 0 ? atoi(repeatString.c_str()) : 1;
       strLine = strLine.substr(0, repeatPos);
     }
 

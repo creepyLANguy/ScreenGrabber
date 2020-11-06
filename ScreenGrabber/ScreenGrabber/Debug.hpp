@@ -575,15 +575,6 @@ inline void PrintDetectedDisplays()
 
   for (auto display : displays)
   {
-    /*
-    char buff[CCHDEVICENAME] = {0};
-    WideCharToMultiByte(
-      CP_UTF8, 0, 
-      display.szDevice, CCHDEVICENAME, 
-      buff, CCHDEVICENAME, 
-      "?", nullptr);
-    cout << buff << endl;
-    */
     wcout << display.szDevice << endl;
     cout << "left:\t" << display.rcMonitor.left << endl;
     cout << "top:\t" << display.rcMonitor.top << endl;

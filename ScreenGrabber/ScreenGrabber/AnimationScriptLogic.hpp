@@ -62,9 +62,9 @@ inline bool ReadScript()
     if (CheckForScriptOverWritesInLine(strLine)) { continue; }
 
     string r = strLine.substr(0, strLine.find(kScriptDelim));
-    strLine = strLine.substr(strLine.find(r) + strlen(r.c_str()) + 1);
+    strLine = strLine.substr(strLine.find(r) + r.length() + 1);
     string g = strLine.substr(0, strLine.find(kScriptDelim));
-    strLine = strLine.substr(strLine.find(g) + strlen(g.c_str()) + 1);
+    strLine = strLine.substr(strLine.find(g) + g.length() + 1);
     string b = strLine;
 
     int repeats = 1;

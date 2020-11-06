@@ -97,7 +97,9 @@ inline void InitConfigVariables_General()
   default: cout << "WARNING! runFunc not set as invalid value was specified in config!" << endl << endl;
   }
 
-  imageFile = GetProperty_String(imageFile_s, "",config);
+  displayName = GetProperty_String(displayName_s, "", config);
+
+  imageFile = GetProperty_String(imageFile_s, "", config);
   staticImageBroadcastSleepMS = GetProperty_Int(staticImageBroadcastSleepMS_s, 0, config);
 
   animationSteps = GetProperty_Int(animationSteps_s, 50, config);

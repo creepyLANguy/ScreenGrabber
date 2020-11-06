@@ -31,7 +31,7 @@ void (*runFunc)() = nullptr;
 
 //Device context stuffs
 vector <MONITORINFOEX> displays;
-HWND hwnd = nullptr;
+HWND hwnd = GetDesktopWindow();
 HDC hwindowDC = nullptr;
 HDC hwindowCompatibleDC = nullptr;
 HBITMAP hbwindow = nullptr;
