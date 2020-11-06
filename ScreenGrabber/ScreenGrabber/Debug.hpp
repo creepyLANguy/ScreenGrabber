@@ -546,7 +546,6 @@ inline void ShowVisualisation(
 
   //user has closed the visualiser so exit the loop and allow program to terminate
   keepRunning = getWindowProperty(kVisualiserWindowName, WND_PROP_VISIBLE) != 0;
-  cout << "USER INITIATED EXIT" << endl;
 }
 
 

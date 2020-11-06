@@ -137,7 +137,7 @@ inline void RunScript()
     double gds = gd / animationSteps;
     double bds = bd / animationSteps;
 
-    while (step < animationSteps)
+    while (step < animationSteps && keepRunning == true)
     {
       int r = it->r + (rds * step);
       int g = it->g + (gds * step);
@@ -169,6 +169,9 @@ inline void RunScript()
           mat = Scalar(b, g, r);
           imshow(kScriptWindowName, mat);
           waitKey(animationDelayMS);
+
+          //user has closed the visualiser so exit the loop and allow program to terminate
+          keepRunning = getWindowProperty(kScriptWindowName, WND_PROP_VISIBLE) != 0;
         }
         else
         {
