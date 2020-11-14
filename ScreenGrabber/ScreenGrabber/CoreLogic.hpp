@@ -430,9 +430,9 @@ inline void GetRectForSelectedDisplay(RECT& rect)
   //Assign the primary display by default.
   GetClientRect(hwnd, &rect);
 
-  if (displayName.length() == 0)
+  if (mode != Mode::SPECIFICDISPLAY || displayName.length() == 0)
   {
-    cout << "No display specified in config." << endl;
+    cout << "Mode is 1, or no specific display has been specified in config." << endl;
     cout << "Defaulting to your primary display." << endl << endl;
     return;
   }

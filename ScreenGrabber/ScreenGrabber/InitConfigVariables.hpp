@@ -90,7 +90,7 @@ inline void InitConfigVariables_General()
   {
   case Mode::CONFIG: runFunc = &RunServerConfigBroadcast; break;
   case Mode::BLACKOUT:  runFunc = &RunBlackoutBroadcast; break;
-  case Mode::PRIMARYDISPLAY:  runFunc = &RunScreenCaptureBroadcast; break;
+  case Mode::PRIMARYDISPLAY: case Mode::SPECIFICDISPLAY :  runFunc = &RunScreenCaptureBroadcast; break;
   case Mode::IMAGEFILE:  runFunc = &RunStaticImageBroadcast; break;
   case Mode::IMAGESEQUENCE:  runFunc = &RunImageSequenceAnimation; break;
   case Mode::SCRIPT:  runFunc = &RunScriptAnimation; break;
