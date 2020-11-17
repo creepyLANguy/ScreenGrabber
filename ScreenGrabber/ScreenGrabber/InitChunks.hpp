@@ -2,7 +2,7 @@
 
 //TODO
 //You can't just dump this spaghett into a 'helper' file
-//and pretend it doesn't exist. ~~,'
+//and pretend it doesn't exist... >_>
 //Refactor, plox
 //
 
