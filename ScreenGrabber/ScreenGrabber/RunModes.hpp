@@ -1,11 +1,23 @@
 #pragma once
 
+#include "ServerRestartLogic.hpp"
+#include "ServerShutdownLogic.hpp"
 #include "ServerConfigLogic.hpp"
 #include "BlackoutLogic.hpp"
 #include "ScreenCaptureLogic.hpp"
 #include "StaticImageLogic.hpp"
 #include "ImageSequenceLogic.hpp"
 #include "AnimationScriptLogic.hpp"
+
+inline void RunServerRestartBroadcast()
+{
+  RunServerRestart();
+}
+
+inline void RunServerShutdownBroadcast()
+{
+  RunServerShutdown();
+}
 
 inline void RunServerConfigBroadcast()
 {

@@ -91,6 +91,9 @@ struct Lumi
 
 enum class Mode
 {
+  _first = -3, //update this as you modify the enums
+  RESTART = -3,
+  SHUTDOWN = -2,
   CONFIG = -1,
   BLACKOUT = 0,
   PRIMARYDISPLAY = 1,
@@ -98,11 +101,14 @@ enum class Mode
   IMAGEFILE = 3,
   IMAGESEQUENCE = 4,
   SCRIPT = 5,
+  _last = 5, //update this as you modify the enums
 };
 
 
 enum class ReservedIndex
 {
   CONFIGURE_SERVER = 250,
+  SHUTDOWN_SERVER = 251,
+  RESTART_SERVER = 252,
   UPDATE_ALL_LEDS = 255  
 };

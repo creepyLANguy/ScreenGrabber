@@ -186,6 +186,8 @@
     <ClInclude Include="InitSockets.hpp" />
     <ClInclude Include="InitConfigVariables.hpp" />
     <ClInclude Include="ServerConfigLogic.hpp" />
+    <ClInclude Include="ServerRestartLogic.hpp" />
+    <ClInclude Include="ServerShutdownLogic.hpp" />
     <ClInclude Include="VectorUtils.hpp" />
   </ItemGroup>
   <ItemGroup>

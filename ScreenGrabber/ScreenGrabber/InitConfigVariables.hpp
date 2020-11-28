@@ -88,6 +88,8 @@ inline void InitConfigVariables_General()
   mode = static_cast<Mode>(GetProperty_Int(mode_s, static_cast<int>(Mode::PRIMARYDISPLAY), config));
   switch (mode)
   {
+  case Mode::RESTART: runFunc = &RunServerRestartBroadcast; break;
+  case Mode::SHUTDOWN: runFunc = &RunServerShutdownBroadcast; break;
   case Mode::CONFIG: runFunc = &RunServerConfigBroadcast; break;
   case Mode::BLACKOUT:  runFunc = &RunBlackoutBroadcast; break;
   case Mode::PRIMARYDISPLAY: case Mode::SPECIFICDISPLAY :  runFunc = &RunScreenCaptureBroadcast; break;

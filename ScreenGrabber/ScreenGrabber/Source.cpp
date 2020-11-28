@@ -31,7 +31,7 @@ int main(const int argc, char** argv)
     RunServerConfigBroadcast();
   }
 
-  if (mode != Mode::CONFIG)
+  if (mode != Mode::CONFIG && runFunc)
   {
     runFunc();
   }
