@@ -12,7 +12,7 @@ D is animationDelayMS, which overwrites the value specified in config.ini
 file is the filepath, including file extension and any file structure markup such as backslashes.
 N is amount of times this hue will repeat
 
-s dand x values are optional
+s d and x values are optional
 
 eg:
 
