@@ -6,7 +6,7 @@
 /*
 MAINTAIN THIS SEQUENCE:
 1. Immediately initialise the globally shared variables as per config.
-2. Process commandline args and override current values found.
+2. Process commandline args and override current configured values.
 3. Set up your sockets as per config.
 4. Send blackout packet to reset all LEDs. This step is kinda optional.
 5. Send server config packet which contains led count and physical brightness. Also kinda optional but is a good idea.
