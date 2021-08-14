@@ -79,13 +79,11 @@ inline ChunkDataTextProperties chunkDataTextProperties;
 
 struct ChunkIndexText
 {
-  const string text = "chunkIndexText";
   const Scalar textColour = Scalar(255, 255, 255);
   const HersheyFonts font = FONT_HERSHEY_SIMPLEX;
   const double scale = 0.4 / 1.5;
   const int thickness = 1;
   const LineTypes line = LINE_AA;
-  const Size textRegion = getTextSize(text, font, scale, thickness, nullptr);
 };
 
 inline ChunkIndexText chunkIndexText;
