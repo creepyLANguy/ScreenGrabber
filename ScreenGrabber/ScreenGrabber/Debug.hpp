@@ -11,8 +11,8 @@
 inline const char* kDebugConfigFileName = "debug_config.ini";
 
 
-inline auto zeroHourFPS = GetTickCount();
-inline auto zeroHourInfo = GetTickCount();
+inline auto zeroHourFPS = GetTickCount64();
+inline auto zeroHourInfo = GetTickCount64();
 inline unsigned int currentFrameCount = 0;
 inline unsigned int lastDeterminedFramerate = 0;
 inline unsigned int currentChunksUpdated = 0;
