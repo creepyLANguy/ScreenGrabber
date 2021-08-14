@@ -31,7 +31,7 @@ inline void UpdateDebugTimer(const int reportTimeMS, const unsigned int updatedC
     currentChunksUpdated += updatedChunksCount;
   }
 
-  const auto now = GetTickCount();
+  const auto now = GetTickCount64();
 
   if (now - zeroHourFPS > 1000)
   {
@@ -300,6 +300,7 @@ inline void WriteChunkIndexesToMat(vector<BorderChunk>& borderChunks, Mat& mat)
   }
 }
 
+
 inline void SetVisualiserWindowProperties(const char* windowName)
 {
   HWND hwnd = FindWindowA("Main HighGUI class", windowName);
@@ -373,7 +374,7 @@ inline void PrintDetectedDisplays()
 {
   cout << "Displays detected: " << endl << endl;
 
-  for (auto display : displays)
+  for (auto& display : displays)
   {
     wcout << display.szDevice << endl;
     cout << "left\t:\t" << display.rcMonitor.left << endl;
