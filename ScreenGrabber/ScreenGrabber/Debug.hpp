@@ -160,44 +160,45 @@ inline void RemoveSkippedChunks(vector<BorderChunk>& borderChunks, vector<int>& 
 }
 
 inline double totalChunks = 0;
-inline void GetChunkDataStrings(string& s, string& g)
+inline void GetChunkDataStrings(string& stats, string& meter)
 {
   const string spacer = "     ";
+  const string meterMarker = "=";
 
-  s += "FPS : ";
-  if (lastDeterminedFramerate < 10) { s += "0"; }
-  s += to_string(lastDeterminedFramerate);
-  s += spacer;
+  stats += "FPS : ";
+  if (lastDeterminedFramerate < 10) { stats += "0"; }
+  stats += to_string(lastDeterminedFramerate);
+  stats += spacer;
 
   const unsigned int averageUpdates = (lastUpdateOccasionsTotal > 0) ? (lastChunksUpdatedTotal / lastUpdateOccasionsTotal) : 0;
 
-  s += "UPF : ";
-  if (averageUpdates < 10) { s += "0"; }
-  s += to_string(averageUpdates);
-  s += spacer;
+  stats += "UPF : ";
+  if (averageUpdates < 10) { stats += "0"; }
+  stats += to_string(averageUpdates);
+  stats += spacer;
 
   const int percentage = static_cast<int>(averageUpdates / totalChunks * 100);
-  s += "%PF : ";
-  if (percentage < 10) { s += "0"; }
-  s += to_string(percentage);
-  s += spacer;
+  stats += "%PF : ";
+  if (percentage < 10) { stats += "0"; }
+  stats += to_string(percentage);
+  stats += spacer;
 
-  if (percentage > 0 && percentage < 100) { g += "-"; }
+  if (percentage > 0 && percentage < 100) { meter += meterMarker; }
   const int dots = percentage / 10;
   for (int i = 0; i < dots; ++i)
   {
-    g += "-";
+    meter += meterMarker;
   }
 }
 
 
 inline void WriteChunkUpdateSummaryToMat(Mat& mat)
 {
-  string s, g;
-  GetChunkDataStrings(s, g);
+  string stats, meter;
+  GetChunkDataStrings(stats, meter);
 
   const Size textRegion = getTextSize(
-    s, 
+    stats, 
     chunkDataTextProperties.font, 
     chunkDataTextProperties.scale, 
     chunkDataTextProperties.thickness,
@@ -212,7 +213,7 @@ inline void WriteChunkUpdateSummaryToMat(Mat& mat)
   //drop shadow v1
   putText(
     mat,
-    s,
+    stats,
     Point(origin.x+1, origin.y+1),
     chunkDataTextProperties.font,
     chunkDataTextProperties.scale,
@@ -237,7 +238,7 @@ inline void WriteChunkUpdateSummaryToMat(Mat& mat)
 
   putText(
     mat,
-    s,
+    stats,
     origin,
     chunkDataTextProperties.font,
     chunkDataTextProperties.scale,
@@ -248,7 +249,7 @@ inline void WriteChunkUpdateSummaryToMat(Mat& mat)
 
   putText(
     mat,
-    g,
+    meter,
     Point(origin.x + textRegion.width, origin.y + 1),
     chunkDataTextProperties.font,
     chunkDataTextProperties.scale,
@@ -259,7 +260,7 @@ inline void WriteChunkUpdateSummaryToMat(Mat& mat)
 
   putText(
     mat,
-    g,
+    meter,
     Point(origin.x + textRegion.width, origin.y),
     chunkDataTextProperties.font,
     chunkDataTextProperties.scale,
