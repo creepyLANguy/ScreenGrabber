@@ -68,13 +68,11 @@ inline void RunScreenCaptureLoop(
       {
         ShowVisualisation(
           mat,
-          borderSamplePercentage * debug_blankRegionModifier,
           borderChunks,
           limitedChunks,
           skippedChunksIndexesBasedOnLastUpdatedTime,
           previousChunks,
-          debug_blankVal,
-          debug_noiseType
+          debug_chunkData
         );
       }
     }

@@ -170,7 +170,7 @@ inline void RunScript()
           imshow(kScriptWindowName, mat);
           waitKey(animationDelayMS);
 
-          SetVisualiserWindowIcon(kScriptWindowName);
+          SetVisualiserWindowProperties(kScriptWindowName);
 
           //user has closed the visualiser so exit the loop and allow program to terminate
           keepRunning = getWindowProperty(kScriptWindowName, WND_PROP_VISIBLE) != 0;          

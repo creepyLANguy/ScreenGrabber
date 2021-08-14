@@ -34,13 +34,11 @@ inline void RunFileBroadcastLoop(
       {
         ShowVisualisation(
           mat,
-          borderSamplePercentage * debug_blankRegionModifier,
           borderChunks,
           borderChunks,
           empty_i,
           empty_bc,
-          debug_blankVal,
-          debug_noiseType //NoiseType(debug_noiseType & ~BLUR)
+          debug_chunkData
         );
       }
     }

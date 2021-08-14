@@ -205,13 +205,11 @@ inline void RunImageSequenceLoop(
       {
         ShowVisualisation(
           mat,
-          borderSamplePercentage * debug_blankRegionModifier,
           borderChunks,
           limitedChunks,
           skippedChunksIndexesBasedOnLastUpdatedTime,
           previousChunks,
-          debug_blankVal,
-          NoiseType(debug_noiseType & ~BLUR)
+          debug_chunkData
         );
       }
     }

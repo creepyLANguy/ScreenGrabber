@@ -9,13 +9,11 @@ vector<KeyValPair> debug_config;
 bool debug_fps_cmd;
 bool debug_fps_ide;
 bool debug_visual;
+bool debug_chunkData;
 bool debug_payload;
 bool debug_drawAllFrames;
 bool debug_mockPayload;
 bool debug_mockChunks;
-int debug_blankVal;
-NoiseType debug_noiseType;
-float debug_blankRegionModifier;
 int debug_reportTimeMS;
 bool debug_scriptAnimation_show;
 int debug_scriptAnimation_rows;
@@ -59,8 +57,8 @@ int resetServerWaitMS;
 //Actual strings used in config files and cmdline
 
 const string debug_visual_s = "draw_visual";
+const string debug_chunkData_s = "draw_chunkData";
 const string debug_drawAllFrames_s = "drawAllFrames";
-const string debug_blankRegionModifier_s = "blankRegionModifier";
 const string debug_fps_cmd_s = "debug_fps_cmd";
 const string debug_fps_ide_s = "debug_fps_ide";
 const string debug_payload_s = "print_payload";
@@ -70,8 +68,6 @@ const string debug_reportTimeMS_s = "reportTimeMS";
 const string debug_scriptAnimation_show_s = "debug_scriptAnimation_show";
 const string debug_scriptAnimation_cols_s = "debug_scriptAnimation_cols";
 const string debug_scriptAnimation_rows_s = "debug_scriptAnimation_rows";
-const string debug_blankVal_s = "blankVal";
-const string debug_noiseType_s = "noiseType";
 
 const string width_s = "ratioHorizontal";
 const string height_s = "ratioVertical";

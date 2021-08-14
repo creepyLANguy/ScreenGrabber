@@ -14,13 +14,11 @@ inline void InitConfigVariables_Debug()
   debug_fps_cmd = GetProperty_Bool(debug_fps_cmd_s, false, debug_config);
   debug_fps_ide = GetProperty_Bool(debug_fps_ide_s, false, debug_config);
   debug_visual = GetProperty_Bool(debug_visual_s, false, debug_config);
+  debug_chunkData = GetProperty_Bool(debug_chunkData_s, false, debug_config);
   debug_payload = GetProperty_Bool(debug_payload_s, false, debug_config);
   debug_drawAllFrames = GetProperty_Bool(debug_drawAllFrames_s, false, debug_config);
   debug_mockPayload = GetProperty_Bool(debug_mockPayload_s, false, debug_config);
   debug_mockChunks = GetProperty_Bool(debug_mockChunks_s, false, debug_config);
-  debug_blankVal = GetProperty_Int(debug_blankVal_s, blankVal_default, debug_config);
-  debug_noiseType = static_cast<NoiseType>(GetProperty_Int(debug_noiseType_s, noiseType_default, debug_config));
-  debug_blankRegionModifier = GetProperty_Float(debug_blankRegionModifier_s, blankRegionModifier_default, debug_config);
   debug_reportTimeMS = GetProperty_Int(debug_reportTimeMS_s, 200, debug_config);
   debug_scriptAnimation_show = GetProperty_Bool(debug_scriptAnimation_show_s, true, debug_config);
   debug_scriptAnimation_rows = GetProperty_Int(debug_scriptAnimation_rows_s, 250, debug_config);

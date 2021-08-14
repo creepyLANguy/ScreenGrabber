@@ -21,7 +21,7 @@ enum class Is
 };
 
 
-std::map<Is, const char*> check_map = {
+inline std::map<Is, const char*> check_map = {
   {Is::UnimplementedCheck, " - CHECK TYPE NOT IMPLEMENTED!"},
   {Is::LessThanZero, " is less than zero."},
   {Is::LessThanOrEqualToZero,  " is less than or equal to zero."},
@@ -132,11 +132,7 @@ inline void CheckConfigValues_General()
 
 inline void CheckConfigValues_Debug()
 {
-  WARNIF(debug_blankVal, Is::LessThanZero);
-
-  if (debug_noiseType < NoiseType::NONE) { WARN(debug_noiseType, Is::NotAnOption); }
-
-  WARNIF(debug_blankRegionModifier,Is::LessThanZero);
+  WARNIF(debug_chunkData, Is::NotOneOrZero);
 
   WARNIF(debug_reportTimeMS, Is::LessThanZero);
 
