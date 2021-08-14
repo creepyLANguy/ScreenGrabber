@@ -12,7 +12,7 @@ inline bool HasLEDRecentlyBeenUpdated(const int chunkIndex, vector<DWORD>& ledUp
     return false;
   }
 
-  const auto now = GetTickCount();
+  const auto now = GetTickCount64();
   const auto timeDiff = now - ledUpdateTracker[chunkIndex];
   if (timeDiff < chunkUpdateTimeoutMS)
   {
