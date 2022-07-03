@@ -301,14 +301,14 @@ inline void WriteChunkIndexesToMat(vector<BorderChunk>& borderChunks, Mat& mat)
 }
 
 
-inline void SetVisualiserWindowProperties(const char* windowName)
+inline void SetVisualiserWindowProperties(const char* windowName, const bool isPreWindows10Version2004)
 {
   HWND hwnd = FindWindowA("Main HighGUI class", windowName);
   SendMessage(hwnd, WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(hIconSmall));
   SendMessage(hwnd, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(hIconLarge));
 
-  SetWindowDisplayAffinity(hwnd, WDA_MONITOR); //Prevent visualiser window from being captured. 
-  //Note, WDA_EXCLUDEFROMCAPTURE is only supported from Windows 10 Version 2004, but WDA_MONITOR behaves the same in most cases so sticking with that.
+  SetWindowDisplayAffinity(hwnd, isPreWindows10Version2004 ? WDA_MONITOR : WDA_EXCLUDEFROMCAPTURE); //Prevent visualiser window from being captured. 
+  //Note, WDA_EXCLUDEFROMCAPTURE is only supported from Windows 10 Version 2004, but WDA_MONITOR behaves similar.
 }
 
 
@@ -318,7 +318,8 @@ inline void ShowVisualisation(
   vector<BorderChunk>& borderChunks, 
   vector<int>& skippedChunksIndexes, 
   vector<BorderChunk>& previousChunks,
-  bool drawChunkData = false
+  bool drawChunkData,
+  bool isPreWindows10Version2004
 )
 {
   FillMatChunksWithAverageRGB(previousChunks, mat);
@@ -340,7 +341,7 @@ inline void ShowVisualisation(
   imshow(kVisualiserWindowName, mat);
   waitKeyEx(1);
 
-  SetVisualiserWindowProperties(kVisualiserWindowName);
+  SetVisualiserWindowProperties(kVisualiserWindowName, isPreWindows10Version2004);
 
   //user has closed the visualiser so exit the loop and allow program to terminate
   keepRunning = getWindowProperty(kVisualiserWindowName, WND_PROP_VISIBLE) != 0;

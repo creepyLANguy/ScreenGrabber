@@ -38,7 +38,8 @@ inline void RunFileBroadcastLoop(
           borderChunks,
           empty_i,
           empty_bc,
-          debug_chunkData
+          debug_chunkData,
+          debug_isPreWindows10Version2004
         );
       }
     }

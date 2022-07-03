@@ -18,6 +18,7 @@ int debug_reportTimeMS;
 bool debug_scriptAnimation_show;
 int debug_scriptAnimation_rows;
 int debug_scriptAnimation_cols;
+bool debug_isPreWindows10Version2004;
 
 
 //Normal execution variables
@@ -68,6 +69,7 @@ const string debug_reportTimeMS_s = "reportTimeMS";
 const string debug_scriptAnimation_show_s = "debug_scriptAnimation_show";
 const string debug_scriptAnimation_cols_s = "debug_scriptAnimation_cols";
 const string debug_scriptAnimation_rows_s = "debug_scriptAnimation_rows";
+const string debug_isPreWindows10Version2004_s = "debug_isPreWindows10Version2004";
 
 const string width_s = "ratioHorizontal";
 const string height_s = "ratioVertical";

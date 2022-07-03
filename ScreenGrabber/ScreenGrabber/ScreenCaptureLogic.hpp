@@ -72,7 +72,8 @@ inline void RunScreenCaptureLoop(
           limitedChunks,
           skippedChunksIndexesBasedOnLastUpdatedTime,
           previousChunks,
-          debug_chunkData
+          debug_chunkData,
+          debug_isPreWindows10Version2004
         );
       }
     }

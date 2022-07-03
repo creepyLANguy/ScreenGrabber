@@ -23,6 +23,7 @@ inline void InitConfigVariables_Debug()
   debug_scriptAnimation_show = GetProperty_Bool(debug_scriptAnimation_show_s, true, debug_config);
   debug_scriptAnimation_rows = GetProperty_Int(debug_scriptAnimation_rows_s, 250, debug_config);
   debug_scriptAnimation_cols = GetProperty_Int(debug_scriptAnimation_cols_s, 250, debug_config);
+  debug_isPreWindows10Version2004 = GetProperty_Bool(debug_isPreWindows10Version2004_s, false, debug_config);
 }
 
 

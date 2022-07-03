@@ -138,6 +138,8 @@ inline void CheckConfigValues_Debug()
 
   WARNIF(debug_scriptAnimation_cols, Is::LessThanOrEqualToZero);
   WARNIF(debug_scriptAnimation_cols, Is::LessThanOrEqualToZero);
+
+  //TODO - complete adding checks for debug config.
 }
 
 
