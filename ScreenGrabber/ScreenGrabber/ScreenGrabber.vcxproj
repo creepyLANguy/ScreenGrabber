@@ -199,6 +199,7 @@
     <None Include="debug_config.ini" />
     <None Include="hosts.ini" />
     <None Include="ports.ini" />
+    <None Include="Samples\masks\racing.msk" />
     <None Include="Samples\scripts\breeze.luna" />
     <None Include="Samples\scripts\rainbow.luna" />
     <None Include="Samples\scripts\single_colour.luna" />

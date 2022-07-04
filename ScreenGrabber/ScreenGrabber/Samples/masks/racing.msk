@@ -1,0 +1,14 @@
+;filepath\filename.extension
+;comma separated led indexes
+;filepath\filename.extension
+;comma separated led indexes
+;...
+
+Samples\masks\racing\1.jpg
+1,2,3
+
+Samples\masks\racing\2.jpg
+4,5,6
+
+Samples\masks\racing\3.jpg
+7,8,9

@@ -116,6 +116,9 @@
     <Filter Include="Samples\Scripts">
       <UniqueIdentifier>{3cfa40cb-e150-4258-8b94-b16edf561294}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Samples\Masks">
+      <UniqueIdentifier>{aa12add6-02f0-4a4b-ae8a-0203218fb960}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini">
@@ -156,6 +159,9 @@
     </None>
     <None Include="Samples\scripts\storm.luna">
       <Filter>Samples\Scripts</Filter>
+    </None>
+    <None Include="Samples\masks\racing.msk">
+      <Filter>Samples\Masks</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
