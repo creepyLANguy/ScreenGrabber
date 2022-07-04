@@ -89,15 +89,6 @@
     <Filter Include="Source">
       <UniqueIdentifier>{a518c423-1bb7-4a6c-9c9e-90f07bf7b732}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SampleAnimations">
-      <UniqueIdentifier>{217d634b-6902-43f9-aee4-361410138c6e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SampleAnimations\ImageSequences">
-      <UniqueIdentifier>{42e52670-fb06-4793-b676-4995071ba694}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SampleAnimations\Scripts">
-      <UniqueIdentifier>{3cfa40cb-e150-4258-8b94-b16edf561294}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ModeLogic">
       <UniqueIdentifier>{7019be6c-a0a2-41d2-adda-b05d099432cd}</UniqueIdentifier>
     </Filter>
@@ -116,6 +107,15 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{32454d2a-a670-46e1-bd27-5904b78c22cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Samples">
+      <UniqueIdentifier>{217d634b-6902-43f9-aee4-361410138c6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Samples\ImageSequences">
+      <UniqueIdentifier>{42e52670-fb06-4793-b676-4995071ba694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Samples\Scripts">
+      <UniqueIdentifier>{3cfa40cb-e150-4258-8b94-b16edf561294}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini">
@@ -130,32 +130,32 @@
     <None Include="ports.ini">
       <Filter>Config</Filter>
     </None>
-    <None Include="SampleAnimations\sequences\complimentary.seq">
-      <Filter>SampleAnimations\ImageSequences</Filter>
-    </None>
-    <None Include="SampleAnimations\sequences\gradient_discrete.seq">
-      <Filter>SampleAnimations\ImageSequences</Filter>
-    </None>
-    <None Include="SampleAnimations\sequences\gradient_smooth.seq">
-      <Filter>SampleAnimations\ImageSequences</Filter>
-    </None>
-    <None Include="SampleAnimations\sequences\rainbow.seq">
-      <Filter>SampleAnimations\ImageSequences</Filter>
-    </None>
-    <None Include="SampleAnimations\scripts\breeze.luna">
-      <Filter>SampleAnimations\Scripts</Filter>
-    </None>
-    <None Include="SampleAnimations\scripts\rainbow.luna">
-      <Filter>SampleAnimations\Scripts</Filter>
-    </None>
-    <None Include="SampleAnimations\scripts\storm.luna">
-      <Filter>SampleAnimations\Scripts</Filter>
-    </None>
     <None Include="StaticImageLogic.hpp">
       <Filter>ModeLogic</Filter>
     </None>
-    <None Include="SampleAnimations\scripts\single_colour.luna">
-      <Filter>SampleAnimations\Scripts</Filter>
+    <None Include="Samples\sequences\complimentary.seq">
+      <Filter>Samples\ImageSequences</Filter>
+    </None>
+    <None Include="Samples\sequences\gradient_discrete.seq">
+      <Filter>Samples\ImageSequences</Filter>
+    </None>
+    <None Include="Samples\sequences\gradient_smooth.seq">
+      <Filter>Samples\ImageSequences</Filter>
+    </None>
+    <None Include="Samples\sequences\rainbow.seq">
+      <Filter>Samples\ImageSequences</Filter>
+    </None>
+    <None Include="Samples\scripts\breeze.luna">
+      <Filter>Samples\Scripts</Filter>
+    </None>
+    <None Include="Samples\scripts\rainbow.luna">
+      <Filter>Samples\Scripts</Filter>
+    </None>
+    <None Include="Samples\scripts\single_colour.luna">
+      <Filter>Samples\Scripts</Filter>
+    </None>
+    <None Include="Samples\scripts\storm.luna">
+      <Filter>Samples\Scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

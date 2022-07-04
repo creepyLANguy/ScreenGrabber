@@ -1,0 +1,14 @@
+;filename.extension
+;comma separated led indexes
+;filename.extension
+;comma separated led indexes
+;...
+
+1.bmp
+1,2,3
+
+2.bmp
+4,5,6
+
+3.bmp
+7,8,9
