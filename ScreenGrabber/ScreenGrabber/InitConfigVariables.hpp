@@ -95,6 +95,7 @@ inline void InitConfigVariables_General()
   case Mode::IMAGEFILE:  runFunc = &RunStaticImageBroadcast; break;
   case Mode::IMAGESEQUENCE:  runFunc = &RunImageSequenceAnimation; break;
   case Mode::SCRIPT:  runFunc = &RunScriptAnimation; break;
+  case Mode::MULTIMASK:  runFunc = &RunMultiMaskBroadcast; break;
   default: cout << "WARNING! runFunc not set as invalid value was specified in config!" << endl << endl;
   }
 

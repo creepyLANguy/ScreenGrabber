@@ -91,7 +91,7 @@ struct Lumi
 
 enum class Mode
 {
-  _first = -3, //update this as you modify the enums
+  _lowerLimit,
   RESTART = -3,
   SHUTDOWN = -2,
   CONFIG = -1,
@@ -101,7 +101,8 @@ enum class Mode
   IMAGEFILE = 3,
   IMAGESEQUENCE = 4,
   SCRIPT = 5,
-  _last = 5, //update this as you modify the enums
+  MULTIMASK = 6,
+  _upperLimit
 };
 
 

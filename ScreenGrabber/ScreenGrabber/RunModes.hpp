@@ -8,6 +8,7 @@
 #include "StaticImageLogic.hpp"
 #include "ImageSequenceLogic.hpp"
 #include "AnimationScriptLogic.hpp"
+#include "MultiMaskLogic.hpp"
 
 inline void RunServerRestartBroadcast()
 {
@@ -47,4 +48,9 @@ inline void RunImageSequenceAnimation()
 inline void RunScriptAnimation()
 {
   if (ReadScript()) { RunScript(); }
+}
+
+inline void RunMultiMaskBroadcast()
+{
+  if (ReadMultiMask()) { RunMultiMask(); }
 }

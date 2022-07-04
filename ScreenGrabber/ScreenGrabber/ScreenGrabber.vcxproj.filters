@@ -81,6 +81,9 @@
     <ClInclude Include="ServerRestartLogic.hpp">
       <Filter>ModeLogic</Filter>
     </ClInclude>
+    <ClInclude Include="MultiMaskLogic.hpp">
+      <Filter>ModeLogic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Config">

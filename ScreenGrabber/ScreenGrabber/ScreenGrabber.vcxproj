@@ -178,6 +178,7 @@
     <ClInclude Include="GlobalDefinitions.h" />
     <ClInclude Include="DeltaE.hpp" />
     <ClInclude Include="ImageSequenceLogic.hpp" />
+    <ClInclude Include="MultiMaskLogic.hpp" />
     <ClInclude Include="MySocket.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="RunModes.hpp" />

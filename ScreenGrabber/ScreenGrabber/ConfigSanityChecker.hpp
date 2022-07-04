@@ -122,8 +122,8 @@ inline void CheckConfigValues_General()
   WARNIF(resetServer, Is::NotOneOrZero);
   WARNIF(resetServerWaitMS, Is::LessThanZero);
 
-  if (mode < Mode::_first) { WARN(mode, Is::NotAnOption); }
-  if (mode > Mode::_last) { WARN(mode, Is::NotAnOption); }
+  if (mode <= Mode::_lowerLimit) { WARN(mode, Is::NotAnOption); }
+  if (mode >= Mode::_upperLimit) { WARN(mode, Is::NotAnOption); }
 
   WARNIF(animationSteps, Is::LessThanOrEqualToZero);
   WARNIF(animationDelayMS, Is::LessThanZero);
