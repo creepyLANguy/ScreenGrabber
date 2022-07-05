@@ -87,6 +87,8 @@ inline bool ReadScript()
     cout << rgb.r << " " << rgb.g << " " << rgb.b << " x" << repeats << endl;
   }
 
+  myFile.close();
+
   cout << endl;
 
   if (nodes.empty())
@@ -99,10 +101,6 @@ inline bool ReadScript()
   cout << "Script file successfully parsed." << endl;
   cout << "Total keyframes: " << nodes.size() << endl;
   cout << endl;
-
-  myFile.close();
-
-  return true;
 }
 
 

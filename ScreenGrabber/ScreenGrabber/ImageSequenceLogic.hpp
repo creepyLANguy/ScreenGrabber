@@ -104,6 +104,8 @@ inline bool ReadImageSequence()
     cout << "Added to sequence : " << strLine << " x" << repeats << endl;
   }
 
+  myFile.close();
+
   cout << endl;
 
   if (images.empty())
@@ -119,8 +121,6 @@ inline bool ReadImageSequence()
     cout << "Exiting Program." << endl;
     return false;
   }
-
-  myFile.close();
 
   return true;
 }

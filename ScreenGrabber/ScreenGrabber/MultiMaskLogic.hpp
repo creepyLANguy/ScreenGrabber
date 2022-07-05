@@ -1,7 +1,34 @@
 #pragma once
 
 #include "ConfigVariables.h"
-#include "CoreLogic.hpp"
+
+vector<MaskGroup> maskGroups;
+
+inline void SplitByDelim(string str, const char* delim, vector<string>& output)
+{
+  size_t pos = 0;
+  while ((pos = str.find(delim)) != std::string::npos) 
+  {
+    string token = str.substr(0, pos);
+    output.emplace_back(token);
+    str.erase(0, pos + strlen(delim));
+  }
+}
+
+inline void ExtractLedIndexes(const string& ledIndexes, const char* delim, const vector<int>& output)
+{
+  vector<string> splitIndexes;
+  SplitByDelim(ledIndexes, kMaskGroupIndexDelim, splitIndexes);
+
+  //AL.
+  //TODO - convert each of the splitIndexes strings into the respective ints and add to output.
+}
+
+inline void ExtractMaskPixelRanges(const string& maskFilename, const vector<pixelRange>& output)
+{
+  //AL.
+  //TODO - implement
+}
 
 inline bool ReadMultiMask()
 {
@@ -15,44 +42,39 @@ inline bool ReadMultiMask()
     return false;
   }
 
-  string strLine;
   while (myFile.eof() == false)
   {
-    getline(myFile, strLine);
-    strLine = Trim(strLine);
+    string buff;
 
-    if (IsCommentOrEmpty(strLine)) { continue; }
+    getline(myFile, buff);
+    string maskFilename = Trim(buff);
+    if (IsCommentOrEmpty(maskFilename)) { continue; }
 
-    string r = strLine.substr(0, strLine.find(kScriptDelim));
-    strLine = strLine.substr(strLine.find(r) + r.length() + 1);
-    string g = strLine.substr(0, strLine.find(kScriptDelim));
-    strLine = strLine.substr(strLine.find(g) + g.length() + 1);
-    string b = strLine;
+    getline(myFile, buff);
+    string ledIndexes = Trim(buff);
+    if (IsCommentOrEmpty(ledIndexes)) { continue; }
 
-    RGB rgb;
-    rgb.r = atoi(r.c_str());
-    rgb.g = atoi(g.c_str());
-    rgb.b = atoi(b.c_str());
+    MaskGroup maskGroup;
+    maskGroup.maskFile = maskFilename;
+    ExtractLedIndexes(ledIndexes, kMaskGroupIndexDelim, maskGroup.ledIndexes);
+    ExtractMaskPixelRanges(maskFilename, maskGroup.pixelRanges);
 
-    nodes.emplace_back(rgb);
-    
-    cout << rgb.r << " " << rgb.g << " " << rgb.b << endl;
+    maskGroups.emplace_back(maskGroup);
   }
 
-  cout << endl;
+  myFile.close();
 
-  if (nodes.empty())
+  if (maskGroups.empty())
   {
-    cout << "Error : Masks config yielded no masks." << endl;
+    cout << "Error : Masks config yielded no mask groups." << endl;
     cout << endl;
+
     return false;
   }
 
   cout << "Masks config file successfully parsed." << endl;
-  cout << "Total masks: " << nodes.size() << endl;
+  cout << "Total mask groups: " << maskGroups.size() << endl;
   cout << endl;
-
-  myFile.close();
 
   return true;
 }

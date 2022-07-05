@@ -32,6 +32,9 @@ const char kScriptAnimationStepsDelim = 's';
 const char kScriptAnimationDelayDelim = 'd';
 const char kScriptAnimationRepeatDelim = 'x';
 
+const char* kMaskGroupIndexDelim = ",";
+const char* kMaskGroupRangeDelim = "-";
+
 constexpr auto imageType = CV_8UC4;
 
 vector<MySocket> tempSockets, sockets;
@@ -78,6 +81,27 @@ struct BorderChunk
   int r = 0;
   int g = 0;
   int b = 0;
+};
+
+
+//AL.
+//TODO - complete implementation and make sure all members are initialized properly
+struct pixelRange
+{
+  int y = 0;
+  vector<int> x_positions;
+};
+
+
+//AL.
+//TODO - complete implementation and make sure all members are initialized properly
+struct MaskGroup
+{
+  string maskFile;
+
+  vector<int> ledIndexes;
+
+  vector<pixelRange> pixelRanges;
 };
 
 
