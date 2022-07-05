@@ -109,6 +109,7 @@ inline void InitConfigVariables_General()
 
   scriptFile = GetProperty_String(scriptFile_s, "", config);
   imageSequenceFile = GetProperty_String(imageSequenceFile_s, "", config);
+  masksFile = GetProperty_String(masksFile_s, "", config);
 }
 
 //This function must be called as soon as the program starts!

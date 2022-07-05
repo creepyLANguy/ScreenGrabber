@@ -91,7 +91,7 @@ inline bool ReadScript()
 
   if (nodes.empty())
   {
-    std::cout << "Script yielded no keyframes." << scriptFile << endl;
+    cout << "Error : Script yielded no keyframes." << endl;
     cout << endl;
     return false;
   }
