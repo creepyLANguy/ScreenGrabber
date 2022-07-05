@@ -36,7 +36,7 @@ d40
 #include "ScriptUtils.hpp"
 
 
-vector<RGB> nodes;
+inline vector<RGB> nodes;
 
 
 inline bool ReadScript()

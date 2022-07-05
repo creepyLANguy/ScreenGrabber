@@ -69,11 +69,9 @@ inline void ProcessCommandLine(const int argc, char** argv)
 {
   args = vector<string>(argv, argv + argc);
 
-  //AL.
   //TODO
   //Do this sorta thing for all the variables...
   //(Haven't completed this yet as normal config files are perfect for current use cases)
   SetInt(width, width_s);
   SetInt(height, height_s);
-  //
 }

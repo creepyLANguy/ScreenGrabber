@@ -2,11 +2,11 @@
 
 #include "ConfigVariables.h"
 
-vector<MaskGroup> maskGroups;
+inline vector<MaskGroup> maskGroups;
 
 inline void SplitByDelim(string str, const char* delim, vector<string>& output)
 {
-  size_t pos = 0;
+  size_t pos;
   while ((pos = str.find(delim)) != std::string::npos) 
   {
     string token = str.substr(0, pos);

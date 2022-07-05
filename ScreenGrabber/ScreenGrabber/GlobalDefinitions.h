@@ -84,8 +84,6 @@ struct BorderChunk
 };
 
 
-//AL.
-//TODO - complete implementation and make sure all members are initialized properly
 struct pixelRange
 {
   int y = 0;
@@ -93,8 +91,6 @@ struct pixelRange
 };
 
 
-//AL.
-//TODO - complete implementation and make sure all members are initialized properly
 struct MaskGroup
 {
   string maskFile;
