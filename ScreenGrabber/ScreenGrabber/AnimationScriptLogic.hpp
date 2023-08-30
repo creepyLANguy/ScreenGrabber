@@ -145,15 +145,9 @@ inline void RunScript()
       g *= brightnessPercentage;
       b *= brightnessPercentage;
 
-      r += redShift;
-      r = r < 0 ? 0 : r;
-      r = r > 255 ? 255 : r;
-      b += blueShift;
-      b = b < 0 ? 0 : b;
-      b = b > 255 ? 255 : b;
-      g += greenShift;
-      g = g < 0 ? 0 : g;
-      g = g > 255 ? 255 : g;
+      r = clamp(r + redShift, 0, 255);
+      g = clamp(g + greenShift, 0, 255);
+      b = clamp(b + blueShift, 0, 255);
 
       BroadcastRGB(r, g, b);
     

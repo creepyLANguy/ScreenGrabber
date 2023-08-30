@@ -93,16 +93,9 @@ inline void ApplyWhiteBrightnessModifier(BorderChunk& chunk)
     return;
   }
 
-  chunk.r += whiteBrightnessModifier;
-  chunk.g += whiteBrightnessModifier;
-  chunk.b += whiteBrightnessModifier;
-
-  chunk.r = chunk.r > 255 ? 255 : chunk.r;
-  chunk.r = chunk.r < 0 ? 0 : chunk.r;
-  chunk.g = chunk.g > 255 ? 255 : chunk.g;
-  chunk.g = chunk.g < 0 ? 0 : chunk.g;
-  chunk.b = chunk.b > 255 ? 255 : chunk.b;
-  chunk.b = chunk.b < 0 ? 0 : chunk.b;  
+  clamp(chunk.r + whiteBrightnessModifier, 0, 255);
+  clamp(chunk.g + whiteBrightnessModifier, 0, 255);
+  clamp(chunk.b + whiteBrightnessModifier, 0, 255);
 }
 
 
@@ -149,9 +142,7 @@ inline void ApplyRedShift(vector<BorderChunk>& borderChunks)
 {
   for (BorderChunk& chunk : borderChunks)
   {
-    chunk.r += redShift;
-    chunk.r = chunk.r < 0 ? 0 : chunk.r;
-    chunk.r = chunk.r > 255 ? 255 : chunk.r;
+    chunk.r = std::clamp(chunk.r + redShift, 0, 255);
   }
 }
 
@@ -160,9 +151,7 @@ inline void ApplyGreenShift(vector<BorderChunk>& borderChunks)
 {
   for (BorderChunk& chunk : borderChunks)
   {
-    chunk.g += greenShift;
-    chunk.g = chunk.g < 0 ? 0 : chunk.g;
-    chunk.g = chunk.g > 255 ? 255 : chunk.g;
+    chunk.g = std::clamp(chunk.g + greenShift, 0, 255);
   }
 }
 
@@ -171,9 +160,7 @@ inline void ApplyBlueShift(vector<BorderChunk>& borderChunks)
 {
   for (BorderChunk& chunk : borderChunks)
   {
-    chunk.b += blueShift;
-    chunk.b = chunk.b < 0 ? 0 : chunk.b;
-    chunk.b = chunk.b > 255 ? 255 : chunk.b;
+    chunk.b = std::clamp(chunk.b + blueShift, 0, 255);
   }
 }
 
